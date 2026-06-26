@@ -3,8 +3,11 @@
  * Origin is read from SITE_URL at build time (Decision #12), defaulting to the
  * placeholder domain so dev/CI never depends on a real domain being set.
  */
+// `import.meta.env` exists in Astro/Vite but is undefined under plain Node (tsx
+// scripts), so access it defensively and fall back to process.env.
+const metaEnv = (import.meta as unknown as { env?: { SITE_URL?: string } }).env;
 export const SITE_URL = (
-  import.meta.env.SITE_URL ??
+  metaEnv?.SITE_URL ??
   (typeof process !== "undefined" ? process.env.SITE_URL : undefined) ??
   "https://resumedocs.example"
 ).replace(/\/$/, "");

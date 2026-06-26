@@ -1,0 +1,37 @@
+---
+import Seo from "@components/Seo.astro";
+import { BRAND } from "@lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  robots?: string;
+  ogImage?: string;
+}
+const { title, description, canonical, robots, ogImage } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <Seo title={title} description={description} canonical={canonical} robots={robots} ogImage={ogImage} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>
+        <strong>{BRAND}</strong> — independent directory. Not affiliated with Google. Google Docs is a
+        trademark of Google LLC.
+      </p>
+    </footer>
+    <slot name="end" />
+  </body>
+</html>

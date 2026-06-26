@@ -1,21 +1,41 @@
 ---
-// M0 placeholder hub. Replaced in M3 (routing + SEO) and M4 (frontend).
-// Exists so `astro build` is green with zero templates.
-import { BRAND } from "@lib/site";
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TemplateGrid from "@components/TemplateGrid.astro";
+import JsonLd from "@components/JsonLd.astro";
+import { itemListSchema } from "@lib/jsonld";
+import { templatePath } from "@lib/routes";
+import { absoluteUrl, BRAND } from "@lib/site";
+import type { Template } from "@/content/schema";
+
+type Entry = CollectionEntry<"templates">;
+const data = (e: Entry) => e.data as Template;
+
+const published = (await getCollection("templates", ({ data }: Entry) => data.status === "published")).sort(
+  (a: Entry, b: Entry) => data(a).name.localeCompare(data(b).name),
+);
+// D11: the grid and the ItemList JSON-LD are built from the SAME array.
+const cards = published;
+const filters = [...new Set(published.flatMap((e: Entry) => data(e).category))] as string[];
+const itemList = itemListSchema(cards.map((e: Entry) => ({ name: data(e).name, url: absoluteUrl(templatePath(data(e).slug)) })));
+
+const title = `Free Google Docs Resume Templates to Copy & Edit | ${BRAND}`;
+const description =
+  "Copy a free, ATS-friendly resume template into Google Docs and edit it in minutes. Templates for students, tech, professional, creative, and executive roles. No signup.";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Free Google Docs Resume Templates to Copy &amp; Edit | {BRAND}</title>
-    <meta name="robots" content="noindex" />
-  </head>
-  <body>
-    <main>
-      <h1>Google Docs resume templates</h1>
-      <p>Scaffold placeholder — directory UI lands in M3/M4.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title={title} description={description}>
+  <section class="hero">
+    <h1>Google Docs resume templates you can copy and edit.</h1>
+    <p class="lead">
+      Pick an ATS-friendly template, open your own copy in Google Docs, and download it as PDF or
+      Word when you are ready to apply.
+    </p>
+  </section>
+
+  <section id="templates" aria-label="Resume templates">
+    <TemplateGrid entries={cards} filters={filters} />
+  </section>
+
+  <JsonLd schema={itemList} />
+</BaseLayout>

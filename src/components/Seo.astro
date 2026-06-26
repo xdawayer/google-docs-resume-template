@@ -1,0 +1,27 @@
+---
+import { absoluteUrl } from "@lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  robots?: string;
+  ogImage?: string;
+}
+
+const { title, description, robots = "index,follow", ogImage } = Astro.props;
+// Self-canonical from the current path unless an explicit canonical is passed.
+const canonical = Astro.props.canonical ?? absoluteUrl(Astro.url.pathname);
+const og = ogImage ? absoluteUrl(ogImage) : undefined;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={robots} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonical} />
+{og && <meta property="og:image" content={og} />}
+<meta name="twitter:card" content="summary_large_image" />

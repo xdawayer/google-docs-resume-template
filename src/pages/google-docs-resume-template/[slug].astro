@@ -1,0 +1,94 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import JsonLd from "@components/JsonLd.astro";
+import { resolveThumb } from "@lib/assets";
+import { creativeWorkSchema, faqSchema } from "@lib/jsonld";
+import { templatePath, hubPath } from "@lib/routes";
+import { absoluteUrl } from "@lib/site";
+import { loadHealthMap, getHealth, ctaState } from "@lib/health";
+import type { Template } from "@/content/schema";
+
+type Entry = CollectionEntry<"templates">;
+
+export async function getStaticPaths() {
+  const all = await getCollection("templates", ({ data }: Entry) => data.status === "published");
+  return all.map((entry: Entry) => ({ params: { slug: (entry.data as Template).slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: Entry };
+const t = entry.data as Template;
+const { Content } = await render(entry);
+const img = resolveThumb(t.thumbnail.src);
+
+const health = getHealth(loadHealthMap(), t.slug);
+const cta = ctaState(health, Boolean(t.wordUrl));
+
+const creative = creativeWorkSchema({
+  name: t.name,
+  url: absoluteUrl(templatePath(t.slug)),
+  description: t.seo.metaDescription,
+  image: img ? absoluteUrl(img.src) : undefined,
+  dateModified: t.updated.toISOString(),
+});
+---
+
+<BaseLayout title={t.seo.title} description={t.seo.metaDescription} canonical={t.seo.canonical} ogImage={t.seo.ogImage}>
+  <Breadcrumbs
+    crumbs={[
+      { name: "Templates", href: hubPath() },
+      { name: t.name, href: templatePath(t.slug) },
+    ]}
+  />
+
+  <article class="detail">
+    <h1>{t.name} Resume Template for Google Docs</h1>
+
+    <div class="detail-grid">
+      <div class="detail-preview">
+        {img && <Image src={img} alt={t.thumbnail.alt} widths={[480, 720, 960]} sizes="(max-width: 800px) 90vw, 480px" />}
+      </div>
+
+      <div class="detail-meta">
+        <p class="ats-profile">ATS profile: <strong>{t.atsProfile}</strong></p>
+        <ul class="ats-checklist">
+          {t.atsChecklist.map((c) => (
+            <li data-pass={String(c.pass)}>{c.pass ? "✓" : "✕"} {c.label}</li>
+          ))}
+        </ul>
+
+        {
+          cta === "copy" ? (
+            <a class="btn primary block" href={`/go/${t.slug}/`} target="_blank" rel="noopener" data-copy={t.slug}>
+              Copy in Google Docs
+            </a>
+          ) : cta === "word" && t.wordUrl ? (
+            <a class="btn block" href={t.wordUrl}>Download Word version</a>
+          ) : (
+            <button class="btn block" disabled>This template is being updated</button>
+          )
+        }
+
+        {t.caveats.length > 0 && (
+          <ul class="caveats">{t.caveats.map((c) => <li>{c}</li>)}</ul>
+        )}
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <Content />
+    </div>
+
+    {t.related.length > 0 && (
+      <nav class="related" aria-label="Related templates">
+        <h2>Related templates</h2>
+        <ul>{t.related.map((r) => <li><a href={templatePath(r)}>{r}</a></li>)}</ul>
+      </nav>
+    )}
+  </article>
+
+  <JsonLd schema={creative} />
+  {t.faq.length > 0 && <JsonLd schema={faqSchema(t.faq)} />}
+</BaseLayout>

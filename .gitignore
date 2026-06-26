@@ -18,3 +18,4 @@ test-results/
 
 # os
 .DS_Store
+src/generated/

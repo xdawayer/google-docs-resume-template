@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from "astro:content";
+import TemplateCard from "./TemplateCard.astro";
+
+interface Props {
+  entries: CollectionEntry<"templates">[];
+  filters?: string[];
+}
+const { entries, filters = [] } = Astro.props;
+---
+
+{
+  filters.length > 0 && (
+    <div class="toolbar">
+      <input id="search" class="searchbox" type="search" placeholder="Search by role, style, or category…" aria-label="Search templates" />
+      <div class="filters" role="group" aria-label="Filter templates by category">
+        <button class="chip" data-filter="all" aria-pressed="true">All</button>
+        {filters.map((f) => (
+          <button class="chip" data-filter={f} aria-pressed="false">{f}</button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+<!-- Live region announces result count for screen readers (D7). -->
+<p id="resultCount" class="sr-only" role="status" aria-live="polite">{entries.length} templates</p>
+
+<!-- Static grid: every card + its internal detail link is in the raw HTML (D4/E4).
+     The filter island only toggles `hidden` on these nodes — it never re-renders. -->
+<div id="templateGrid" class="grid">
+  {entries.map((e, i) => <TemplateCard entry={e} index={i} />)}
+</div>
+
+<div id="emptyState" class="empty-state" hidden>
+  <p>No templates match your search.</p>
+  <button id="resetFilters" class="btn">Clear filters</button>
+</div>
+
+{entries.length === 0 && <p class="empty-note">Templates are being prepared. Check back soon.</p>}

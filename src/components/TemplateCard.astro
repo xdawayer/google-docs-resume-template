@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { resolveThumb } from "@lib/assets";
+import { templatePath } from "@lib/routes";
+import type { Template } from "@/content/schema";
+
+interface Props {
+  entry: CollectionEntry<"templates">;
+  index?: number;
+}
+const { entry, index = 0 } = Astro.props;
+const t = entry.data as Template;
+const img = resolveThumb(t.thumbnail.src);
+const detail = templatePath(t.slug);
+// data-* power the client filter island (M4); the card itself is fully static.
+const search = [t.name, ...t.category, ...t.roles].join(" ").toLowerCase();
+---
+
+<article class="template-card" data-categories={t.category.join(" ")} data-search={search}>
+  <a class="thumb" href={detail} aria-label={`Preview ${t.name}`}>
+    {
+      img ? (
+        <Image
+          src={img}
+          alt={t.thumbnail.alt}
+          widths={[320, 480, 720]}
+          sizes="(max-width: 640px) 90vw, 320px"
+          loading={index < 3 ? "eager" : "lazy"}
+        />
+      ) : (
+        <div class="thumb-placeholder" aria-hidden="true"></div>
+      )
+    }
+  </a>
+  <div class="card-body">
+    <div class="tagrow">
+      {t.category.slice(0, 3).map((c) => <span class={`tag tag-${c}`}>{c}</span>)}
+      <span class="tag tag-ats-profile">{t.atsProfile}</span>
+    </div>
+    <h3 class="card-title"><a href={detail}>{t.name}</a></h3>
+    <div class="card-actions">
+      <a class="btn" href={detail}>Preview</a>
+      <a class="btn primary" href={`/go/${t.slug}/`} target="_blank" rel="noopener" data-copy={t.slug}>
+        Copy in Google Docs
+      </a>
+    </div>
+  </div>
+</article>
