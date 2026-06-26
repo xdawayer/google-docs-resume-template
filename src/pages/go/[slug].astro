@@ -1,0 +1,45 @@
+---
+// Static /go fallback (universal + no-JS). The Cloudflare edge function
+// (functions/go/[slug].ts) takes precedence when deployed; this exists so the
+// redirect still works on any host and with JS disabled. noindex,nofollow.
+import { getCollection, type CollectionEntry } from "astro:content";
+import { BASE } from "@lib/site";
+import { loadHealthMap, getHealth } from "@lib/health";
+
+type Entry = CollectionEntry<"templates">;
+
+export async function getStaticPaths() {
+  const all = await getCollection("templates", ({ data }: Entry) => data.status === "published");
+  const health = loadHealthMap();
+  return all
+    .filter((e: Entry) => !e.data.copyUrl.includes("REPLACE_WITH_"))
+    .map((e: Entry) => ({
+      params: { slug: e.data.slug },
+      props: { copyUrl: e.data.copyUrl, status: getHealth(health, e.data.slug), slug: e.data.slug },
+    }));
+}
+
+interface Props {
+  copyUrl: string;
+  status: string;
+  slug: string;
+}
+const { copyUrl, status, slug } = Astro.props as Props;
+const healthy = status === "available";
+const target = healthy ? copyUrl : `${BASE}/${slug}/?status=updating`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={`${BASE}/${slug}/`} />
+    <title>Opening template…</title>
+  </head>
+  <body>
+    <p>Opening your template… If nothing happens, <a href={target}>click here</a>.</p>
+    <noscript><p><a href={target}>Continue to the template</a>.</p></noscript>
+  </body>
+</html>

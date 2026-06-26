@@ -1,0 +1,37 @@
+name: link-health
+
+# E1 monitor. OFF the deploy path (Decision #10): runs on a schedule, commits the
+# health report, and never gates an unrelated deploy. This is the 2am test.
+on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Check copy-link health
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+        run: pnpm check:links
+      - name: Alert on sustained failures
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: node scripts/alert-health.mjs || true
+      - name: Commit health report
+        run: |
+          git config user.name "link-health-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/copy_link_health.json
+          git commit -m "chore(link-health): refresh copy_link_health.json" || echo "no changes"
+          git push || echo "nothing to push"
