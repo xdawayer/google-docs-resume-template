@@ -1,0 +1,20 @@
+/* DT2 — document-forward visual identity. Paper + ink, a real sheet shadow,
+   a serif display for credibility. Deliberately NOT generic SaaS (no gradient
+   wash, no glass header, no floating fake-score badge). */
+:root {
+  --paper: #ffffff;
+  --bg: #f4f1ea; /* warm paper, not blue-white */
+  --ink: #1a1a17;
+  --ink-soft: #55514a;
+  --line: #e2ddd2;
+  --accent: #1b4332; /* deep document green — trustworthy, not startup-blue */
+  --accent-ink: #ffffff;
+  --good: #1b6e4b;
+  --warn: #8a5a00;
+  --sheet-shadow: 0 1px 0 rgba(26, 26, 23, 0.04), 0 12px 28px rgba(26, 26, 23, 0.08);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --tap: 44px; /* minimum touch target */
+}

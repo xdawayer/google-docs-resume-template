@@ -1,0 +1,17 @@
+---
+import { BRAND, BASE } from "@lib/site";
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href={`${BASE}/`}>{BRAND}</a>
+    <button class="btn nav-toggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+      Menu
+    </button>
+    <nav id="navLinks" class="nav-links" aria-label="Primary">
+      <a href={`${BASE}/`}>Templates</a>
+      <a href={`${BASE}/#how`}>How it works</a>
+      <a href={`${BASE}/#faq`}>FAQ</a>
+    </nav>
+  </div>
+</header>

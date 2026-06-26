@@ -1,5 +1,8 @@
 ---
+import "../styles/global.css";
 import Seo from "@components/Seo.astro";
+import SiteHeader from "@components/SiteHeader.astro";
+import PreviewModal from "@components/PreviewModal.astro";
 import { BRAND } from "@lib/site";
 
 interface Props {
@@ -22,8 +25,8 @@ const { title, description, canonical, robots, ogImage } = Astro.props;
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <slot name="header" />
-    <main id="main">
+    <slot name="header"><SiteHeader /></slot>
+    <main id="main" class="wrap">
       <slot />
     </main>
     <footer class="site-footer">
@@ -32,6 +35,9 @@ const { title, description, canonical, robots, ogImage } = Astro.props;
         trademark of Google LLC.
       </p>
     </footer>
-    <slot name="end" />
+    <PreviewModal />
+    <script>
+      import "../scripts/directory-island.ts";
+    </script>
   </body>
 </html>

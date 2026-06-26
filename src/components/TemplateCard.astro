@@ -40,7 +40,7 @@ const search = [t.name, ...t.category, ...t.roles].join(" ").toLowerCase();
     </div>
     <h3 class="card-title"><a href={detail}>{t.name}</a></h3>
     <div class="card-actions">
-      <a class="btn" href={detail}>Preview</a>
+      <button class="btn" type="button" data-preview={t.slug}>Preview</button>
       <a class="btn primary" href={`/go/${t.slug}/`} target="_blank" rel="noopener" data-copy={t.slug}>
         Copy in Google Docs
       </a>
