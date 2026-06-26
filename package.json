@@ -20,6 +20,7 @@
     "check:freshness": "tsx scripts/check-freshness.ts",
     "shots:gen": "tsx scripts/generate-screenshots.ts",
     "gate:e2e": "node scripts/e2e-gate.mjs",
+    "prebuild": "tsx scripts/validate-content.ts && tsx scripts/check-assets.ts",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
