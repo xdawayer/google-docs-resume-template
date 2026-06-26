@@ -40,7 +40,9 @@ async function main(): Promise<void> {
     }
     const meta = await getMeta(drive, t.docId);
     if (meta.modifiedTime !== entry.modifiedTime) {
-      drift.push(`${t.slug}: Doc modified ${meta.modifiedTime} != screenshot ${entry.modifiedTime} (regenerate)`);
+      drift.push(
+        `${t.slug}: Doc modified ${meta.modifiedTime} != screenshot ${entry.modifiedTime} (regenerate)`,
+      );
     }
   }
 

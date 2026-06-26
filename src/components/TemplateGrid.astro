@@ -12,11 +12,21 @@ const { entries, filters = [] } = Astro.props;
 {
   filters.length > 0 && (
     <div class="toolbar">
-      <input id="search" class="searchbox" type="search" placeholder="Search by role, style, or category…" aria-label="Search templates" />
+      <input
+        id="search"
+        class="searchbox"
+        type="search"
+        placeholder="Search by role, style, or category…"
+        aria-label="Search templates"
+      />
       <div class="filters" role="group" aria-label="Filter templates by category">
-        <button class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" data-filter="all" aria-pressed="true">
+          All
+        </button>
         {filters.map((f) => (
-          <button class="chip" data-filter={f} aria-pressed="false">{f}</button>
+          <button class="chip" data-filter={f} aria-pressed="false">
+            {f}
+          </button>
         ))}
       </div>
     </div>

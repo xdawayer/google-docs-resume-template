@@ -36,7 +36,9 @@ function main(): void {
 
   const cards = $(".template-card").length;
   if (cards !== detailSlugs.length) {
-    errors.push(`hub renders ${cards} cards but manifest has ${detailSlugs.length} published detail pages`);
+    errors.push(
+      `hub renders ${cards} cards but manifest has ${detailSlugs.length} published detail pages`,
+    );
   }
   for (const slug of detailSlugs) {
     if ($(`a[href="${templatePath(slug)}"]`).length === 0) {
@@ -53,7 +55,9 @@ function main(): void {
     for (const e of errors) console.error(`  - ${e}`);
     process.exit(1);
   }
-  console.log(`✓ check-nojs-crawl: hub crawlable, ${cards} card(s) in raw HTML, no direct Google links`);
+  console.log(
+    `✓ check-nojs-crawl: hub crawlable, ${cards} card(s) in raw HTML, no direct Google links`,
+  );
 }
 
 main();

@@ -15,7 +15,10 @@ type Entry = CollectionEntry<"templates">;
 
 export async function getStaticPaths() {
   const all = await getCollection("templates", ({ data }: Entry) => data.status === "published");
-  return all.map((entry: Entry) => ({ params: { slug: (entry.data as Template).slug }, props: { entry } }));
+  return all.map((entry: Entry) => ({
+    params: { slug: (entry.data as Template).slug },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props as { entry: Entry };
@@ -35,7 +38,12 @@ const creative = creativeWorkSchema({
 });
 ---
 
-<BaseLayout title={t.seo.title} description={t.seo.metaDescription} canonical={t.seo.canonical} ogImage={t.seo.ogImage}>
+<BaseLayout
+  title={t.seo.title}
+  description={t.seo.metaDescription}
+  canonical={t.seo.canonical}
+  ogImage={t.seo.ogImage}
+>
   <Breadcrumbs
     crumbs={[
       { name: "Templates", href: hubPath() },
@@ -48,32 +56,61 @@ const creative = creativeWorkSchema({
 
     <div class="detail-grid">
       <div class="detail-preview">
-        {img && <Image src={img} alt={t.thumbnail.alt} widths={[480, 720, 960]} sizes="(max-width: 800px) 90vw, 480px" />}
+        {
+          img && (
+            <Image
+              src={img}
+              alt={t.thumbnail.alt}
+              widths={[480, 720, 960]}
+              sizes="(max-width: 800px) 90vw, 480px"
+            />
+          )
+        }
       </div>
 
       <div class="detail-meta">
         <p class="ats-profile">ATS profile: <strong>{t.atsProfile}</strong></p>
         <ul class="ats-checklist">
-          {t.atsChecklist.map((c) => (
-            <li data-pass={String(c.pass)}>{c.pass ? "✓" : "✕"} {c.label}</li>
-          ))}
+          {
+            t.atsChecklist.map((c) => (
+              <li data-pass={String(c.pass)}>
+                {c.pass ? "✓" : "✕"} {c.label}
+              </li>
+            ))
+          }
         </ul>
 
         {
           cta === "copy" ? (
-            <a class="btn primary block" href={`/go/${t.slug}/`} target="_blank" rel="noopener" data-copy={t.slug}>
+            <a
+              class="btn primary block"
+              href={`/go/${t.slug}/`}
+              target="_blank"
+              rel="noopener"
+              data-copy={t.slug}
+            >
               Copy in Google Docs
             </a>
           ) : cta === "word" && t.wordUrl ? (
-            <a class="btn block" href={t.wordUrl}>Download Word version</a>
+            <a class="btn block" href={t.wordUrl}>
+              Download Word version
+            </a>
           ) : (
-            <button class="btn block" disabled>This template is being updated</button>
+            <button class="btn block" disabled>
+              This template is being updated
+            </button>
           )
         }
 
-        {t.caveats.length > 0 && (
-          <ul class="caveats">{t.caveats.map((c) => <li>{c}</li>)}</ul>
-        )}
+        {
+          t.caveats.length > 0 && (
+            <ul class="caveats">
+              {t.caveats.map((c) => (
+                <li>{c}</li>
+              ))}
+            </ul>
+          )
+        }
       </div>
     </div>
 
@@ -81,12 +118,20 @@ const creative = creativeWorkSchema({
       <Content />
     </div>
 
-    {t.related.length > 0 && (
-      <nav class="related" aria-label="Related templates">
-        <h2>Related templates</h2>
-        <ul>{t.related.map((r) => <li><a href={templatePath(r)}>{r}</a></li>)}</ul>
-      </nav>
-    )}
+    {
+      t.related.length > 0 && (
+        <nav class="related" aria-label="Related templates">
+          <h2>Related templates</h2>
+          <ul>
+            {t.related.map((r) => (
+              <li>
+                <a href={templatePath(r)}>{r}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
   </article>
 
   <JsonLd schema={creative} />

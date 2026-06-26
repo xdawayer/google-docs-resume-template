@@ -11,13 +11,15 @@ import type { Template } from "@/content/schema";
 type Entry = CollectionEntry<"templates">;
 const data = (e: Entry) => e.data as Template;
 
-const published = (await getCollection("templates", ({ data }: Entry) => data.status === "published")).sort(
-  (a: Entry, b: Entry) => data(a).name.localeCompare(data(b).name),
-);
+const published = (
+  await getCollection("templates", ({ data }: Entry) => data.status === "published")
+).sort((a: Entry, b: Entry) => data(a).name.localeCompare(data(b).name));
 // D11: the grid and the ItemList JSON-LD are built from the SAME array.
 const cards = published;
 const filters = [...new Set(published.flatMap((e: Entry) => data(e).category))] as string[];
-const itemList = itemListSchema(cards.map((e: Entry) => ({ name: data(e).name, url: absoluteUrl(templatePath(data(e).slug)) })));
+const itemList = itemListSchema(
+  cards.map((e: Entry) => ({ name: data(e).name, url: absoluteUrl(templatePath(data(e).slug)) })),
+);
 
 const title = `Free Google Docs Resume Templates to Copy & Edit | ${BRAND}`;
 const description =

@@ -14,19 +14,37 @@ export async function getStaticPaths() {
   const categories = [...new Set(all.flatMap((e: Entry) => e.data.category))];
   return categories.map((category) => ({
     params: { category },
-    props: { category, entries: all.filter((e: Entry) => e.data.category.some((c: string) => c === category)) },
+    props: {
+      category,
+      entries: all.filter((e: Entry) => e.data.category.some((c: string) => c === category)),
+    },
   }));
 }
 
 const { category, entries } = Astro.props as { category: string; entries: Entry[] };
 // Thin listing until it has a unique intro + FAQ (E5): noindex,follow by default.
-const indexable = isListingIndexable({ optedIn: false, itemCount: entries.length, introChars: 0, faqCount: 0 });
+const indexable = isListingIndexable({
+  optedIn: false,
+  itemCount: entries.length,
+  introChars: 0,
+  faqCount: 0,
+});
 const title = `${category} resume templates for Google Docs | ${BRAND}`;
 const description = `Free ${category} resume templates you can copy straight into Google Docs and edit in minutes. ATS-friendly, exportable to PDF or Word.`;
 ---
 
-<BaseLayout title={title} description={description} robots={robotsContent(indexable)} canonical={undefined}>
-  <Breadcrumbs crumbs={[{ name: "Templates", href: hubPath() }, { name: category, href: categoryPath(category) }]} />
+<BaseLayout
+  title={title}
+  description={description}
+  robots={robotsContent(indexable)}
+  canonical={undefined}
+>
+  <Breadcrumbs
+    crumbs={[
+      { name: "Templates", href: hubPath() },
+      { name: category, href: categoryPath(category) },
+    ]}
+  />
   <h1>{category} resume templates for Google Docs</h1>
   <TemplateGrid entries={entries} />
 </BaseLayout>

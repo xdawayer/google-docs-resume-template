@@ -61,7 +61,9 @@ async function main(): Promise<void> {
   }
 
   writeFileSync(HEALTH_PATH, JSON.stringify(next, null, 2) + "\n");
-  console.log(`✓ check-links: ${Object.keys(next).length} checked, ${unhealthy} unhealthy → ${HEALTH_PATH}`);
+  console.log(
+    `✓ check-links: ${Object.keys(next).length} checked, ${unhealthy} unhealthy → ${HEALTH_PATH}`,
+  );
   // Intentionally exit 0; alerting (scripts/alert-health) pages on sustained failures.
 }
 

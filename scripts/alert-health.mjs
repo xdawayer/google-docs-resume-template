@@ -21,7 +21,9 @@ function main() {
     console.log("alert-health: all copy links healthy");
     return;
   }
-  const lines = bad.map(([slug, r]) => `• ${slug}: ${r.status} (${r.consecutiveFailures}x) — ${r.reason ?? ""}`);
+  const lines = bad.map(
+    ([slug, r]) => `• ${slug}: ${r.status} (${r.consecutiveFailures}x) — ${r.reason ?? ""}`,
+  );
   const text = `⚠ ${bad.length} resume template copy link(s) unhealthy:\n${lines.join("\n")}`;
   console.error(text);
   const hook = process.env.SLACK_WEBHOOK_URL;

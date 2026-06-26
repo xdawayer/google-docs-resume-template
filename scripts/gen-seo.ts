@@ -32,9 +32,13 @@ function main(): void {
 
   const routes: RouteEntry[] = [
     { path: hubPath(), type: "hub", indexable: true },
-    ...published.map((t): RouteEntry => ({ path: templatePath(t.slug), type: "detail", indexable: true })),
+    ...published.map(
+      (t): RouteEntry => ({ path: templatePath(t.slug), type: "detail", indexable: true }),
+    ),
     // listing pages default to noindex until they carry unique content (E5)
-    ...categories.map((c): RouteEntry => ({ path: categoryPath(c), type: "category", indexable: false })),
+    ...categories.map(
+      (c): RouteEntry => ({ path: categoryPath(c), type: "category", indexable: false }),
+    ),
     ...roles.map((r): RouteEntry => ({ path: rolePath(r), type: "role", indexable: false })),
   ];
 
@@ -54,7 +58,9 @@ function main(): void {
       2,
     ) + "\n",
   );
-  console.log(`✓ gen-seo: ${routes.length} routes (${routes.filter((r) => r.indexable).length} indexable)`);
+  console.log(
+    `✓ gen-seo: ${routes.length} routes (${routes.filter((r) => r.indexable).length} indexable)`,
+  );
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main();

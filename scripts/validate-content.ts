@@ -5,7 +5,12 @@
  * Core logic is the pure `validateTemplates()` so it's unit-testable without fs.
  * `main()` loads from disk and exits non-zero on any error (fails the build).
  */
-import { templateSchema, CANONICAL_ORIGIN, TEMPLATE_PATH_PREFIX, type Template } from "../src/content/schema";
+import {
+  templateSchema,
+  CANONICAL_ORIGIN,
+  TEMPLATE_PATH_PREFIX,
+  type Template,
+} from "../src/content/schema";
 import { loadRawTemplates, type RawTemplate } from "./_shared";
 
 export function expectedCanonical(slug: string): string {
@@ -98,7 +103,9 @@ function main(): void {
     console.error("");
     process.exit(1);
   }
-  const published = raws.filter((r) => (r.data as { status?: string }).status === "published").length;
+  const published = raws.filter(
+    (r) => (r.data as { status?: string }).status === "published",
+  ).length;
   console.log(`✓ validate-content: ${raws.length} template(s) OK (${published} published)`);
 }
 

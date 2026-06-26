@@ -10,7 +10,10 @@ import type { RawTemplate } from "../../scripts/_shared";
 const FIXTURES = resolve(dirname(fileURLToPath(import.meta.url)), "../fixtures/templates");
 
 function loadFixture(name: string): Record<string, unknown> {
-  return matter(readFileSync(resolve(FIXTURES, `${name}.md`), "utf8")).data as Record<string, unknown>;
+  return matter(readFileSync(resolve(FIXTURES, `${name}.md`), "utf8")).data as Record<
+    string,
+    unknown
+  >;
 }
 
 // ---- schema-level (gray-matter → Zod) ----
@@ -47,7 +50,13 @@ describe("templateSchema (real frontmatter path)", () => {
 
 // ---- cross-template gate (validateTemplates, no fs) ----
 function raw(slug: string, data: Record<string, unknown>, fileSlug = slug): RawTemplate {
-  return { fileSlug, filepath: `/x/${fileSlug}.md`, relpath: `templates/${fileSlug}.md`, data, body: "x" };
+  return {
+    fileSlug,
+    filepath: `/x/${fileSlug}.md`,
+    relpath: `templates/${fileSlug}.md`,
+    data,
+    body: "x",
+  };
 }
 
 function draft(slug: string, over: Record<string, unknown> = {}): Record<string, unknown> {
@@ -78,12 +87,19 @@ function draft(slug: string, over: Record<string, unknown> = {}): Record<string,
 }
 
 function published(slug: string, related: string[]): Record<string, unknown> {
-  return draft(slug, { status: "published", linkStatus: "available", atsProfile: "visual-pdf", related });
+  return draft(slug, {
+    status: "published",
+    linkStatus: "available",
+    atsProfile: "visual-pdf",
+    related,
+  });
 }
 
 describe("validateTemplates (cross-template rules)", () => {
   it("passes for 3 valid drafts", () => {
-    expect(validateTemplates([raw("a", draft("a")), raw("b", draft("b")), raw("c", draft("c"))])).toEqual([]);
+    expect(
+      validateTemplates([raw("a", draft("a")), raw("b", draft("b")), raw("c", draft("c"))]),
+    ).toEqual([]);
   });
 
   it("flags slug != filename", () => {
@@ -97,27 +113,64 @@ describe("validateTemplates (cross-template rules)", () => {
   });
 
   it("flags duplicate SEO title", () => {
-    const errs = validateTemplates([raw("a", draft("a", { seo: { ...(draft("z").seo as object) } })), raw("b", draft("b", { seo: { ...(draft("z").seo as object), canonical: expectedCanonical("b") } }))]);
+    const errs = validateTemplates([
+      raw("a", draft("a", { seo: { ...(draft("z").seo as object) } })),
+      raw(
+        "b",
+        draft("b", { seo: { ...(draft("z").seo as object), canonical: expectedCanonical("b") } }),
+      ),
+    ]);
     expect(errs.join("\n")).toMatch(/duplicate SEO title/);
   });
 
   it("flags wrong canonical", () => {
-    const errs = validateTemplates([raw("a", draft("a", { seo: { title: "a t", metaDescription: "a sufficiently long unique meta description that clears the seventy character minimum easily here", canonical: "https://resumedocs.example/wrong/" } }))]);
+    const errs = validateTemplates([
+      raw(
+        "a",
+        draft("a", {
+          seo: {
+            title: "a t",
+            metaDescription:
+              "a sufficiently long unique meta description that clears the seventy character minimum easily here",
+            canonical: "https://resumedocs.example/wrong/",
+          },
+        }),
+      ),
+    ]);
     expect(errs.join("\n")).toMatch(/canonical/);
   });
 
   it("flags missing / self related", () => {
-    expect(validateTemplates([raw("a", draft("a", { related: ["nope"] }))]).join("\n")).toMatch(/does not exist/);
-    expect(validateTemplates([raw("a", draft("a", { related: ["a"] }))]).join("\n")).toMatch(/itself/);
+    expect(validateTemplates([raw("a", draft("a", { related: ["nope"] }))]).join("\n")).toMatch(
+      /does not exist/,
+    );
+    expect(validateTemplates([raw("a", draft("a", { related: ["a"] }))]).join("\n")).toMatch(
+      /itself/,
+    );
   });
 
   it("flags published relating to non-published", () => {
-    const errs = validateTemplates([raw("p", published("p", ["d", "e"])), raw("d", draft("d")), raw("e", draft("e"))]);
+    const errs = validateTemplates([
+      raw("p", published("p", ["d", "e"])),
+      raw("d", draft("d")),
+      raw("e", draft("e")),
+    ]);
     expect(errs.join("\n")).toMatch(/non-published/);
   });
 
   it("enforces the E12 gate (>3 published unless SCALE_OK)", () => {
-    const four = ["p1", "p2", "p3", "p4"].map((s) => raw(s, published(s, ["p1", "p2"].filter((x) => x !== s).concat("p3").slice(0, 2))));
+    const four = ["p1", "p2", "p3", "p4"].map((s) =>
+      raw(
+        s,
+        published(
+          s,
+          ["p1", "p2"]
+            .filter((x) => x !== s)
+            .concat("p3")
+            .slice(0, 2),
+        ),
+      ),
+    );
     expect(validateTemplates(four).join("\n")).toMatch(/E12 gate/);
     expect(validateTemplates(four, { scaleOk: true }).join("\n")).not.toMatch(/E12 gate/);
   });

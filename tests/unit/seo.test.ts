@@ -12,11 +12,21 @@ describe("seo-rules", () => {
   });
 
   it("listing is indexable only with enough unique substance", () => {
-    expect(isListingIndexable({ optedIn: true, itemCount: 6, introChars: 600, faqCount: 3 })).toBe(true);
-    expect(isListingIndexable({ optedIn: false, itemCount: 9, introChars: 999, faqCount: 9 })).toBe(false);
-    expect(isListingIndexable({ optedIn: true, itemCount: 5, introChars: 600, faqCount: 3 })).toBe(false);
-    expect(isListingIndexable({ optedIn: true, itemCount: 6, introChars: 599, faqCount: 3 })).toBe(false);
-    expect(isListingIndexable({ optedIn: true, itemCount: 6, introChars: 600, faqCount: 2 })).toBe(false);
+    expect(isListingIndexable({ optedIn: true, itemCount: 6, introChars: 600, faqCount: 3 })).toBe(
+      true,
+    );
+    expect(isListingIndexable({ optedIn: false, itemCount: 9, introChars: 999, faqCount: 9 })).toBe(
+      false,
+    );
+    expect(isListingIndexable({ optedIn: true, itemCount: 5, introChars: 600, faqCount: 3 })).toBe(
+      false,
+    );
+    expect(isListingIndexable({ optedIn: true, itemCount: 6, introChars: 599, faqCount: 3 })).toBe(
+      false,
+    );
+    expect(isListingIndexable({ optedIn: true, itemCount: 6, introChars: 600, faqCount: 2 })).toBe(
+      false,
+    );
   });
 
   it("robotsContent maps indexability", () => {
@@ -50,7 +60,10 @@ describe("jsonld", () => {
 
 describe("routes (T3 cap)", () => {
   it("throws over the role cap or under 500 traffic potential", () => {
-    const many = Array.from({ length: ROLE_CAP + 1 }, (_, i) => ({ role: `r${i}`, trafficPotential: 999 }));
+    const many = Array.from({ length: ROLE_CAP + 1 }, (_, i) => ({
+      role: `r${i}`,
+      trafficPotential: 999,
+    }));
     expect(() => assertRoleCap(many)).toThrow(/cap/);
     expect(() => assertRoleCap([{ role: "x", trafficPotential: 499 }])).toThrow(/500/);
     expect(() => assertRoleCap([{ role: "x", trafficPotential: 500 }])).not.toThrow();

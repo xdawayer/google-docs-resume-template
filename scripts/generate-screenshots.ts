@@ -34,7 +34,9 @@ function loadLock(): Lock {
 }
 
 async function main(): Promise<void> {
-  const only = process.argv.includes("--slug") ? process.argv[process.argv.indexOf("--slug") + 1] : null;
+  const only = process.argv.includes("--slug")
+    ? process.argv[process.argv.indexOf("--slug") + 1]
+    : null;
   if (!hasCreds()) {
     console.warn("⚠ generate-screenshots: GOOGLE_SA_KEY not set — skipping (no-op).");
     return;
@@ -57,7 +59,18 @@ async function main(): Promise<void> {
     writeFileSync(tmp, pdf);
     const prefix = join(tmpdir(), t.slug);
     // first page only, 150dpi PNG -> {prefix}-1.png (or {prefix}.png with -singlefile)
-    await execa("pdftoppm", ["-png", "-singlefile", "-r", "150", "-f", "1", "-l", "1", tmp, prefix]);
+    await execa("pdftoppm", [
+      "-png",
+      "-singlefile",
+      "-r",
+      "150",
+      "-f",
+      "1",
+      "-l",
+      "1",
+      tmp,
+      prefix,
+    ]);
     const png = readFileSync(`${prefix}.png`);
 
     const outPath = join(ASSET_DIR, `${t.slug}.png`);

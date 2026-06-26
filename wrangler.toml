@@ -1,0 +1,6 @@
+# Cloudflare Pages config. The static build is in dist/; functions/ deploys as
+# Pages Functions (/go/[slug], /api/collect). nodejs_compat enables fetch/URL etc.
+name = "google-docs-resume-template"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]

@@ -24,7 +24,9 @@ const MAP = goMap as Record<string, Entry>;
 const BASE = "/google-docs-resume-template";
 
 export const onRequest = async (ctx: GoContext): Promise<Response> => {
-  const slug = String(Array.isArray(ctx.params.slug) ? ctx.params.slug[0] : ctx.params.slug ?? "");
+  const slug = String(
+    Array.isArray(ctx.params.slug) ? ctx.params.slug[0] : (ctx.params.slug ?? ""),
+  );
   const entry = MAP[slug];
   const hub = new URL(`${BASE}/`, ctx.request.url).toString();
 
@@ -35,10 +37,18 @@ export const onRequest = async (ctx: GoContext): Promise<Response> => {
 
   // Healthy → the real /copy link. Anything else → detail page in "updating" state.
   if (entry.status === "available") return Response.redirect(entry.copyUrl, 302);
-  return Response.redirect(new URL(`${BASE}/${slug}/?status=updating`, ctx.request.url).toString(), 302);
+  return Response.redirect(
+    new URL(`${BASE}/${slug}/?status=updating`, ctx.request.url).toString(),
+    302,
+  );
 };
 
-async function reportDispatch(env: Env, slug: string, status: string, request: Request): Promise<void> {
+async function reportDispatch(
+  env: Env,
+  slug: string,
+  status: string,
+  request: Request,
+): Promise<void> {
   if (!env.PLAUSIBLE_DOMAIN) return;
   const host = env.PLAUSIBLE_API_HOST ?? "https://plausible.io";
   try {
@@ -59,4 +69,4 @@ async function reportDispatch(env: Env, slug: string, status: string, request: R
   } catch {
     // best-effort; never block the redirect
   }
-};
+}

@@ -9,7 +9,11 @@ describe("buildGoMap", () => {
     const templates: TemplateLite[] = [
       { slug: "a", copyUrl: realCopy, status: "published" },
       { slug: "b", copyUrl: realCopy, status: "draft" }, // dropped: draft
-      { slug: "c", copyUrl: "https://docs.google.com/document/d/REPLACE_WITH_X/copy", status: "published" }, // dropped: placeholder
+      {
+        slug: "c",
+        copyUrl: "https://docs.google.com/document/d/REPLACE_WITH_X/copy",
+        status: "published",
+      }, // dropped: placeholder
     ];
     const health: HealthMap = { a: { status: "available" } };
     const map = buildGoMap(templates, health);

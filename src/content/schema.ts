@@ -24,8 +24,7 @@ const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DOC_ID_RE = /^[A-Za-z0-9_-]{20,}$/;
 // Real Google Docs "make a copy" link. The trailing `/copy` is mandatory and
 // the placeholder `REPLACE_WITH_*` from the demo is explicitly rejected.
-const COPY_URL_RE =
-  /^https:\/\/docs\.google\.com\/document\/d\/[A-Za-z0-9_-]{20,}\/copy$/;
+const COPY_URL_RE = /^https:\/\/docs\.google\.com\/document\/d\/[A-Za-z0-9_-]{20,}\/copy$/;
 
 const category = z.enum([
   "ats",
@@ -55,12 +54,7 @@ const experienceLevel = z.enum(["entry", "mid", "senior", "any"]);
 // plus a checklist of checkable facts (T2).
 const atsProfile = z.enum(["scanner-first", "balanced", "visual-pdf"]);
 
-const linkStatus = z.enum([
-  "unverified",
-  "available",
-  "unavailable",
-  "checking",
-]);
+const linkStatus = z.enum(["unverified", "available", "unavailable", "checking"]);
 
 const status = z.enum(["draft", "published"]);
 
@@ -91,9 +85,7 @@ const imageAsset = z
   })
   .strict();
 
-const faqItem = z
-  .object({ q: z.string().min(1), a: z.string().min(1) })
-  .strict();
+const faqItem = z.object({ q: z.string().min(1), a: z.string().min(1) }).strict();
 
 const seo = z
   .object({

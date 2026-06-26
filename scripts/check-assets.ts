@@ -9,7 +9,13 @@ import { imageSize } from "image-size";
 import { templateSchema } from "../src/content/schema";
 import { loadRawTemplates } from "./_shared";
 
-function checkImage(srcPath: string, declared: { width: number; height: number } | null, relpath: string, label: string, errors: string[]): void {
+function checkImage(
+  srcPath: string,
+  declared: { width: number; height: number } | null,
+  relpath: string,
+  label: string,
+  errors: string[],
+): void {
   const abs = resolve(process.cwd(), srcPath);
   if (!existsSync(abs)) {
     errors.push(`${relpath}: ${label} not found on disk: ${srcPath}`);
@@ -32,7 +38,13 @@ function main(): void {
     const res = templateSchema.safeParse(r.data);
     if (!res.success) continue; // schema errors are reported by validate-content
     const t = res.data;
-    checkImage(t.thumbnail.src, { width: t.thumbnail.width, height: t.thumbnail.height }, r.relpath, "thumbnail", errors);
+    checkImage(
+      t.thumbnail.src,
+      { width: t.thumbnail.width, height: t.thumbnail.height },
+      r.relpath,
+      "thumbnail",
+      errors,
+    );
     if (t.seo.ogImage) checkImage(t.seo.ogImage, null, r.relpath, "ogImage", errors);
     for (const pe of t.parseEvidence) {
       if (pe.image) checkImage(pe.image, null, r.relpath, `parseEvidence(${pe.tool})`, errors);

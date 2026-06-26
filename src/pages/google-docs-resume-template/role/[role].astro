@@ -12,25 +12,40 @@ type Entry = CollectionEntry<"templates">;
 
 export async function getStaticPaths() {
   const all = await getCollection("templates", ({ data }: Entry) => data.status === "published");
-  const roles = ([...new Set(all.flatMap((e: Entry) => (e.data as Template).roles))] as string[]).filter(
-    (r) => r !== "general",
-  );
+  const roles = (
+    [...new Set(all.flatMap((e: Entry) => (e.data as Template).roles))] as string[]
+  ).filter((r) => r !== "general");
   // T3 cap: traffic potential is supplied by M7; default 999 keeps the count guard active.
   assertRoleCap(roles.map((role) => ({ role, trafficPotential: 999 })));
   return roles.map((role) => ({
     params: { role },
-    props: { role, entries: all.filter((e: Entry) => ((e.data as Template).roles as string[]).some((r) => r === role)) },
+    props: {
+      role,
+      entries: all.filter((e: Entry) =>
+        ((e.data as Template).roles as string[]).some((r) => r === role),
+      ),
+    },
   }));
 }
 
 const { role, entries } = Astro.props as { role: string; entries: Entry[] };
-const indexable = isListingIndexable({ optedIn: false, itemCount: entries.length, introChars: 0, faqCount: 0 });
+const indexable = isListingIndexable({
+  optedIn: false,
+  itemCount: entries.length,
+  introChars: 0,
+  faqCount: 0,
+});
 const title = `${role} resume template for Google Docs | ATS-friendly | ${BRAND}`;
 const description = `A ${role} resume template you can copy into Google Docs. Role-specific structure, ATS-friendly, with example bullet points and section guidance.`;
 ---
 
 <BaseLayout title={title} description={description} robots={robotsContent(indexable)}>
-  <Breadcrumbs crumbs={[{ name: "Templates", href: hubPath() }, { name: role, href: rolePath(role) }]} />
+  <Breadcrumbs
+    crumbs={[
+      { name: "Templates", href: hubPath() },
+      { name: role, href: rolePath(role) },
+    ]}
+  />
   <h1>{role} resume template for Google Docs</h1>
   <TemplateGrid entries={entries} />
 </BaseLayout>

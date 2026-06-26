@@ -31,7 +31,9 @@ export function assertRoleCap(candidates: RoleCandidate[]): void {
   }
   for (const c of candidates) {
     if (c.trafficPotential < 500) {
-      throw new Error(`role "${c.role}" has trafficPotential ${c.trafficPotential} < 500 (T3 — verify demand)`);
+      throw new Error(
+        `role "${c.role}" has trafficPotential ${c.trafficPotential} < 500 (T3 — verify demand)`,
+      );
     }
   }
 }

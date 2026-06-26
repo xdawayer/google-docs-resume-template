@@ -19,7 +19,11 @@ const schema = breadcrumbSchema(crumbs.map((c) => ({ name: c.name, url: absolute
     {
       crumbs.map((c, i) => (
         <li>
-          {i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}
+          {i < crumbs.length - 1 ? (
+            <a href={c.href}>{c.name}</a>
+          ) : (
+            <span aria-current="page">{c.name}</span>
+          )}
         </li>
       ))
     }

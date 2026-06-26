@@ -1,4 +1,5 @@
 <!-- /autoplan restore point: /Users/wzb/.gstack/projects/google-docs-resume-template/main-autoplan-restore-20260626-232238.md -->
+
 # Google Docs Resume Template 产品 PRD 与 SEO 分析
 
 版本：v0.1  
@@ -28,13 +29,13 @@
 
 用户提供的数据：
 
-| 指标 | 数值 | 判断 |
-|---|---:|---|
+| 指标   |      数值 | 判断               |
+| ------ | --------: | ------------------ |
 | Volume | 32,000/月 | 足够支撑独立站 MVP |
-| KD | 12 | 难度低 |
-| CPC | $1.00 | 对内容型站点较优 |
-| KGR | 0.0115 | 极低竞争 |
-| KDRoi | 2,667 | 高优先级 |
+| KD     |        12 | 难度低             |
+| CPC    |     $1.00 | 对内容型站点较优   |
+| KGR    |    0.0115 | 极低竞争           |
+| KDRoi  |     2,667 | 高优先级           |
 
 补充判断：
 
@@ -211,13 +212,13 @@
 
 ### 5.3 差异化策略
 
-| 维度 | 普通模板站 | 推荐方案 |
-|---|---|---|
-| 获取方式 | Download / sign up / jump | Direct Google Docs copy link |
-| 分类方式 | 风格分类 | 风格 + 岗位 + 经验级别 + ATS 风险 |
-| 内容深度 | 简短描述 | 适用人群、ATS 注意、填写建议、关键词建议 |
-| 转化 | 模板点击 | Copy Docs + Email pack + Resume checker affiliate |
-| SEO | 单页集合 | Hub + detail pages + cluster pages + FAQ |
+| 维度     | 普通模板站                | 推荐方案                                          |
+| -------- | ------------------------- | ------------------------------------------------- |
+| 获取方式 | Download / sign up / jump | Direct Google Docs copy link                      |
+| 分类方式 | 风格分类                  | 风格 + 岗位 + 经验级别 + ATS 风险                 |
+| 内容深度 | 简短描述                  | 适用人群、ATS 注意、填写建议、关键词建议          |
+| 转化     | 模板点击                  | Copy Docs + Email pack + Resume checker affiliate |
+| SEO      | 单页集合                  | Hub + detail pages + cluster pages + FAQ          |
 
 ---
 
@@ -253,14 +254,14 @@
 
 建议首版至少 24 个模板。
 
-| 类别 | 数量 | 示例 |
-|---|---:|---|
-| ATS / Simple | 6 | ATS Classic, Clean One Page, No-table Resume |
-| Student / Entry-level | 4 | College Student, Internship, New Grad, Scholarship CV |
-| Tech / Data / Product | 5 | Software Engineer, Data Analyst, Product Manager, UX Designer, Full Stack |
-| Professional / Corporate | 4 | Manager, Operations, Sales, Finance |
-| Creative / Marketing | 3 | Marketing, Designer, Portfolio-style |
-| Cover Letter / References | 2 | Matching Cover Letter, References Page |
+| 类别                      | 数量 | 示例                                                                      |
+| ------------------------- | ---: | ------------------------------------------------------------------------- |
+| ATS / Simple              |    6 | ATS Classic, Clean One Page, No-table Resume                              |
+| Student / Entry-level     |    4 | College Student, Internship, New Grad, Scholarship CV                     |
+| Tech / Data / Product     |    5 | Software Engineer, Data Analyst, Product Manager, UX Designer, Full Stack |
+| Professional / Corporate  |    4 | Manager, Operations, Sales, Finance                                       |
+| Creative / Marketing      |    3 | Marketing, Designer, Portfolio-style                                      |
+| Cover Letter / References |    2 | Matching Cover Letter, References Page                                    |
 
 模板数量要足够支撑“集合页”的权威感。低于 12 个会显得像薄内容。
 
