@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Google Docs Resume Templates to Copy & Edit</title>
+  <meta name="description" content="Copy a free Google Docs resume template, edit it in minutes, and download as PDF or Word. ATS-friendly layouts for students, professionals, tech, and creative roles." />
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #64748b;
+      --line: #e5e7eb;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --soft: #eef4ff;
+      --good: #0f766e;
+      --warn: #a16207;
+      --shadow: 0 18px 50px rgba(15, 23, 42, .08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: radial-gradient(circle at top left, #eaf2ff 0, transparent 28rem), var(--bg);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 247, 244, .82);
+      border-bottom: 1px solid rgba(229, 231, 235, .7);
+    }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--ink);
+      color: white;
+      font-weight: 900;
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .navlinks a:hover { color: var(--ink); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      min-height: 44px;
+      padding: 0 18px;
+      font-weight: 750;
+      font-size: 14px;
+      cursor: pointer;
+      background: white;
+      color: var(--ink);
+      transition: .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(15, 23, 42, .08); }
+    .btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    .btn.primary:hover { background: var(--accent-dark); }
+    .btn.ghost { background: transparent; }
+    .btn.block { width: 100%; }
+
+    .hero {
+      padding: 82px 0 42px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #1e40af;
+      font-weight: 750;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: .95;
+      letter-spacing: -.065em;
+      margin: 0 0 22px;
+    }
+
+    .lead {
+      font-size: 20px;
+      color: var(--muted);
+      max-width: 650px;
+      margin: 0 0 28px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .trust {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .trust span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.6);
+      border-radius: 999px;
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 24px;
+      background: var(--panel);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(229,231,235,.9);
+    }
+
+    .doc-preview {
+      aspect-ratio: 8.5 / 11;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 34px 30px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.7);
+      overflow: hidden;
+    }
+
+    .resume-head { border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 18px; }
+    .name-line { width: 62%; height: 18px; background: var(--ink); border-radius: 8px; margin-bottom: 10px; }
+    .meta-line { width: 84%; height: 8px; background: #cbd5e1; border-radius: 8px; }
+    .section { margin: 18px 0; }
+    .section-title { width: 34%; height: 9px; background: var(--accent); border-radius: 8px; margin-bottom: 10px; }
+    .line { height: 8px; background: #e2e8f0; border-radius: 8px; margin: 8px 0; }
+    .line.short { width: 72%; }
+    .line.mid { width: 88%; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .floating-score {
+      position: absolute;
+      right: 8px;
+      bottom: 54px;
+      background: #0f172a;
+      color: white;
+      border-radius: 18px;
+      padding: 16px;
+      width: 170px;
+      box-shadow: var(--shadow);
+    }
+
+    .floating-score strong { display: block; font-size: 26px; letter-spacing: -.04em; }
+    .floating-score small { color: #cbd5e1; }
+
+    section { padding: 48px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 24px; }
+    h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1; letter-spacing: -.05em; margin: 0; }
+    .section-note { color: var(--muted); max-width: 520px; margin: 0; }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .searchbox {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 18px;
+      background: white;
+      font: inherit;
+      outline: none;
+    }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--muted);
+      border-radius: 999px;
+      min-height: 44px;
+      padding: 0 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .template-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(15,23,42,.05);
+      transition: .18s ease;
+    }
+
+    .template-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .thumb {
+      background: linear-gradient(145deg, #f8fafc, #eef2f7);
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .mini-doc {
+      aspect-ratio: 8.5/11;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 18px;
+      overflow: hidden;
+    }
+    .mini-doc .name-line { height: 11px; width: 58%; }
+    .mini-doc .meta-line, .mini-doc .line { height: 5px; }
+    .mini-doc .section-title { height: 6px; }
+
+    .card-body { padding: 18px; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 750;
+    }
+    .tag.ats { color: var(--good); background: #e8f7f4; }
+    .tag.warn { color: var(--warn); background: #fef3c7; }
+    .card-body h3 { margin: 0 0 8px; font-size: 20px; letter-spacing: -.03em; }
+    .card-body p { color: var(--muted); margin: 0 0 16px; min-height: 48px; }
+    .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .step {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--ink);
+      color: white;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    .step h3 { margin: 0 0 8px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    .split {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px;
+      box-shadow: 0 12px 30px rgba(15,23,42,.04);
+    }
+    .checklist { list-style: none; padding: 0; margin: 18px 0 0; }
+    .checklist li { padding: 11px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+    .checklist li:last-child { border-bottom: 0; }
+    .checklist strong { color: var(--ink); }
+
+    .faq details {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-bottom: 10px;
+    }
+    .faq summary { cursor: pointer; font-weight: 800; }
+    .faq p { color: var(--muted); margin-bottom: 0; }
+
+    footer {
+      padding: 44px 0;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(15,23,42,.54);
+      z-index: 100;
+      padding: 22px;
+    }
+    .modal.open { display: grid; }
+    .modal-card {
+      width: min(960px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      background: white;
+      border-radius: 28px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(280px, .9fr) minmax(280px, 1fr);
+      gap: 24px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.22);
+    }
+    .modal h3 { font-size: 30px; margin: 0 0 10px; letter-spacing: -.04em; }
+    .modal p { color: var(--muted); }
+    .close { float: right; }
+
+    .mobile-cta {
+      display: none;
+      position: fixed;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 60;
+      box-shadow: 0 14px 32px rgba(37,99,235,.28);
+    }
+
+    @media (max-width: 920px) {
+      .hero, .split, .modal-card { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .how-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toolbar { grid-template-columns: 1fr; }
+      .floating-score { right: 24px; bottom: 24px; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 0 16px; }
+      .navlinks { display: none; }
+      .hero { padding-top: 50px; }
+      .grid, .how-grid { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .hero-card { padding: 14px; }
+      .floating-score { display: none; }
+      .mobile-cta { display: inline-flex; }
+      section { padding: 34px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="ResumeDocs home"><span class="logo">RD</span><span>ResumeDocs</span></a>
+      <nav class="navlinks" aria-label="Primary navigation">
+        <a href="#templates">Templates</a>
+        <a href="#how">How it works</a>
+        <a href="#ats">ATS guide</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn primary" href="#templates">Browse templates</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">Free · Editable · No signup required</div>
+        <h1>Google Docs resume templates you can copy and edit.</h1>
+        <p class="lead">Choose an ATS-friendly resume template, open a copy in Google Docs, customize the sections, and download it as PDF or Word when you are ready to apply.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#templates">Copy a template</a>
+          <a class="btn" href="#how">See how it works</a>
+        </div>
+        <div class="trust" aria-label="Product benefits">
+          <span>✓ Direct Google Docs copy links</span>
+          <span>✓ ATS-friendly layouts</span>
+          <span>✓ Student, tech, creative and executive options</span>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="Resume preview">
+        <div class="doc-preview">
+          <div class="resume-head"><div class="name-line"></div><div class="meta-line"></div></div>
+          <div class="section"><div class="section-title"></div><div class="line mid"></div><div class="line"></div><div class="line short"></div></div>
+          <div class="section"><div class="section-title"></div><div class="line"></div><div class="line mid"></div><div class="line short"></div></div>
+          <div class="two-col"><div><div class="section-title"></div><div class="line"></div><div class="line short"></div></div><div><div class="section-title"></div><div class="line mid"></div><div class="line short"></div></div></div>
+        </div>
+        <div class="floating-score"><strong>95</strong><small>ATS-friendly score for clean one-column templates</small></div>
+      </div>
+    </div>
+
+    <section id="templates">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Pick a resume template.</h2>
+          </div>
+          <p class="section-note">Use filters to match your situation. In production, each card should point to a real Google Docs file shared as view-only and opened through a /copy link.</p>
+        </div>
+        <div class="toolbar">
+          <input id="search" class="searchbox" type="search" placeholder="Search by role, style, or category..." aria-label="Search templates" />
+          <div class="filters" aria-label="Template filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="ATS">ATS</button>
+            <button class="chip" data-filter="Student">Student</button>
+            <button class="chip" data-filter="Tech">Tech</button>
+            <button class="chip" data-filter="Creative">Creative</button>
+            <button class="chip" data-filter="Executive">Executive</button>
+          </div>
+        </div>
+        <div id="templateGrid" class="grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>How to use these templates.</h2>
+          <p class="section-note">The fastest flow is copy, edit, export. Avoid forcing users to sign up before they see the actual Google Docs document.</p>
+        </div>
+        <div class="how-grid">
+          <article class="step"><div class="num">1</div><h3>Choose a template</h3><p>Filter by ATS, student, tech, creative, or executive style.</p></article>
+          <article class="step"><div class="num">2</div><h3>Open in Docs</h3><p>Click the copy button to create your own editable Google Docs copy.</p></article>
+          <article class="step"><div class="num">3</div><h3>Customize sections</h3><p>Replace placeholder text with measurable achievements and role-specific skills.</p></article>
+          <article class="step"><div class="num">4</div><h3>Export and apply</h3><p>Download as PDF for direct applications or Word when a portal requests .docx.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ats">
+      <div class="wrap split">
+        <div class="panel">
+          <h2>ATS-friendly by default.</h2>
+          <p class="section-note">For corporate job boards, clean structure usually matters more than visual decoration. Separate highly visual templates from scanner-first templates.</p>
+          <ul class="checklist">
+            <li><strong>Use standard headings:</strong> Experience, Education, Skills, Projects.</li>
+            <li><strong>Avoid risky elements:</strong> text boxes, icons, charts, complex tables.</li>
+            <li><strong>Keep contact info visible:</strong> do not hide it in headers or footers.</li>
+            <li><strong>Export carefully:</strong> test both PDF and Word versions before applying.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h2>Recommended template taxonomy.</h2>
+          <ul class="checklist">
+            <li><strong>ATS / Simple:</strong> highest intent, best conversion for job boards.</li>
+            <li><strong>Student:</strong> strong seasonal demand around graduation and internships.</li>
+            <li><strong>Tech / Data / Product:</strong> high-value long-tail pages by role.</li>
+            <li><strong>Creative:</strong> good for Pinterest/social distribution; label ATS caveats.</li>
+            <li><strong>Cover Letter:</strong> increases session depth and email capture potential.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>FAQ.</h2>
+          <p class="section-note">FAQ content should target People Also Ask style queries and reduce friction before the copy action.</p>
+        </div>
+        <details open>
+          <summary>Are Google Docs resume templates free?</summary>
+          <p>The free templates on this demo are positioned as direct copy templates. A production site can also offer a paid premium pack, but the first copy action should stay frictionless.</p>
+        </details>
+        <details>
+          <summary>Can I download a Google Docs resume as PDF?</summary>
+          <p>Yes. After editing the copy in Google Docs, use File → Download → PDF Document. For job portals that request Word, use File → Download → Microsoft Word.</p>
+        </details>
+        <details>
+          <summary>Which template is best for ATS?</summary>
+          <p>Choose a simple one-column template with standard section headings and minimal decorative elements. Use visual templates mainly when applying by email or sharing a designed PDF.</p>
+        </details>
+        <details>
+          <summary>Is this affiliated with Google?</summary>
+          <p>No. This demo represents an independent template directory. Google Docs is a trademark of Google LLC.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <strong>ResumeDocs</strong>
+      <p>Independent demo. Not affiliated with Google. Replace all placeholder Google Docs links with real view-only template copy links before launch.</p>
+    </div>
+  </footer>
+
+  <a class="btn primary mobile-cta" href="#templates">Browse templates</a>
+
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="doc-preview" id="modalPreview" aria-hidden="true">
+        <div class="resume-head"><div class="name-line"></div><div class="meta-line"></div></div>
+        <div class="section"><div class="section-title"></div><div class="line"></div><div class="line mid"></div><div class="line short"></div></div>
+        <div class="section"><div class="section-title"></div><div class="line mid"></div><div class="line"></div><div class="line short"></div></div>
+      </div>
+      <div>
+        <button class="btn close" id="closeModal">Close</button>
+        <h3 id="modalTitle">Template name</h3>
+        <p id="modalDesc">Template description.</p>
+        <ul class="checklist" id="modalFacts"></ul>
+        <a id="modalCopy" class="btn primary block" href="#" target="_blank" rel="noopener">Copy in Google Docs</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const templates = [
+      { name: 'ATS Classic One Page', tags: ['ATS', 'Professional', 'Simple'], score: 95, best: 'Corporate applications and job portals', desc: 'A clean one-column resume for Google Docs with standard headings and scanner-friendly spacing.' },
+      { name: 'Student Internship Resume', tags: ['Student', 'Entry-level', 'ATS'], score: 92, best: 'Students and internship applications', desc: 'Designed for limited work experience, coursework, campus roles, projects, and internships.' },
+      { name: 'Software Engineer Resume', tags: ['Tech', 'ATS', 'Projects'], score: 94, best: 'Engineering, full-stack, backend, frontend roles', desc: 'Highlights technical skills, projects, impact metrics, and work experience without complex formatting.' },
+      { name: 'Data Analyst Resume', tags: ['Tech', 'ATS', 'Analytics'], score: 93, best: 'Data analyst, BI, operations analytics roles', desc: 'Structured for tools, business impact, dashboards, SQL, Python, and quantified achievements.' },
+      { name: 'Modern Professional Resume', tags: ['Professional', 'Modern'], score: 86, best: 'General business and operations roles', desc: 'A polished layout that balances visual hierarchy with straightforward editing in Google Docs.' },
+      { name: 'Creative Marketing Resume', tags: ['Creative', 'Marketing'], score: 76, best: 'Marketing, brand, content, social roles', desc: 'A more visual template for roles where presentation matters. Best for PDF applications.' },
+      { name: 'Executive Two Page Resume', tags: ['Executive', 'Professional'], score: 84, best: 'Senior managers and leadership roles', desc: 'Built for longer career histories, leadership scope, metrics, board exposure, and major wins.' },
+      { name: 'Career Change Resume', tags: ['ATS', 'Professional'], score: 91, best: 'Career switchers and transferable skills', desc: 'Prioritizes profile, transferable skills, selected achievements, and role-relevant projects.' },
+      { name: 'Cover Letter Match', tags: ['Cover Letter', 'Professional'], score: 88, best: 'Matching application packages', desc: 'A matching Google Docs cover letter layout to pair with simple and professional resumes.' }
+    ];
+
+    const grid = document.getElementById('templateGrid');
+    const search = document.getElementById('search');
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalFacts = document.getElementById('modalFacts');
+    const modalCopy = document.getElementById('modalCopy');
+    const closeModal = document.getElementById('closeModal');
+    let activeFilter = 'all';
+
+    function placeholderCopyLink(templateName) {
+      const slug = templateName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      return `https://docs.google.com/document/d/REPLACE_WITH_${slug.toUpperCase()}_ID/copy`;
+    }
+
+    function render() {
+      const q = search.value.trim().toLowerCase();
+      const filtered = templates.filter(t => {
+        const haystack = [t.name, t.desc, t.best, ...t.tags].join(' ').toLowerCase();
+        const matchesSearch = !q || haystack.includes(q);
+        const matchesFilter = activeFilter === 'all' || t.tags.includes(activeFilter);
+        return matchesSearch && matchesFilter;
+      });
+
+      grid.innerHTML = filtered.map((t, index) => `
+        <article class="template-card">
+          <div class="thumb">
+            <div class="mini-doc">
+              <div class="resume-head"><div class="name-line"></div><div class="meta-line"></div></div>
+              <div class="section"><div class="section-title"></div><div class="line mid"></div><div class="line"></div><div class="line short"></div></div>
+              <div class="section"><div class="section-title"></div><div class="line"></div><div class="line mid"></div></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="tagrow">
+              ${t.tags.slice(0, 3).map(tag => `<span class="tag ${tag === 'ATS' ? 'ats' : tag === 'Creative' ? 'warn' : ''}">${tag}</span>`).join('')}
+            </div>
+            <h3>${t.name}</h3>
+            <p>${t.desc}</p>
+            <div class="card-actions">
+              <button class="btn" data-preview="${index}">Preview</button>
+              <a class="btn primary" href="${placeholderCopyLink(t.name)}" target="_blank" rel="noopener">Copy</a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('[data-preview]').forEach(button => {
+        button.addEventListener('click', () => openPreview(templates[Number(button.dataset.preview)]));
+      });
+    }
+
+    function openPreview(t) {
+      modalTitle.textContent = t.name;
+      modalDesc.textContent = t.desc;
+      modalFacts.innerHTML = `
+        <li><strong>Best for:</strong> ${t.best}</li>
+        <li><strong>ATS score:</strong> ${t.score}/100</li>
+        <li><strong>Tags:</strong> ${t.tags.join(', ')}</li>
+      `;
+      modalCopy.href = placeholderCopyLink(t.name);
+      modal.classList.add('open');
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        render();
+      });
+    });
+
+    search.addEventListener('input', render);
+    closeModal.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', event => {
+      if (event.target === modal) modal.classList.remove('open');
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') modal.classList.remove('open');
+    });
+
+    render();
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Free Google Docs Resume Templates",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"ATS Classic One Page"},
+      {"@type":"ListItem","position":2,"name":"Student Internship Resume"},
+      {"@type":"ListItem","position":3,"name":"Software Engineer Resume"},
+      {"@type":"ListItem","position":4,"name":"Data Analyst Resume"}
+    ]
+  }
+  </script>
+</body>
+</html>
