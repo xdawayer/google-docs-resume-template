@@ -1,3 +1,4 @@
+<!-- /autoplan restore point: /Users/wzb/.gstack/projects/google-docs-resume-template/main-autoplan-restore-20260626-232238.md -->
 # Google Docs Resume Template 产品 PRD 与 SEO 分析
 
 版本：v0.1  
