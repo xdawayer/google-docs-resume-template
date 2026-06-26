@@ -1,0 +1,29 @@
+name: gsc-monitor
+
+# T6 indexation monitor. OFF the deploy path (Decision #10). Weekly. Fails if
+# crawled-not-indexed > 20% (cold-start signal to deepen content before scaling).
+on:
+  schedule:
+    - cron: "0 7 * * 1" # Mondays
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gsc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Generate route manifest
+        run: pnpm gen:seo
+      - name: GSC indexation report
+        env:
+          GSC_SA_KEY: ${{ secrets.GSC_SA_KEY }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: pnpm tsx scripts/gsc-monitor.ts

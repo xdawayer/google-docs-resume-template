@@ -4,6 +4,7 @@
  * existing nodes — it NEVER re-renders the grid from data (that would regress
  * the no-JS crawlability D4/E4 protect). Loaded once from BaseLayout.
  */
+import { sendEvent } from "@lib/analytics";
 
 function setupFilter(): void {
   const grid = document.getElementById("templateGrid");
@@ -15,7 +16,8 @@ function setupFilter(): void {
   if (!grid) return;
   let activeFilter = "all";
 
-  const cards = (): HTMLElement[] => Array.from(grid.querySelectorAll<HTMLElement>(".template-card"));
+  const cards = (): HTMLElement[] =>
+    Array.from(grid.querySelectorAll<HTMLElement>(".template-card"));
 
   const apply = (): void => {
     const q = (search?.value ?? "").trim().toLowerCase();
@@ -23,7 +25,8 @@ function setupFilter(): void {
     for (const card of cards()) {
       const cats = (card.dataset.categories ?? "").split(" ");
       const hay = card.dataset.search ?? "";
-      const show = (activeFilter === "all" || cats.includes(activeFilter)) && (!q || hay.includes(q));
+      const show =
+        (activeFilter === "all" || cats.includes(activeFilter)) && (!q || hay.includes(q));
       card.hidden = !show;
       if (show) visible++;
     }
@@ -35,6 +38,7 @@ function setupFilter(): void {
     chip.addEventListener("click", () => {
       for (const c of chips) c.setAttribute("aria-pressed", String(c === chip));
       activeFilter = chip.dataset.filter ?? "all";
+      sendEvent("template_filter_click", { filter: activeFilter });
       apply();
     });
   }
@@ -57,15 +61,6 @@ function setupMobileNav(): void {
   });
 }
 
-function beacon(name: string, props: Record<string, string>): void {
-  try {
-    const payload = JSON.stringify({ name, domain: location.hostname, url: location.href, props });
-    navigator.sendBeacon?.("/api/collect", new Blob([payload], { type: "text/plain" }));
-  } catch {
-    /* analytics never errors the user */
-  }
-}
-
 function setupCopyBeacon(): void {
   // Capture phase so the beacon fires BEFORE the link navigates (E9). The CTA
   // opens in a new tab (rel=noopener) so the source tab never unloads anyway.
@@ -73,10 +68,10 @@ function setupCopyBeacon(): void {
     "click",
     (e) => {
       const el = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-copy]");
-      if (!el) return;
-      beacon("copy_google_docs_click", {
-        slug: el.dataset.copy ?? "",
-        cta_location: el.closest(".detail") ? "detail" : "card",
+      if (!el || !el.dataset.copy) return; // modal copy starts with empty data-copy
+      sendEvent("copy_google_docs_click", {
+        slug: el.dataset.copy,
+        cta_location: el.closest(".detail") ? "detail" : el.closest(".modal") ? "modal" : "card",
       });
     },
     { capture: true },
@@ -102,13 +97,18 @@ function setupModal(): void {
   const open = (card: HTMLElement): void => {
     lastFocus = document.activeElement as HTMLElement | null;
     const slug = card.querySelector<HTMLElement>("[data-copy]")?.dataset.copy ?? "";
-    if (title) title.textContent = card.querySelector(".card-title")?.textContent?.trim() ?? "Template";
+    if (title)
+      title.textContent = card.querySelector(".card-title")?.textContent?.trim() ?? "Template";
     if (thumb) {
       thumb.innerHTML = "";
       const t = card.querySelector(".thumb");
       if (t) thumb.appendChild(t.cloneNode(true));
     }
-    if (copy) copy.href = `/go/${slug}/`;
+    if (copy) {
+      copy.href = `/go/${slug}/`;
+      copy.dataset.copy = slug; // so the modal CTA also fires the copy beacon
+    }
+    sendEvent("template_preview_open", { slug });
     modal.hidden = false;
     document.body.style.overflow = "hidden";
     setInert(true);
@@ -139,7 +139,9 @@ function setupModal(): void {
   });
   modal.addEventListener("keydown", (e) => {
     if (e.key !== "Tab" || modal.hidden) return;
-    const f = modal.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])');
+    const f = modal.querySelectorAll<HTMLElement>(
+      'a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])',
+    );
     const first = f[0];
     const last = f[f.length - 1];
     if (!first || !last) return;
