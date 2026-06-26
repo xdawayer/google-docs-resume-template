@@ -1,0 +1,68 @@
+{
+  "name": "google-docs-resume-template",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "gen:seo": "tsx scripts/gen-seo.ts",
+    "gen:gomap": "tsx scripts/gen-go-map.ts",
+    "validate": "tsx scripts/validate-content.ts",
+    "check:assets": "tsx scripts/check-assets.ts",
+    "check:canonical": "tsx scripts/check-canonical.ts",
+    "check:sitemap": "tsx scripts/check-sitemap.ts",
+    "check:nojs": "tsx scripts/check-nojs-crawl.ts",
+    "check:links": "tsx scripts/check-links.ts",
+    "check:freshness": "tsx scripts/check-freshness.ts",
+    "shots:gen": "tsx scripts/generate-screenshots.ts",
+    "gate:e2e": "node scripts/e2e-gate.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "e2e": "playwright test",
+    "lhci": "lhci autorun",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "verify": "pnpm check && pnpm build && pnpm test"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.6.0",
+    "gray-matter": "^4.0.3",
+    "sharp": "^0.34.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.0",
+    "@vitest/coverage-v8": "^3.0.0",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "execa": "^9.5.0",
+    "fast-glob": "^3.3.2",
+    "google-auth-library": "^9.15.0",
+    "googleapis": "^144.0.0",
+    "image-size": "^1.1.1",
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "@parcel/watcher",
+      "workerd"
+    ]
+  }
+}

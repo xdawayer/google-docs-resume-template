@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects. /go/* is served by the edge function (functions/go/[slug].ts);
+# these are page-level 301s only. Generated /go map lines are appended at build (M6).
+/  /google-docs-resume-template/  301

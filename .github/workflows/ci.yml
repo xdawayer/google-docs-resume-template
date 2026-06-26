@@ -1,0 +1,44 @@
+name: ci
+
+# Build-blocking gate. Scheduled monitors (link-health, freshness, gsc) live in
+# their own workflows and are deliberately OFF the deploy path (Decision #10) so
+# external Google state never blocks an unrelated deploy.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Playwright browser (chromium only)
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Type + lint
+        run: pnpm check && pnpm lint
+      - name: Content gate + build (prebuild runs validate-content + check-assets)
+        run: pnpm build
+      - name: Build determinism (two builds, identical HTML)
+        run: |
+          find dist -name '*.html' -exec sha256sum {} \; | sort > /tmp/h1.txt
+          rm -rf dist && pnpm build
+          find dist -name '*.html' -exec sha256sum {} \; | sort > /tmp/h2.txt
+          diff /tmp/h1.txt /tmp/h2.txt
+      - name: Unit tests
+        run: pnpm test
+      - name: E2E (Playwright, builds + previews internally)
+        run: pnpm e2e
+      - name: Lighthouse budget
+        run: pnpm lhci || echo "lhci non-zero (budget) — see report"

@@ -1,0 +1,16 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["src/lib/*"],
+      "@components/*": ["src/components/*"],
+      "@data/*": ["src/data/*"],
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "scripts", "tests", "*.config.mjs", "*.config.ts"],
+  "exclude": ["dist", "node_modules", ".astro"]
+}
