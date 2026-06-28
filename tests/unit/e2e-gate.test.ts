@@ -19,13 +19,41 @@ function rawFromFixture(name: string): RawTemplate {
   };
 }
 
-function draftRaw(slug: string): RawTemplate {
+function bareDraft(slug: string): RawTemplate {
   return {
     fileSlug: `${slug}.draft`,
     filepath: `/x/${slug}.draft.md`,
     relpath: `x/${slug}.draft.md`,
     data: { slug, status: "draft" },
     body: "TODO",
+  };
+}
+
+function contentCompleteDraft(slug: string): RawTemplate {
+  return {
+    fileSlug: `${slug}.draft`,
+    filepath: `/x/${slug}.draft.md`,
+    relpath: `x/${slug}.draft.md`,
+    data: {
+      slug,
+      status: "draft",
+      atsProfile: "balanced",
+      docId: "REPLACE_WITH_DOC_ID",
+      copyUrl: "https://docs.google.com/document/d/REPLACE_WITH_DOC_ID/copy",
+      linkStatus: "unverified",
+      thumbnail: { src: "src/assets/x.png", alt: "A real alt description of the template" },
+      seo: { title: "A Unique Title Under Seventy Chars", metaDescription: "x".repeat(100) },
+      atsChecklist: [{ id: "a", label: "Single column", pass: true }],
+      bulletExamples: ["one outcome", "two outcome", "three outcome"],
+      faq: [
+        { q: "a", a: "1" },
+        { q: "b", a: "2" },
+        { q: "c", a: "3" },
+      ],
+      sectionGuidance: [{ section: "Experience", guidance: "Lead with outcomes." }],
+      related: ["other-one", "other-two"],
+    },
+    body: "word ".repeat(60),
   };
 }
 
@@ -45,33 +73,50 @@ describe("evaluateGate", () => {
   it("reports a missing target as missing / not-ready", () => {
     const r = evaluateGate(["nope"], baseInputs([]))[0]!;
     expect(r.state).toBe("missing");
+    expect(r.contentReady).toBe(false);
     expect(r.ready).toBe(false);
   });
 
-  it("reports a draft target as draft / not-ready (must be promoted first)", () => {
+  it("a bare draft is draft, not content-ready, with promoted pending", () => {
     const r = evaluateGate(
       ["ats-classic-one-page"],
-      baseInputs([draftRaw("ats-classic-one-page")]),
+      baseInputs([bareDraft("ats-classic-one-page")]),
     )[0]!;
     expect(r.state).toBe("draft");
+    expect(r.contentReady).toBe(false);
     expect(r.ready).toBe(false);
-    expect(checkStatus(r, "promoted")).toBe("fail");
+    expect(checkStatus(r, "promoted")).toBe("pending");
   });
 
-  it("a schema-valid published template still fails without screenshot / go / parse image", () => {
+  it("a content-complete draft is content-ready but not release-ready (externals pending)", () => {
+    const r = evaluateGate(
+      ["ats-classic-one-page"],
+      baseInputs([contentCompleteDraft("ats-classic-one-page")]),
+    )[0]!;
+    expect(r.state).toBe("draft");
+    expect(r.contentReady).toBe(true);
+    expect(r.ready).toBe(false);
+    expect(checkStatus(r, "seo-title")).toBe("pass");
+    expect(checkStatus(r, "bullets")).toBe("pass");
+    expect(checkStatus(r, "promoted")).toBe("pending");
+    expect(checkStatus(r, "doc")).toBe("pending");
+    expect(checkStatus(r, "link-available")).toBe("pending");
+  });
+
+  it("a promoted template with thin content fails the content checks", () => {
     const r = evaluateGate(
       ["valid-ats-classic-one-page"],
       baseInputs([rawFromFixture("valid-ats-classic-one-page")]),
     )[0]!;
     expect(r.state).toBe("published");
     expect(checkStatus(r, "promoted")).toBe("pass");
-    expect(checkStatus(r, "schema")).toBe("pass");
-    expect(checkStatus(r, "screenshot")).toBe("fail");
-    expect(checkStatus(r, "go-resolves")).toBe("fail");
+    expect(checkStatus(r, "bullets")).toBe("fail"); // fixture has 2
+    expect(checkStatus(r, "faq")).toBe("fail"); // fixture has 1
+    expect(r.contentReady).toBe(false);
     expect(r.ready).toBe(false);
   });
 
-  it("passes every data-layer check once all artifacts are present (manual checks stay pending)", () => {
+  it("passes every check once content + external artifacts are all present", () => {
     const raw = rawFromFixture("valid-ats-classic-one-page");
     raw.data = {
       ...raw.data,
@@ -94,7 +139,8 @@ describe("evaluateGate", () => {
       assetExists: () => true,
     })[0]!;
 
-    expect(r.checks.filter((c) => c.status === "fail")).toEqual([]);
+    expect(r.checks.filter((c) => c.status === "fail" || c.status === "pending")).toEqual([]);
+    expect(r.contentReady).toBe(true);
     expect(r.ready).toBe(true);
     expect(r.checks.some((c) => c.status === "manual")).toBe(true);
   });

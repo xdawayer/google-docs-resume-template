@@ -1,24 +1,26 @@
 /**
  * scripts/e2e-gate.ts — M7-7a release-readiness gate (the `pnpm gate:e2e` command).
  *
- * Evaluates the 7a target templates against the data-layer half of the 10-point
- * checklist and prints `N/<targets> ready`. It is the "belt" half of E12 (the
- * "suspenders" being the SCALE_OK block in validate-content). This gate is
- * intentionally OFF the build path (CI runs verify, not gate:e2e) so it can sit
- * RED until a template is genuinely authored, screenshotted, linked, and live.
+ * Evaluates the 7a target templates and prints two tallies: how many are
+ * CONTENT-ready (the prose/metadata Claude can author) and how many are
+ * RELEASE-ready (content + the external artifacts that need the governed
+ * Workspace). It is the "belt" half of E12 (the SCALE_OK block in
+ * validate-content is the "suspenders") and sits OFF the build path (CI runs
+ * verify, not gate:e2e), so it can stay red until a template is genuinely live.
  *
- * Machine-checkable here (read from the offline artifacts):
- *   promoted, schema-valid, published, linkStatus:available, ATS parse evidence,
- *   screenshot+revision (screenshots.lock + asset + revisionId), /go resolves,
- *   unique content (HCU), related>=2, alt text, cross-target uniqueness.
- * Surfaced but NOT machine-verified (run separately):
- *   PDF/DOCX export QA (qa:export) and the intent beacon (pnpm e2e copy-beacon).
+ * Check kinds:
+ *   pass    — verified good.
+ *   fail    — a CONTENT defect Claude must fix (too few bullets, dup title, ...).
+ *   pending — an EXTERNAL artifact that is not real yet and cannot be faked here
+ *             (real Google Doc id/copyUrl, screenshot via GOOGLE_SA_KEY, link
+ *             health, /go, parse evidence). Blocks release, not a content bug.
+ *   manual  — run a separate command (export QA, beacon e2e).
  *
+ * contentReady = no failing CONTENT check. ready = no fail AND no pending.
  * Core logic is the pure `evaluateGate()` so it is unit-testable without fs.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { templateSchema } from "../src/content/schema";
 import { loadRawTemplates, TEMPLATES_DIR, type RawTemplate } from "./_shared";
 import type { GoMap } from "../src/lib/go-map";
 
@@ -28,7 +30,11 @@ export const TARGET_SLUGS_7A = ["ats-classic-one-page", "student-internship", "s
 const GO_MAP_PATH = "functions/_data/go-map.json";
 const LOCK_PATH = "src/data/screenshots.lock.json";
 
-export type CheckStatus = "pass" | "fail" | "manual";
+const DOC_ID_RE = /^[A-Za-z0-9_-]{20,}$/;
+const COPY_URL_RE = /^https:\/\/docs\.google\.com\/document\/d\/[A-Za-z0-9_-]{20,}\/copy$/;
+const WORD_RE = /\S+/g;
+
+export type CheckStatus = "pass" | "fail" | "pending" | "manual";
 export interface Check {
   id: string;
   label: string;
@@ -37,7 +43,8 @@ export interface Check {
 }
 export interface GateResult {
   slug: string;
-  state: "published" | "draft" | "missing";
+  state: "missing" | "draft" | "published";
+  contentReady: boolean;
   ready: boolean;
   checks: Check[];
 }
@@ -50,14 +57,13 @@ export interface GateInputs {
   assetExists: (src: string) => boolean;
 }
 
-const WORD_RE = /\S+/g;
+const asArray = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
+const asStr = (v: unknown): string => (typeof v === "string" ? v : "");
+const asObj = (v: unknown): Record<string, unknown> =>
+  v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 const wordCount = (s: string): number => (s.match(WORD_RE) ?? []).length;
+const isReal = (s: string): boolean => s.length > 0 && !s.includes("REPLACE_WITH");
 
-/**
- * Evaluate each target slug. Pure: all I/O is supplied via `input`.
- * `ready` means "no failing machine checks"; pending `manual` checks do not
- * block readiness but are always printed as a reminder.
- */
 export function evaluateGate(targets: string[], input: GateInputs): GateResult[] {
   // Index raws by real slug, preferring a promoted .md over a .draft.md sibling.
   const bySlug = new Map<string, { raw: RawTemplate; isDraft: boolean }>();
@@ -68,153 +74,173 @@ export function evaluateGate(targets: string[], input: GateInputs): GateResult[]
     if (!existing || (existing.isDraft && !isDraft)) bySlug.set(slug, { raw, isDraft });
   }
 
-  // Cross-target uniqueness (HCU / near-dup defense) accumulates as we go.
   const seenBody = new Map<string, string>();
   const seenTitle = new Map<string, string>();
 
   return targets.map((slug): GateResult => {
     const hit = bySlug.get(slug);
-
     if (!hit) {
       return {
         slug,
         state: "missing",
+        contentReady: false,
         ready: false,
         checks: [
           {
             id: "exists",
             label: "template file exists",
             status: "fail",
-            detail: `no ${slug}.md or ${slug}.draft.md — run \`pnpm new:template ${slug}\``,
+            detail: `run \`pnpm new:template ${slug}\``,
           },
         ],
       };
     }
 
-    if (hit.isDraft) {
-      return {
-        slug,
-        state: "draft",
-        ready: false,
-        checks: [
-          {
-            id: "promoted",
-            label: "promoted (.md, not .draft.md)",
-            status: "fail",
-            detail: "still a scaffold — author the Doc, fill REPLACE_WITH_*/TODO, rename to .md",
-          },
-        ],
-      };
-    }
+    const d = hit.raw.data;
+    const statusField = asStr(d.status) || "draft";
+    const state: GateResult["state"] = hit.isDraft
+      ? "draft"
+      : statusField === "published"
+        ? "published"
+        : "draft";
 
-    const checks: Check[] = [{ id: "promoted", label: "promoted (.md)", status: "pass" }];
-    const add = (id: string, label: string, ok: boolean, detail?: string): void => {
-      checks.push({ id, label, status: ok ? "pass" : "fail", detail });
+    const content: Check[] = [];
+    const cAdd = (id: string, label: string, ok: boolean, detail?: string): void => {
+      content.push({ id, label, status: ok ? "pass" : "fail", detail });
+    };
+    const external: Check[] = [];
+    const eAdd = (id: string, label: string, ok: boolean, detail?: string): void => {
+      external.push({ id, label, status: ok ? "pass" : "pending", detail });
     };
 
-    const res = templateSchema.safeParse(hit.raw.data);
-    if (!res.success) {
-      checks.push({
-        id: "schema",
-        label: "schema valid",
-        status: "fail",
-        detail: res.error.issues
-          .slice(0, 3)
-          .map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`)
-          .join("; "),
-      });
-      return { slug, state: "published", ready: false, checks };
-    }
-    const t = res.data;
-    checks.push({ id: "schema", label: "schema valid", status: "pass" });
+    const promoted: Check = {
+      id: "promoted",
+      label: "promoted (.md, not .draft.md)",
+      status: hit.isDraft ? "pending" : "pass",
+      detail: hit.isDraft ? "fill the externals, then rename .draft.md -> .md" : undefined,
+    };
 
-    add("published", "status: published", t.status === "published", `status=${t.status}`);
-    add(
-      "link-available",
-      "linkStatus: available (E1/E2/D2)",
-      t.linkStatus === "available",
-      `linkStatus=${t.linkStatus}`,
+    // ---- CONTENT (Claude-authorable; read from raw frontmatter) ----
+    const seo = asObj(d.seo);
+    const title = asStr(seo.title);
+    const dupTitle = seenTitle.get(title);
+    cAdd(
+      "seo-title",
+      "SEO title set, <=70 chars, unique",
+      isReal(title) && title.length <= 70 && !dupTitle,
+      dupTitle ? `duplicate of ${dupTitle}` : `len=${title.length}`,
+    );
+    if (title) seenTitle.set(title, slug);
+
+    const desc = asStr(seo.metaDescription);
+    cAdd(
+      "seo-desc",
+      "meta description 70-160 chars",
+      isReal(desc) && desc.length >= 70 && desc.length <= 160,
+      `len=${desc.length}`,
     );
 
-    const needsParse = t.atsProfile !== "visual-pdf";
-    add(
+    cAdd(
+      "ats-checklist",
+      "ATS checklist >=1 item",
+      asArray(d.atsChecklist).length >= 1,
+      `n=${asArray(d.atsChecklist).length}`,
+    );
+    cAdd(
+      "bullets",
+      "bulletExamples >=3",
+      asArray(d.bulletExamples).length >= 3,
+      `n=${asArray(d.bulletExamples).length}`,
+    );
+    cAdd("faq", "faq >=3", asArray(d.faq).length >= 3, `n=${asArray(d.faq).length}`);
+    cAdd(
+      "guidance",
+      "sectionGuidance >=1",
+      asArray(d.sectionGuidance).length >= 1,
+      `n=${asArray(d.sectionGuidance).length}`,
+    );
+    cAdd(
+      "related",
+      "related >=2 (E5)",
+      asArray(d.related).length >= 2,
+      `n=${asArray(d.related).length}`,
+    );
+
+    const alt = asStr(asObj(d.thumbnail).alt);
+    cAdd("alt", "thumbnail alt text (a11y)", isReal(alt));
+
+    const bodyWords = wordCount(hit.raw.body);
+    const bodyKey = hit.raw.body.trim();
+    const dupBody = seenBody.get(bodyKey);
+    cAdd(
+      "body",
+      "unique body prose >=50 words (HCU)",
+      bodyWords >= 50 && !dupBody,
+      dupBody ? `duplicate of ${dupBody}` : `words=${bodyWords}`,
+    );
+    if (bodyKey) seenBody.set(bodyKey, slug);
+
+    // ---- EXTERNAL (needs the governed Workspace; cannot be faked here) ----
+    const docId = asStr(d.docId);
+    eAdd(
+      "doc",
+      "real Google Doc id",
+      DOC_ID_RE.test(docId) && isReal(docId),
+      isReal(docId) ? undefined : "placeholder",
+    );
+    eAdd(
+      "copy-url",
+      "real copy URL",
+      COPY_URL_RE.test(asStr(d.copyUrl)) && isReal(asStr(d.copyUrl)),
+    );
+    eAdd(
+      "link-available",
+      "linkStatus: available (E1)",
+      asStr(d.linkStatus) === "available",
+      `linkStatus=${asStr(d.linkStatus) || "unset"}`,
+    );
+
+    const needsParse = asStr(d.atsProfile) !== "visual-pdf";
+    const parseEvidence = asArray(d.parseEvidence);
+    eAdd(
       "parse-evidence",
       "ATS parse evidence with image (T2)",
-      !needsParse || t.parseEvidence.some((p) => p.image),
-      needsParse ? "needs >=1 parseEvidence with image" : "visual-pdf: parse evidence optional",
+      !needsParse || parseEvidence.some((p) => asStr(asObj(p).image).length > 0),
+      needsParse ? `n=${parseEvidence.length}` : "visual-pdf: optional",
     );
 
     const inLock = Boolean(input.lock[slug]?.hash);
-    const assetOk = input.assetExists(t.thumbnail.src);
-    add(
+    const assetOk = input.assetExists(asStr(asObj(d.thumbnail).src));
+    const revisionId = asStr(d.revisionId);
+    eAdd(
       "screenshot",
       "screenshot + revision hash (E6)",
-      inLock && assetOk && Boolean(t.revisionId),
-      `lock=${inLock} asset=${assetOk} revisionId=${t.revisionId ?? "—"}`,
+      inLock && assetOk && revisionId.length > 0,
+      `lock=${inLock} asset=${assetOk} rev=${revisionId || "—"}`,
     );
 
     const go = input.goMap[slug];
-    add(
+    eAdd(
       "go-resolves",
       "/go resolves + available (E2)",
       go !== undefined && go.status === "available",
-      go ? `go.status=${go.status}` : "not in go-map (published + real copyUrl required)",
+      go ? `go=${go.status}` : "not in go-map",
     );
 
-    const bodyWords = wordCount(hit.raw.body);
-    add(
-      "hcu",
-      "unique content (bullets>=3, faq>=3, guidance>=1, body>=50w)",
-      t.bulletExamples.length >= 3 &&
-        t.faq.length >= 3 &&
-        t.sectionGuidance.length >= 1 &&
-        bodyWords >= 50,
-      `bullets=${t.bulletExamples.length} faq=${t.faq.length} guidance=${t.sectionGuidance.length} words=${bodyWords}`,
-    );
+    const manual: Check[] = [
+      { id: "export-qa", label: "PDF/DOCX export QA", status: "manual", detail: "pnpm qa:export" },
+      {
+        id: "beacon",
+        label: "intent beacon fires (E9)",
+        status: "manual",
+        detail: "pnpm e2e (copy-beacon)",
+      },
+    ];
 
-    add("related", "related >= 2 (E5)", t.related.length >= 2, `related=${t.related.length}`);
-    add(
-      "alt",
-      "thumbnail alt text present (a11y)",
-      Boolean(t.thumbnail.alt) && !t.thumbnail.alt.includes("REPLACE_WITH"),
-      t.thumbnail.alt,
-    );
-
-    const bodyKey = hit.raw.body.trim();
-    const dupBody = seenBody.get(bodyKey);
-    add(
-      "unique-body",
-      "body prose unique across targets (HCU)",
-      !dupBody,
-      dupBody ? `duplicate of ${dupBody}` : "unique",
-    );
-    seenBody.set(bodyKey, slug);
-
-    const dupTitle = seenTitle.get(t.seo.title);
-    add(
-      "unique-title",
-      "SEO title unique across targets",
-      !dupTitle,
-      dupTitle ? `duplicate of ${dupTitle}` : "unique",
-    );
-    seenTitle.set(t.seo.title, slug);
-
-    // Runtime / human-attested checks — surfaced, not machine-verified here.
-    checks.push({
-      id: "export-qa",
-      label: "PDF/DOCX export QA",
-      status: "manual",
-      detail: "run `pnpm qa:export` (scripts/export-qa.mjs)",
-    });
-    checks.push({
-      id: "beacon",
-      label: "intent beacon fires (E9)",
-      status: "manual",
-      detail: "covered by `pnpm e2e` (copy-beacon.spec)",
-    });
-
-    const ready = checks.every((c) => c.status !== "fail");
-    return { slug, state: "published", ready, checks };
+    const checks = [promoted, ...content, ...external, ...manual];
+    const contentReady = content.every((c) => c.status === "pass");
+    const ready = checks.every((c) => c.status === "pass" || c.status === "manual");
+    return { slug, state, contentReady, ready, checks };
   });
 }
 
@@ -226,7 +252,7 @@ function readJson<T>(path: string, fallback: T): T {
   }
 }
 
-const ICON: Record<CheckStatus, string> = { pass: "✓", fail: "✗", manual: "○" };
+const ICON: Record<CheckStatus, string> = { pass: "✓", fail: "✗", pending: "·", manual: "○" };
 
 function main(): void {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
@@ -240,19 +266,28 @@ function main(): void {
   const results = evaluateGate(targets, { raws, goMap, lock, assetExists });
 
   for (const r of results) {
-    const tag = r.ready ? "READY" : r.state.toUpperCase();
-    console.log(`\n${r.ready ? "✓" : "✗"} ${r.slug} — ${tag}`);
+    const tag = r.ready
+      ? "RELEASE-READY"
+      : r.contentReady
+        ? "CONTENT-READY"
+        : r.state.toUpperCase();
+    console.log(`\n${r.ready ? "✓" : r.contentReady ? "◐" : "✗"} ${r.slug} — ${tag}`);
     for (const c of r.checks) {
-      const detail = c.detail ? `  (${c.detail})` : "";
-      console.log(`    ${ICON[c.status]} ${c.label}${detail}`);
+      console.log(`    ${ICON[c.status]} ${c.label}${c.detail ? `  (${c.detail})` : ""}`);
     }
   }
 
+  const contentCount = results.filter((r) => r.contentReady).length;
   const readyCount = results.filter((r) => r.ready).length;
-  const manualPending = results.some((r) => r.ready && r.checks.some((c) => c.status === "manual"));
-  console.log(`\ngate:e2e — ${readyCount}/${targets.length} ready`);
-  if (manualPending) {
-    console.log("note: READY templates still owe the ○ manual checks (export QA + beacon e2e).");
+  console.log(
+    `\ngate:e2e — content-ready ${contentCount}/${targets.length} · release-ready ${readyCount}/${targets.length}`,
+  );
+  console.log("legend: ✓ pass  ✗ content defect  · external artifact pending  ○ manual check");
+  if (contentCount > readyCount) {
+    console.log(
+      "pending externals need the governed Workspace (real Doc + copyUrl, screenshot via",
+    );
+    console.log("GOOGLE_SA_KEY, link-health). Fill them, promote to .md, then re-run gate:e2e.");
   }
   process.exit(readyCount === targets.length ? 0 : 1);
 }
