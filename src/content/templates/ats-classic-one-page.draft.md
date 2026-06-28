@@ -14,9 +14,9 @@ roles: [general]
 experienceLevel: [entry, mid, senior]
 pageCount: 1
 
-docId: REPLACE_WITH_DOC_ID # TODO(human): real governed Google Doc id
-copyUrl: https://docs.google.com/document/d/REPLACE_WITH_DOC_ID/copy
-linkStatus: unverified
+docId: 1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0
+copyUrl: https://docs.google.com/document/d/1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0/copy
+linkStatus: unverified # pending: set the Doc to "Anyone with the link: Viewer", then pnpm check:links
 
 thumbnail:
   src: src/assets/templates/ats-classic-one-page.png # TODO: pnpm shots:gen (needs GOOGLE_SA_KEY)
