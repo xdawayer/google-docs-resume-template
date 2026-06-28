@@ -1,3 +1,8 @@
+// Load a local, gitignored .env so GOOGLE_SA_KEY / GSC_SA_KEY flow into the
+// cron/manual scripts. No-op when .env is absent (e.g. CI). This module is
+// imported ONLY by scripts (never the page build), so it never runs on the
+// deterministic build path.
+import "dotenv/config";
 import { JWT } from "google-auth-library";
 
 /**
