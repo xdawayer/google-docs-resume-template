@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { execa } from "execa";
 import { templateSchema } from "../src/content/schema";
-import { loadRawTemplates } from "./_shared";
+import { loadRawTemplates, TEMPLATES_DIR } from "./_shared";
 import { hasCreds, getServiceAuth } from "./lib/auth";
 import { driveClient, exportPdf, getMeta, sha256 } from "./lib/drive";
 import { writeMaster } from "./lib/image";
@@ -42,7 +42,9 @@ async function main(): Promise<void> {
     return;
   }
   const drive = driveClient(getServiceAuth());
-  const raws = loadRawTemplates();
+  // Include drafts: you screenshot a template (real docId) BEFORE promoting it.
+  // Drafts whose docId is still a placeholder fail safeParse below and are skipped.
+  const raws = loadRawTemplates(TEMPLATES_DIR, { includeDrafts: true });
   const lock = loadLock();
   mkdirSync(ASSET_DIR, { recursive: true });
   mkdirSync(dirname(LOCK), { recursive: true });

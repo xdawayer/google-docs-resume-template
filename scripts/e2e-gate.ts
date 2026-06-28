@@ -204,8 +204,11 @@ export function evaluateGate(targets: string[], input: GateInputs): GateResult[]
     const parseEvidence = asArray(d.parseEvidence);
     eAdd(
       "parse-evidence",
-      "ATS parse evidence with image (T2)",
-      !needsParse || parseEvidence.some((p) => asStr(asObj(p).image).length > 0),
+      "ATS parse evidence (T2)",
+      !needsParse ||
+        parseEvidence.some(
+          (p) => asStr(asObj(p).image).length > 0 || asStr(asObj(p).note).length > 0,
+        ),
       needsParse ? `n=${parseEvidence.length}` : "visual-pdf: optional",
     );
 

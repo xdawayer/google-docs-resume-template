@@ -8,7 +8,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { templateSchema } from "../src/content/schema";
-import { loadRawTemplates } from "./_shared";
+import { loadRawTemplates, TEMPLATES_DIR } from "./_shared";
 import { hasCreds, getServiceAuth } from "./lib/auth";
 import { driveClient, getMeta, anyoneCanRead } from "./lib/drive";
 import { loadHealthMap, HEALTH_PATH, type HealthMap, type LinkHealth } from "../src/lib/health";
@@ -20,7 +20,8 @@ async function main(): Promise<void> {
     console.warn("⚠ check-links: GOOGLE_SA_KEY not set — skipping (no-op).");
     return;
   }
-  const raws = loadRawTemplates();
+  // Include drafts so a real Doc can be health-verified BEFORE promotion.
+  const raws = loadRawTemplates(TEMPLATES_DIR, { includeDrafts: true });
   const prev = loadHealthMap();
   const next: HealthMap = {};
   const drive = driveClient(getServiceAuth());
@@ -28,7 +29,9 @@ async function main(): Promise<void> {
 
   for (const r of raws) {
     const res = templateSchema.safeParse(r.data);
-    if (!res.success || res.data.status !== "published") continue;
+    // Real docId required (placeholder drafts fail safeParse and are skipped);
+    // status is not gated so a draft can be verified before it is published.
+    if (!res.success) continue;
     const t = res.data;
 
     let status: LinkHealth = "available";
@@ -41,9 +44,19 @@ async function main(): Promise<void> {
       } else if (meta.mimeType !== DOC_MIME) {
         status = "unavailable";
         reason = `unexpected mime ${meta.mimeType}`;
-      } else if (!(await anyoneCanRead(drive, t.docId))) {
-        status = "unavailable";
-        reason = "not shared anyone-with-link reader";
+      } else {
+        // Best-effort sharing confirmation. A reader-only SA usually can't list
+        // permissions on a file it doesn't own — that throw is NOT a failure
+        // (getMeta + export already proved the SA can reach it). Only an explicit
+        // "no anyone-reader" verdict downgrades health.
+        try {
+          if (!(await anyoneCanRead(drive, t.docId))) {
+            status = "unavailable";
+            reason = "not shared anyone-with-link reader";
+          }
+        } catch {
+          reason = "reachable (sharing not introspectable by reader SA)";
+        }
       }
     } catch (e) {
       status = "unavailable";

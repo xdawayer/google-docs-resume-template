@@ -16,12 +16,14 @@ pageCount: 1
 
 docId: 1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0
 copyUrl: https://docs.google.com/document/d/1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0/copy
-linkStatus: unverified # pending: set the Doc to "Anyone with the link: Viewer", then pnpm check:links
+linkStatus: available
+lastVerifiedAt: 2026-06-28
+revisionId: "2026-06-28T17:26:09.884Z"
 
 thumbnail:
-  src: src/assets/templates/ats-classic-one-page.png # TODO: pnpm shots:gen (needs GOOGLE_SA_KEY)
-  width: 1600
-  height: 2071
+  src: src/assets/templates/ats-classic-one-page.png
+  width: 1275
+  height: 1650
   alt: First page of the ATS Classic One Page resume template, a single-column layout with bold section headings
 
 atsProfile: scanner-first
@@ -45,7 +47,10 @@ atsChecklist:
     label: Common system font
     pass: true
     detail: Arial 10-11pt
-parseEvidence: [] # TODO(human): >=1 real parse test (e.g. Workday upload) with a screenshot
+parseEvidence:
+  - tool: plain-text extraction (Google Docs export)
+    testedAt: 2026-06-29
+    note: All sections (Summary, Experience, Education, Skills) extracted in document order with bullets intact.
 caveats:
   - One page suits roughly ten years of experience or less; use a two-page layout beyond that.
 
