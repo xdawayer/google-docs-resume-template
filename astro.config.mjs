@@ -2,6 +2,8 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
+import svelte from "@astrojs/svelte";
+
 // Single source of truth for the production origin. No trailing slash, no www.
 const SITE_URL = process.env.SITE_URL ?? "https://resumedocs.example";
 
@@ -23,6 +25,7 @@ export default defineConfig({
       // /go/* is a redirect surface (noindex) and 404 must never be in the map.
       filter: (page) => !page.includes("/go/") && !page.includes("/404"),
     }),
+    svelte(),
   ],
   vite: {
     build: {

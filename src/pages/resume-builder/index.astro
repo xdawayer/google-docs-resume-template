@@ -1,0 +1,102 @@
+---
+import Builder from "../../builder/Builder.svelte";
+import { SITE_URL } from "../../lib/site";
+
+// The builder is an app route (ships JS), separate from the zero-JS SEO pages.
+// It complements the directory: SEO pages rank and link here to convert.
+const canonical = `${SITE_URL}/resume-builder/`;
+const title = "Free Resume Builder — Fill In, Pick a Template, Download PDF";
+const description =
+  "Build an ATS-friendly resume free. Fill in your details, choose a template, and download a clean PDF with selectable text. No signup, nothing saved to a server.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+  </head>
+  <body>
+    <header class="app-header" data-chrome>
+      <a class="back" href="/google-docs-resume-template/">← Templates</a>
+      <h1>Resume Builder</h1>
+      <span class="muted">Free · No signup · ATS-friendly PDF · saved in your browser</span>
+    </header>
+    <Builder client:load />
+
+    <style is:global>
+      :root {
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        color: #111;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      .app-header {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 0 16px;
+        border-bottom: 1px solid #e3e3e6;
+      }
+      .app-header .back {
+        color: #1a4fa0;
+        text-decoration: none;
+        font-size: 0.88rem;
+      }
+      .app-header h1 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+      .app-header .muted {
+        color: #777;
+        font-size: 0.78rem;
+        margin-left: auto;
+      }
+
+      /* Print only the resume sheet — real selectable text, ATS-friendly. */
+      @media print {
+        @page {
+          size: A4;
+          margin: 0;
+        }
+        body * {
+          visibility: hidden !important;
+        }
+        [data-sheet],
+        [data-sheet] * {
+          visibility: visible !important;
+        }
+        [data-sheet] {
+          position: absolute;
+          left: 0;
+          top: 0;
+          margin: 0 !important;
+          box-shadow: none !important;
+        }
+      }
+      @media (max-width: 820px) {
+        .app-header .muted {
+          display: none;
+        }
+      }
+    </style>
+  </body>
+</html>
