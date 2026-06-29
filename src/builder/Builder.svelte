@@ -19,7 +19,6 @@
   import Form from "./Form.svelte";
   import Preview from "./Preview.svelte";
   import StyleBar from "./StyleBar.svelte";
-  import ImportPanel from "./import/ImportPanel.svelte";
   import { sanitizeResume } from "./resume-core";
 
   // Preselect a template from ?t= (e.g. an "Open in builder" link from the directory).
@@ -46,12 +45,6 @@
   function pickTemplate(id: TemplateId) {
     if (isPristineSample(resume)) resume = sampleFor(id);
     template = id;
-  }
-
-  // Drop a parsed/imported resume into the editor (sanitized at the boundary). Named
-  // applyImport, not loadResume — the latter is the localStorage loader imported above.
-  function applyImport(r: Resume) {
-    resume = sanitizeResume(r);
   }
 
   // Auto-save every change to localStorage (no accounts, no backend); sanitize the
@@ -105,7 +98,6 @@
 
   <div class="builder">
     <section class="editor" data-chrome>
-      <ImportPanel onImport={applyImport} />
       {#if !TEMPLATE_META[template].atsSafe}
         <p class="ats-note">
           Designed two-column template — looks great, but some applicant tracking systems read
