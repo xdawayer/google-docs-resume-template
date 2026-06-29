@@ -171,7 +171,7 @@
 
 <style>
   .sheet {
-    --green: #3fae5a;
+    --green: var(--rb-accent, #3fae5a);
     --charcoal: #222222;
     --ink: #1c2430;
     --muted: #6b7280;
@@ -181,9 +181,9 @@
     box-sizing: border-box;
     background: #ffffff;
     color: var(--ink);
-    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-    font-size: 10pt;
-    line-height: 1.45;
+    font-family: var(--rb-font, "Inter", "Helvetica Neue", Arial, sans-serif);
+    font-size: calc(10pt * var(--rb-scale, 1));
+    line-height: calc(1.45 * var(--rb-line-scale, 1));
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
@@ -223,13 +223,13 @@
     justify-content: center;
     background: var(--green);
     color: #ffffff;
-    font-size: 25pt;
+    font-size: calc(25pt * var(--rb-scale, 1));
     font-weight: 800;
     letter-spacing: 1px;
     border-color: rgba(255, 255, 255, 0.2);
   }
   .name {
-    font-size: 19pt;
+    font-size: calc(19pt * var(--rb-scale, 1));
     font-weight: 800;
     line-height: 1.08;
     letter-spacing: 0.5px;
@@ -238,7 +238,7 @@
   }
   .role {
     margin-top: 6px;
-    font-size: 8.3pt;
+    font-size: calc(8.3pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 2.5px;
     text-transform: uppercase;
@@ -253,7 +253,7 @@
     align-items: center;
     gap: 9px;
     margin: 7px 0;
-    font-size: 8.4pt;
+    font-size: calc(8.4pt * var(--rb-scale, 1));
     color: #cfd4da;
     word-break: break-word;
   }
@@ -272,7 +272,7 @@
     align-items: center;
     gap: 9px;
     margin: 0 0 10px;
-    font-size: 10pt;
+    font-size: calc(10pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1.3px;
     text-transform: uppercase;
@@ -298,8 +298,8 @@
 
   .about-text {
     margin: 0;
-    font-size: 8.7pt;
-    line-height: 1.55;
+    font-size: calc(8.7pt * var(--rb-scale, 1));
+    line-height: calc(1.55 * var(--rb-line-scale, 1));
     color: #c4cad1;
   }
 
@@ -310,26 +310,26 @@
     margin-bottom: 0;
   }
   .edu-degree {
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     font-weight: 700;
-    line-height: 1.3;
+    line-height: calc(1.3 * var(--rb-line-scale, 1));
     color: #ffffff;
   }
   .edu-school {
     margin-top: 1px;
-    font-size: 8.6pt;
+    font-size: calc(8.6pt * var(--rb-scale, 1));
     font-weight: 600;
     color: var(--green);
   }
   .edu-meta {
     margin-top: 2px;
-    font-size: 8pt;
+    font-size: calc(8pt * var(--rb-scale, 1));
     color: #98a0a8;
   }
   .edu-details {
     margin-top: 3px;
-    font-size: 8.2pt;
-    line-height: 1.4;
+    font-size: calc(8.2pt * var(--rb-scale, 1));
+    line-height: calc(1.4 * var(--rb-line-scale, 1));
     color: #b3b9c0;
   }
 
@@ -341,7 +341,7 @@
   }
   .skill-cat {
     margin-bottom: 6px;
-    font-size: 8.3pt;
+    font-size: calc(8.3pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 0.8px;
     text-transform: uppercase;
@@ -353,7 +353,7 @@
     gap: 5px;
   }
   .chip {
-    font-size: 7.9pt;
+    font-size: calc(7.9pt * var(--rb-scale, 1));
     line-height: 1.2;
     color: #e7eaed;
     background: rgba(63, 174, 90, 0.16);
@@ -377,7 +377,7 @@
     gap: 10px;
     margin: 0 0 15px;
     padding-bottom: 9px;
-    font-size: 12.5pt;
+    font-size: calc(12.5pt * var(--rb-scale, 1));
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -415,12 +415,12 @@
     gap: 12px;
   }
   .job-title {
-    font-size: 11pt;
+    font-size: calc(11pt * var(--rb-scale, 1));
     font-weight: 700;
     color: var(--ink);
   }
   .job-dates {
-    font-size: 8.4pt;
+    font-size: calc(8.4pt * var(--rb-scale, 1));
     font-weight: 600;
     letter-spacing: 0.3px;
     color: var(--muted);
@@ -428,7 +428,7 @@
   }
   .job-sub {
     margin-top: 2px;
-    font-size: 9.3pt;
+    font-size: calc(9.3pt * var(--rb-scale, 1));
     font-weight: 700;
     color: var(--green);
   }
@@ -445,8 +445,8 @@
     position: relative;
     padding-left: 15px;
     margin: 4px 0;
-    font-size: 9.3pt;
-    line-height: 1.45;
+    font-size: calc(9.3pt * var(--rb-scale, 1));
+    line-height: calc(1.45 * var(--rb-line-scale, 1));
     color: #353c45;
   }
   li::before {

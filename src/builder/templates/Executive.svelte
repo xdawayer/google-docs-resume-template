@@ -184,14 +184,14 @@
     --muted: #6f6f6f;
     --faint: #9a9a9a;
     --hair: #cdcdcd;
-    --rule: #aeaeae;
+    --rule: var(--rb-accent, #aeaeae);
     --disc: #ededea;
 
     background: #fff;
     color: var(--ink);
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 10pt;
-    line-height: 1.5;
+    font-family: var(--rb-font, Georgia, "Times New Roman", Times, serif);
+    font-size: calc(10pt * var(--rb-scale, 1));
+    line-height: calc(1.5 * var(--rb-line-scale, 1));
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
@@ -226,14 +226,14 @@
     display: block;
   }
   .monogram {
-    font-size: 19pt;
+    font-size: calc(19pt * var(--rb-scale, 1));
     letter-spacing: 0.04em;
     color: var(--soft);
     font-weight: 400;
   }
   .name {
     margin: 0;
-    font-size: 27pt;
+    font-size: calc(27pt * var(--rb-scale, 1));
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: 0.17em;
@@ -242,7 +242,7 @@
   }
   .role {
     margin-top: 7px;
-    font-size: 9.5pt;
+    font-size: calc(9.5pt * var(--rb-scale, 1));
     font-weight: 400;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -257,7 +257,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 5px 22px;
-    font-size: 8.6pt;
+    font-size: calc(8.6pt * var(--rb-scale, 1));
     letter-spacing: 0.03em;
     color: var(--muted);
   }
@@ -280,7 +280,7 @@
   h2 {
     margin: 0 0 10px;
     padding-bottom: 5px;
-    font-size: 11pt;
+    font-size: calc(11pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -289,7 +289,7 @@
   }
   .summary {
     margin: 0;
-    line-height: 1.58;
+    line-height: calc(1.58 * var(--rb-line-scale, 1));
     color: var(--soft);
   }
 
@@ -308,7 +308,7 @@
   }
   .ex-title {
     font-weight: 700;
-    font-size: 10.5pt;
+    font-size: calc(10.5pt * var(--rb-scale, 1));
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--ink);
@@ -318,7 +318,7 @@
     letter-spacing: 0.01em;
   }
   .ex-dates {
-    font-size: 8.7pt;
+    font-size: calc(8.7pt * var(--rb-scale, 1));
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
@@ -330,7 +330,7 @@
     align-items: baseline;
     gap: 14px;
     margin-top: 2px;
-    font-size: 9.4pt;
+    font-size: calc(9.4pt * var(--rb-scale, 1));
   }
   .ex-company {
     color: var(--soft);
@@ -346,7 +346,7 @@
   }
   .bullets li {
     margin: 3px 0;
-    line-height: 1.5;
+    line-height: calc(1.5 * var(--rb-line-scale, 1));
     color: var(--soft);
   }
   .bullets li::marker {
@@ -354,8 +354,8 @@
   }
   .ed-details {
     margin: 4px 0 0;
-    font-size: 9.4pt;
-    line-height: 1.5;
+    font-size: calc(9.4pt * var(--rb-scale, 1));
+    line-height: calc(1.5 * var(--rb-line-scale, 1));
     color: var(--soft);
   }
 
@@ -371,7 +371,7 @@
   }
   .comp-cat {
     font-weight: 700;
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink);
@@ -386,9 +386,9 @@
     position: relative;
     padding-left: 13px;
     margin: 2px 0;
-    font-size: 9.6pt;
+    font-size: calc(9.6pt * var(--rb-scale, 1));
     color: var(--soft);
-    line-height: 1.4;
+    line-height: calc(1.4 * var(--rb-line-scale, 1));
   }
   .comp-list li::before {
     content: "\2013";

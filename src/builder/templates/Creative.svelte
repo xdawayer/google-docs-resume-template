@@ -227,7 +227,7 @@
 
 <style>
   .sheet {
-    --teal: #2f8f8f;
+    --teal: var(--rb-accent, #2f8f8f);
     --teal-deep: #246f6f;
     --teal-tint: #e9f3f2;
     --ink: #283232;
@@ -241,9 +241,9 @@
     box-sizing: border-box;
     background: #fff;
     color: var(--ink);
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 9.6pt;
-    line-height: 1.5;
+    font-family: var(--rb-font, "Helvetica Neue", Arial, sans-serif);
+    font-size: calc(9.6pt * var(--rb-scale, 1));
+    line-height: calc(1.5 * var(--rb-line-scale, 1));
     overflow: hidden;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
@@ -320,7 +320,7 @@
   }
   .initials {
     color: #fff;
-    font-size: 22pt;
+    font-size: calc(22pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1px;
   }
@@ -330,7 +330,7 @@
     align-items: center;
     gap: 7px;
     margin: 0 0 9px;
-    font-size: 10pt;
+    font-size: calc(10pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 2.5px;
     text-transform: uppercase;
@@ -363,7 +363,7 @@
     display: flex;
     align-items: center;
     gap: 9px;
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     color: var(--ink);
   }
   .ico {
@@ -389,7 +389,7 @@
   }
   .ctext {
     word-break: break-word;
-    line-height: 1.35;
+    line-height: calc(1.35 * var(--rb-line-scale, 1));
   }
 
   .skills {
@@ -398,7 +398,7 @@
     gap: 7px;
   }
   .skill-cat {
-    font-size: 8pt;
+    font-size: calc(8pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -414,7 +414,7 @@
     gap: 4px;
   }
   .skill-name {
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     color: var(--ink);
   }
   .meter {
@@ -457,14 +457,14 @@
   .links li {
     display: flex;
     flex-direction: column;
-    line-height: 1.3;
+    line-height: calc(1.3 * var(--rb-line-scale, 1));
   }
   .link-label {
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     font-weight: 600;
   }
   .link-url {
-    font-size: 7.6pt;
+    font-size: calc(7.6pt * var(--rb-scale, 1));
     color: #cfe6e3;
     word-break: break-all;
   }
@@ -480,7 +480,7 @@
   }
   .name {
     margin: 0;
-    font-size: 30pt;
+    font-size: calc(30pt * var(--rb-scale, 1));
     font-weight: 800;
     line-height: 1.02;
     letter-spacing: 1px;
@@ -494,7 +494,7 @@
   }
   .role {
     margin-top: 7px;
-    font-size: 11pt;
+    font-size: calc(11pt * var(--rb-scale, 1));
     font-weight: 600;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -522,7 +522,7 @@
     align-items: center;
     gap: 9px;
     margin: 0 0 9px;
-    font-size: 11.5pt;
+    font-size: calc(11.5pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -558,13 +558,13 @@
     gap: 12px;
   }
   .job-title {
-    font-size: 10.5pt;
+    font-size: calc(10.5pt * var(--rb-scale, 1));
     font-weight: 700;
     color: var(--ink);
   }
   .job-date {
     flex: none;
-    font-size: 8.6pt;
+    font-size: calc(8.6pt * var(--rb-scale, 1));
     font-weight: 600;
     color: #fff;
     background: var(--teal);
@@ -576,7 +576,7 @@
   }
   .job-sub {
     margin-top: 2px;
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
   }
   .job-company {
     color: var(--teal-deep);
@@ -614,7 +614,7 @@
   }
   .edu-details {
     margin: 4px 0 0;
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     color: var(--muted);
   }
 </style>

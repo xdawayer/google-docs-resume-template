@@ -13,8 +13,10 @@
     emptyEducation,
     emptySkillGroup,
   } from "./resume-schema";
+  import { type ResumeStyle, defaultStyle, loadStyle, saveStyle } from "./resume-style";
   import Form from "./Form.svelte";
   import Preview from "./Preview.svelte";
+  import StyleBar from "./StyleBar.svelte";
   import ImportPanel from "./import/ImportPanel.svelte";
   import { sanitizeResume } from "./resume-core";
 
@@ -22,6 +24,8 @@
   // browser extension, or devtools — the render path must not trust stored content.
   let resume = $state<Resume>(sanitizeResume(loadResume() ?? sampleFor("ats-minimal")));
   let template = $state<TemplateId>("ats-minimal");
+  // Typography/color knobs (separate from content); sanitized on load.
+  let style = $state<ResumeStyle>(loadStyle() ?? defaultStyle());
 
   // Switching template while the content is still an untouched sample swaps in the
   // persona that suits that template. Once the user edits, their content is kept.
@@ -41,6 +45,9 @@
   $effect(() => {
     saveResume(sanitizeResume(resume));
   });
+  $effect(() => {
+    saveStyle(style);
+  });
 
   function clearAll() {
     const blank = resumeSchema.parse({});
@@ -51,93 +58,96 @@
   }
 </script>
 
-<div class="builder">
-  <section class="editor" data-chrome>
-    <ImportPanel onImport={applyImport} />
-    <div class="toolbar">
-      <div class="templates" role="group" aria-label="Template">
+<div class="app">
+  <header class="bar" data-chrome>
+    <label class="ctl">
+      <span class="lbl">Template</span>
+      <select
+        value={template}
+        onchange={(e) => pickTemplate(e.currentTarget.value as TemplateId)}
+        aria-label="Template"
+      >
         {#each TEMPLATE_IDS as id}
-          <button class:active={template === id} onclick={() => pickTemplate(id)}>
-            {TEMPLATE_META[id].label}
-          </button>
+          <option value={id}>{TEMPLATE_META[id].label}</option>
         {/each}
-      </div>
-      <div class="actions">
-        <button class="ghost" onclick={() => (resume = sampleFor(template))}>Sample</button>
-        <button class="ghost" onclick={clearAll}>Clear</button>
-        <button class="primary" onclick={() => window.print()}>Download PDF</button>
-      </div>
-    </div>
-    {#if !TEMPLATE_META[template].atsSafe}
-      <p class="ats-note">
-        Designed two-column template — looks great, but some applicant tracking systems read
-        two columns out of order. For ATS-heavy applications, pick <strong>ATS Minimal</strong> or
-        <strong>Executive Elegant</strong>.
-      </p>
-    {/if}
-    <Form bind:resume />
-  </section>
+      </select>
+    </label>
 
-  <section class="preview" aria-label="Preview">
-    <div class="stage">
-      <Preview {resume} {template} />
+    <span class="divider" aria-hidden="true"></span>
+
+    <StyleBar bind:style />
+
+    <div class="actions">
+      <button class="ghost" onclick={() => (resume = sampleFor(template))}>Sample</button>
+      <button class="ghost" onclick={clearAll}>Clear</button>
+      <button class="primary" onclick={() => window.print()}>Download PDF</button>
     </div>
-  </section>
+  </header>
+
+  <div class="builder">
+    <section class="editor" data-chrome>
+      <ImportPanel onImport={applyImport} />
+      {#if !TEMPLATE_META[template].atsSafe}
+        <p class="ats-note">
+          Designed two-column template — looks great, but some applicant tracking systems read
+          two columns out of order. For ATS-heavy applications, pick <strong>ATS Minimal</strong> or
+          <strong>Executive Elegant</strong>.
+        </p>
+      {/if}
+      <Form bind:resume />
+    </section>
+
+    <section class="preview" aria-label="Preview">
+      <div class="stage">
+        <Preview {resume} {template} {style} />
+      </div>
+    </section>
+  </div>
 </div>
 
 <style>
-  .builder {
-    display: grid;
-    grid-template-columns: minmax(320px, 1fr) minmax(0, 1.1fr);
-    gap: 0;
+  .app {
+    display: flex;
+    flex-direction: column;
     height: calc(100vh - 48px);
   }
-  .editor {
-    overflow-y: auto;
-    padding: 16px;
-    border-right: 1px solid #e3e3e6;
-  }
-  .toolbar {
+  .bar {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 14px;
-    position: sticky;
-    top: -16px;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 8px 14px;
+    border-bottom: 1px solid #e3e3e6;
     background: #fff;
-    padding: 8px 0;
-    z-index: 1;
   }
-  .templates {
+  .ctl {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
   }
-  .templates button {
-    border: 1px solid #ccc;
-    background: #fff;
-    padding: 5px 10px;
-    border-radius: 6px;
-    cursor: pointer;
+  .lbl {
+    font-size: 0.72rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  select {
+    font: inherit;
     font-size: 0.82rem;
-  }
-  .templates button.active {
-    background: #111;
-    color: #fff;
-    border-color: #111;
-  }
-  .ats-note {
-    margin: 0 0 14px;
-    padding: 8px 10px;
-    background: #fff7e6;
-    border: 1px solid #ffe1a8;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
     border-radius: 6px;
-    font-size: 0.76rem;
-    color: #7a5b00;
-    line-height: 1.4;
+    background: #fff;
+    cursor: pointer;
+  }
+  .divider {
+    width: 1px;
+    align-self: stretch;
+    background: #e3e3e6;
+    margin: 2px 0;
   }
   .actions {
+    margin-left: auto;
     display: flex;
     gap: 6px;
   }
@@ -159,6 +169,27 @@
     font-weight: 600;
     font-size: 0.82rem;
   }
+  .builder {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(0, 1.1fr);
+  }
+  .editor {
+    overflow-y: auto;
+    padding: 16px;
+    border-right: 1px solid #e3e3e6;
+  }
+  .ats-note {
+    margin: 12px 0 0;
+    padding: 8px 10px;
+    background: #fff7e6;
+    border: 1px solid #ffe1a8;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    color: #7a5b00;
+    line-height: 1.4;
+  }
   .preview {
     overflow: auto;
     background: #6b7280;
@@ -171,9 +202,11 @@
     height: max-content;
   }
   @media (max-width: 820px) {
+    .app {
+      height: auto;
+    }
     .builder {
       grid-template-columns: 1fr;
-      height: auto;
     }
     .preview {
       display: none;

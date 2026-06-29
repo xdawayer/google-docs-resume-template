@@ -235,7 +235,7 @@
 
 <style>
   .sheet {
-    --accent: #2f5fd0;
+    --accent: var(--rb-accent, #2f5fd0);
     --accent-dark: #16243f;
     --accent-soft: #eef4fd;
     --chip: #e1ebfb;
@@ -244,9 +244,9 @@
     --muted: #6a7686;
     background: #fff;
     color: var(--ink);
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 10pt;
-    line-height: 1.5;
+    font-family: var(--rb-font, "Segoe UI", "Helvetica Neue", Arial, sans-serif);
+    font-size: calc(10pt * var(--rb-scale, 1));
+    line-height: calc(1.5 * var(--rb-line-scale, 1));
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
@@ -290,7 +290,7 @@
   }
   .name {
     margin: 0;
-    font-size: 27pt;
+    font-size: calc(27pt * var(--rb-scale, 1));
     font-weight: 800;
     letter-spacing: 0.5px;
     line-height: 1.04;
@@ -299,7 +299,7 @@
   }
   .role {
     margin-top: 5px;
-    font-size: 10.5pt;
+    font-size: calc(10.5pt * var(--rb-scale, 1));
     font-weight: 600;
     letter-spacing: 2.6px;
     text-transform: uppercase;
@@ -350,7 +350,7 @@
   }
   .initials {
     color: #fff;
-    font-size: 17pt;
+    font-size: calc(17pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1px;
   }
@@ -368,7 +368,7 @@
     gap: 8px;
     margin: 0 0 9px;
     padding-bottom: 6px;
-    font-size: 11pt;
+    font-size: calc(11pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1.6px;
     text-transform: uppercase;
@@ -376,7 +376,7 @@
     border-bottom: 1.5px solid var(--rule);
   }
   .sec-side {
-    font-size: 10pt;
+    font-size: calc(10pt * var(--rb-scale, 1));
     letter-spacing: 1.4px;
   }
   .sec-icon {
@@ -408,7 +408,7 @@
     align-items: center;
     gap: 8px;
     margin: 0 0 7px;
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
   }
   .contact li:last-child {
     margin-bottom: 0;
@@ -448,7 +448,7 @@
     margin-bottom: 0;
   }
   .skill-cat {
-    font-size: 8.6pt;
+    font-size: calc(8.6pt * var(--rb-scale, 1));
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -464,7 +464,7 @@
     background: #fff;
     border: 1px solid var(--rule);
     color: var(--accent);
-    font-size: 8.4pt;
+    font-size: calc(8.4pt * var(--rb-scale, 1));
     font-weight: 600;
     padding: 2px 9px;
     border-radius: 11px;
@@ -486,7 +486,7 @@
     gap: 10px;
   }
   .primary {
-    font-size: 10.6pt;
+    font-size: calc(10.6pt * var(--rb-scale, 1));
     font-weight: 700;
     color: var(--accent-dark);
   }
@@ -494,7 +494,7 @@
     flex: none;
     background: var(--chip);
     color: var(--accent);
-    font-size: 8.2pt;
+    font-size: calc(8.2pt * var(--rb-scale, 1));
     font-weight: 600;
     padding: 1.5px 8px;
     border-radius: 10px;
@@ -504,13 +504,13 @@
   }
   .org {
     margin-top: 2px;
-    font-size: 9.6pt;
+    font-size: calc(9.6pt * var(--rb-scale, 1));
     font-weight: 600;
     color: var(--accent);
   }
   .detail {
     margin: 3px 0 0;
-    font-size: 9.3pt;
+    font-size: calc(9.3pt * var(--rb-scale, 1));
     color: var(--muted);
   }
   .summary {

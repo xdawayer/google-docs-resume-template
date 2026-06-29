@@ -96,12 +96,12 @@
   .sheet {
     --ink: #1a1a1a;
     --muted: #5a5a5a;
-    --rule: #1a1a1a;
+    --rule: var(--rb-accent, #1a1a1a);
     background: #fff;
     color: var(--ink);
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 10.3pt;
-    line-height: 1.45;
+    font-family: var(--rb-font, "Helvetica Neue", Arial, sans-serif);
+    font-size: calc(10.3pt * var(--rb-scale, 1));
+    line-height: calc(1.45 * var(--rb-line-scale, 1));
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
@@ -112,21 +112,21 @@
     margin-bottom: 16px;
   }
   .name {
-    font-size: 23pt;
+    font-size: calc(23pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 4px;
     text-transform: uppercase;
   }
   .headline {
     margin-top: 4px;
-    font-size: 10.5pt;
+    font-size: calc(10.5pt * var(--rb-scale, 1));
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--muted);
   }
   .contact {
     margin-top: 8px;
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     color: var(--muted);
   }
   .contact .sep {
@@ -137,7 +137,7 @@
     margin-top: 15px;
   }
   h2 {
-    font-size: 10pt;
+    font-size: calc(10pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -168,12 +168,12 @@
   }
   .dates {
     color: var(--muted);
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     white-space: nowrap;
   }
   .meta {
     color: var(--muted);
-    font-size: 9pt;
+    font-size: calc(9pt * var(--rb-scale, 1));
     font-style: italic;
   }
   ul {

@@ -191,7 +191,7 @@
 
 <style>
   .sheet {
-    --navy: #1f3a5f;
+    --navy: var(--rb-accent, #1f3a5f);
     --navy-deep: #182d4a;
     --side-text: #c9d6e6;
     --side-rule: rgba(255, 255, 255, 0.16);
@@ -202,9 +202,9 @@
     align-items: stretch;
     background: #fff;
     color: var(--ink);
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 10pt;
-    line-height: 1.45;
+    font-family: var(--rb-font, "Helvetica Neue", Arial, sans-serif);
+    font-size: calc(10pt * var(--rb-scale, 1));
+    line-height: calc(1.45 * var(--rb-line-scale, 1));
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
@@ -229,7 +229,7 @@
   }
   .name {
     margin: 0;
-    font-size: 21pt;
+    font-size: calc(21pt * var(--rb-scale, 1));
     font-weight: 800;
     line-height: 1.06;
     letter-spacing: 1.5px;
@@ -238,7 +238,7 @@
   }
   .role {
     margin: 7px 0 0;
-    font-size: 8.4pt;
+    font-size: calc(8.4pt * var(--rb-scale, 1));
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -250,7 +250,7 @@
   .side-h {
     margin: 0 0 4mm;
     padding-bottom: 2.5mm;
-    font-size: 10pt;
+    font-size: calc(10pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -267,8 +267,8 @@
     align-items: center;
     gap: 9px;
     margin: 0 0 9px;
-    font-size: 8.6pt;
-    line-height: 1.3;
+    font-size: calc(8.6pt * var(--rb-scale, 1));
+    line-height: calc(1.3 * var(--rb-line-scale, 1));
     word-break: break-word;
   }
   .contact li:last-child {
@@ -302,7 +302,7 @@
   }
   .skill-cat {
     margin: 0 0 2.5mm;
-    font-size: 8.4pt;
+    font-size: calc(8.4pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1.4px;
     text-transform: uppercase;
@@ -317,8 +317,8 @@
     position: relative;
     padding-left: 12px;
     margin: 0 0 4px;
-    font-size: 8.7pt;
-    line-height: 1.32;
+    font-size: calc(8.7pt * var(--rb-scale, 1));
+    line-height: calc(1.32 * var(--rb-line-scale, 1));
   }
   .skill-list li::before {
     content: "";
@@ -362,7 +362,7 @@
     display: block;
   }
   .initials {
-    font-size: 17pt;
+    font-size: calc(17pt * var(--rb-scale, 1));
     font-weight: 700;
     letter-spacing: 1px;
     color: #fff;
@@ -381,7 +381,7 @@
     align-items: center;
     gap: 8px;
     margin: 0 0 3.5mm;
-    font-size: 11pt;
+    font-size: calc(11pt * var(--rb-scale, 1));
     font-weight: 800;
     letter-spacing: 1.4px;
     text-transform: uppercase;
@@ -397,8 +397,8 @@
   }
   .summary {
     margin: 0;
-    font-size: 9.7pt;
-    line-height: 1.55;
+    font-size: calc(9.7pt * var(--rb-scale, 1));
+    line-height: calc(1.55 * var(--rb-line-scale, 1));
     color: #34404e;
   }
   .entry {
@@ -417,7 +417,7 @@
     min-width: 0;
   }
   .job {
-    font-size: 10.4pt;
+    font-size: calc(10.4pt * var(--rb-scale, 1));
     font-weight: 700;
     color: var(--ink);
   }
@@ -427,14 +427,14 @@
   }
   .dates {
     flex: 0 0 auto;
-    font-size: 8.6pt;
+    font-size: calc(8.6pt * var(--rb-scale, 1));
     font-weight: 600;
     color: var(--muted);
     white-space: nowrap;
   }
   .meta {
     margin-top: 1px;
-    font-size: 8.7pt;
+    font-size: calc(8.7pt * var(--rb-scale, 1));
     font-style: italic;
     color: var(--muted);
   }
@@ -451,8 +451,8 @@
     position: relative;
     padding-left: 14px;
     margin: 0 0 1.6mm;
-    font-size: 9.5pt;
-    line-height: 1.45;
+    font-size: calc(9.5pt * var(--rb-scale, 1));
+    line-height: calc(1.45 * var(--rb-line-scale, 1));
     color: #34404e;
   }
   .bullets li::before {
@@ -469,8 +469,8 @@
   }
   .edu-details {
     margin: 1.6mm 0 0;
-    font-size: 9.3pt;
-    line-height: 1.45;
+    font-size: calc(9.3pt * var(--rb-scale, 1));
+    line-height: calc(1.45 * var(--rb-line-scale, 1));
     color: #34404e;
   }
 </style>
