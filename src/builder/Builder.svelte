@@ -15,6 +15,8 @@
   } from "./resume-schema";
   import Form from "./Form.svelte";
   import Preview from "./Preview.svelte";
+  import ImportPanel from "./import/ImportPanel.svelte";
+  import { sanitizeResume } from "./resume-core";
 
   let resume = $state<Resume>(loadResume() ?? sampleFor("ats-minimal"));
   let template = $state<TemplateId>("ats-minimal");
@@ -26,9 +28,16 @@
     template = id;
   }
 
-  // Auto-save every change to localStorage (no accounts, no backend).
+  // Drop a parsed/imported resume into the editor (sanitized at the boundary). Named
+  // applyImport, not loadResume — the latter is the localStorage loader imported above.
+  function applyImport(r: Resume) {
+    resume = sanitizeResume(r);
+  }
+
+  // Auto-save every change to localStorage (no accounts, no backend); sanitize the
+  // persisted copy so a manually-typed javascript:/data: URL never lands in storage.
   $effect(() => {
-    saveResume(resume);
+    saveResume(sanitizeResume(resume));
   });
 
   function clearAll() {
@@ -42,6 +51,7 @@
 
 <div class="builder">
   <section class="editor" data-chrome>
+    <ImportPanel onImport={applyImport} />
     <div class="toolbar">
       <div class="templates" role="group" aria-label="Template">
         {#each TEMPLATE_IDS as id}
