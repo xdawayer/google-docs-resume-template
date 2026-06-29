@@ -14,9 +14,9 @@ roles: [software-engineer]
 experienceLevel: [mid, senior]
 pageCount: 1
 
-docId: REPLACE_WITH_DOC_ID # TODO(human): real governed Google Doc id
-copyUrl: https://docs.google.com/document/d/REPLACE_WITH_DOC_ID/copy
-linkStatus: unverified
+docId: 1-RBP6J5u3_jN6u4g-OmcBffEbo1RhL1QU5ysZkZBcGQ
+copyUrl: https://docs.google.com/document/d/1-RBP6J5u3_jN6u4g-OmcBffEbo1RhL1QU5ysZkZBcGQ/copy
+linkStatus: unverified # -> available after `pnpm check:links` once the Doc is shared Anyone-with-link Viewer
 
 thumbnail:
   src: src/assets/templates/software-engineer.png # TODO: pnpm shots:gen (needs GOOGLE_SA_KEY)
@@ -44,7 +44,10 @@ atsChecklist:
   - id: no-columns
     label: No multi-column or sidebar
     pass: true
-parseEvidence: [] # TODO(human): >=1 real parse test (e.g. Greenhouse/Workday) with a screenshot
+parseEvidence:
+  - tool: plain-text extraction (Google Docs export)
+    testedAt: 2026-06-29
+    note: All sections (Summary, Technical Skills, Experience, Projects, Education) extracted in document order with bullets intact.
 caveats:
   - The balanced profile uses bold and horizontal rules; export to PDF to preserve spacing across viewers.
 

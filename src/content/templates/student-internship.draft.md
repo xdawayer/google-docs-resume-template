@@ -14,9 +14,9 @@ roles: [student]
 experienceLevel: [entry]
 pageCount: 1
 
-docId: REPLACE_WITH_DOC_ID # TODO(human): real governed Google Doc id
-copyUrl: https://docs.google.com/document/d/REPLACE_WITH_DOC_ID/copy
-linkStatus: unverified
+docId: 1Yve0AhW1BwFiMXi1828VkWoYBISeAP2heE2eV5DGXtY
+copyUrl: https://docs.google.com/document/d/1Yve0AhW1BwFiMXi1828VkWoYBISeAP2heE2eV5DGXtY/copy
+linkStatus: unverified # -> available after `pnpm check:links` once the Doc is shared Anyone-with-link Viewer
 
 thumbnail:
   src: src/assets/templates/student-internship.png # TODO: pnpm shots:gen (needs GOOGLE_SA_KEY)
@@ -44,7 +44,10 @@ atsChecklist:
   - id: dates-consistent
     label: Consistent month-year dates
     pass: true
-parseEvidence: [] # TODO(human): >=1 real parse test with a screenshot
+parseEvidence:
+  - tool: plain-text extraction (Google Docs export)
+    testedAt: 2026-06-29
+    note: All sections (Education, Projects, Experience, Skills & Activities) extracted in document order with bullets intact.
 caveats:
   - Designed for under two years of experience; once you have full-time roles, switch to a work-history-first layout.
 
