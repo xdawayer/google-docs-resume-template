@@ -1,10 +1,13 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
   import { type SectionKey, defaultOrder } from "../section-order";
+  import { safePhoto } from "../resume-core";
   let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } =
     $props();
 
   const fullName = $derived(resume.basics.fullName || "Your Name");
+
+  const photo = $derived(safePhoto(resume.basics.photo));
 
   const initials = $derived(
     fullName
@@ -119,8 +122,8 @@
 
   <div class="main">
     <div class="avatar">
-      {#if resume.basics.photo}
-        <img src={resume.basics.photo} alt={fullName} />
+      {#if photo}
+        <img src={photo} alt={fullName} />
       {:else}
         <span class="initials">{initials}</span>
       {/if}

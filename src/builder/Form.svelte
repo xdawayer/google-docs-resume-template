@@ -14,6 +14,7 @@
     moveSection,
     defaultOrder,
   } from "./section-order";
+  import { readImageAsDataUrl } from "./import/photo";
 
   let {
     resume = $bindable(),
@@ -22,6 +23,22 @@
 
   // Collapse is editor-only UI state (preview always shows non-empty sections).
   let collapsed = $state<Record<string, boolean>>({});
+
+  // Local photo upload: read + downscale to a small data-URL, set basics.photo.
+  let photoError = $state("");
+  async function onPhotoFile(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    photoError = "";
+    try {
+      resume.basics.photo = await readImageAsDataUrl(file);
+    } catch (err) {
+      photoError = err instanceof Error ? err.message : "Could not use that image.";
+    } finally {
+      input.value = ""; // allow re-picking the same file
+    }
+  }
   const toggle = (key: string) => (collapsed[key] = !collapsed[key]);
   const move = (key: SectionKey, dir: -1 | 1) => (sectionOrder = moveSection(sectionOrder, key, dir));
 
@@ -142,12 +159,42 @@
     <label>Phone<input bind:value={resume.basics.phone} /></label>
   </div>
   <label>Location<input bind:value={resume.basics.location} placeholder="City, State" /></label>
-  <label
-    >Photo URL (optional)<input
+
+  <div class="photo">
+    <span class="photo-lbl">Photo (optional)</span>
+    <div class="photo-row">
+      {#if resume.basics.photo}
+        <img class="photo-prev" src={resume.basics.photo} alt="Photo preview" />
+      {:else}
+        <span class="photo-ph" aria-hidden="true">👤</span>
+      {/if}
+      <div class="photo-actions">
+        <label class="upload">
+          {resume.basics.photo ? "Change photo" : "Upload photo"}
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onchange={onPhotoFile}
+            data-photo-input
+            hidden
+          />
+        </label>
+        {#if resume.basics.photo}
+          <button type="button" class="remove" onclick={() => (resume.basics.photo = "")}
+            >Remove</button
+          >
+        {/if}
+      </div>
+    </div>
+    {#if photoError}<span class="err" data-photo-error>{photoError}</span>{/if}
+    <input
+      class="photo-url"
       bind:value={resume.basics.photo}
-      placeholder="https://…  — used by the Creative template"
-    /></label
-  >
+      placeholder="…or paste an image URL (https://)"
+    />
+    <span class="sub">Shown on photo templates (Modern Sidebar, Creative, Fresh Graduate, Bold, Executive).</span>
+  </div>
+
   <div class="rows">
     {#each resume.basics.links as link, i}
       <div class="row">
@@ -424,5 +471,57 @@
     height: 28px;
     cursor: pointer;
     flex: none;
+  }
+  .photo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .photo-lbl {
+    font-size: 0.8rem;
+    color: #444;
+  }
+  .photo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .photo-prev,
+  .photo-ph {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    flex: none;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    background: #f2f2f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+  .photo-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .upload {
+    display: inline-block;
+    border: 1px solid #1a4fa0;
+    color: #1a4fa0;
+    background: #fff;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .photo-url {
+    font-size: 0.82rem;
+  }
+  .err {
+    font-size: 0.76rem;
+    color: #b00020;
   }
 </style>

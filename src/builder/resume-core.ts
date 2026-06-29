@@ -37,7 +37,7 @@ export function normalizeUrl(raw: string): string {
   return isSafeUrl(c) ? c : "";
 }
 
-function safePhoto(raw: string): string {
+export function safePhoto(raw: string): string {
   const s = (raw ?? "").trim();
   if (!s) return "";
   if (/^https:\/\//i.test(s)) return s;

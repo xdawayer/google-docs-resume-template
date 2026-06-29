@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
   import { type SectionKey, defaultOrder } from "../section-order";
+  import { safePhoto } from "../resume-core";
   let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } = $props();
 
   type ContactItem = {
@@ -29,6 +30,8 @@
       ),
     ].filter(Boolean) as ContactItem[],
   );
+
+  const photo = $derived(safePhoto(resume.basics.photo));
 
   const initials = $derived(
     (resume.basics.fullName || "Your Name")
@@ -71,8 +74,8 @@
 
   <header class="hdr">
     <div class="avatar">
-      {#if resume.basics.photo}
-        <img src={resume.basics.photo} alt={resume.basics.fullName || "Profile photo"} />
+      {#if photo}
+        <img src={photo} alt={resume.basics.fullName || "Profile photo"} />
       {:else}
         <span class="monogram">{initials}</span>
       {/if}

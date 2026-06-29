@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
   import { type SectionKey, defaultOrder } from "../section-order";
+  import { safePhoto } from "../resume-core";
   let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } =
     $props();
 
@@ -13,6 +14,8 @@
     if (i === -1) return { first: trimmed, last: "" };
     return { first: trimmed.slice(0, i), last: trimmed.slice(i + 1) };
   });
+
+  const photo = $derived(safePhoto(resume.basics.photo));
 
   const initials = $derived(
     fullName
@@ -100,8 +103,8 @@
   <aside class="sidebar">
     <div class="avatar-wrap">
       <div class="avatar">
-        {#if resume.basics.photo}
-          <img src={resume.basics.photo} alt={fullName} />
+        {#if photo}
+          <img src={photo} alt={fullName} />
         {:else}
           <span class="initials">{initials || "YN"}</span>
         {/if}

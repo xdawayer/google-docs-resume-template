@@ -1,8 +1,11 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
   import { type SectionKey, defaultOrder } from "../section-order";
+  import { safePhoto } from "../resume-core";
   let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } =
     $props();
+
+  const photo = $derived(safePhoto(resume.basics.photo));
 
   const initials = $derived(
     (resume.basics.fullName || "Your Name")
@@ -87,8 +90,8 @@
 <article class="sheet" data-sheet>
   <aside class="sidebar">
     <div class="identity">
-      {#if resume.basics.photo}
-        <img class="avatar" src={resume.basics.photo} alt={resume.basics.fullName || "Profile"} />
+      {#if photo}
+        <img class="avatar" src={photo} alt={resume.basics.fullName || "Profile"} />
       {:else}
         <div class="avatar initials">{initials}</div>
       {/if}
