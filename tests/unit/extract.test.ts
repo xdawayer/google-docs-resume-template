@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractText, ACCEPTED, MAX_BYTES } from "../../src/builder/import/extract";
+import { extractText, ACCEPTED, MAX_BYTES, MAX_TEXT } from "../../src/builder/import/extract";
 
 // Node-safe paths only: paste returns early, guards throw before the dynamic
 // mammoth/pdf.js import. Real docx/pdf extraction is validated by the Playwright gate.
@@ -20,5 +20,11 @@ describe("extractText (node-safe paths)", () => {
 
   it("exposes the accepted-type allowlist", () => {
     expect(ACCEPTED).toContain("application/pdf");
+  });
+
+  it("caps a huge paste to MAX_TEXT", async () => {
+    const r = await extractText("x".repeat(MAX_TEXT + 5000));
+    expect(r.source).toBe("paste");
+    expect(r.text.length).toBe(MAX_TEXT);
   });
 });

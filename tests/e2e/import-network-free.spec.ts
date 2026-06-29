@@ -15,17 +15,21 @@ test("import is network-free and populates the builder", async ({ page, baseURL 
   await page.goto("/resume-builder/");
   await page.locator("[data-import] summary").click();
 
-  // docx (mammoth)
+  // docx (mammoth) — name + a parsed experience field prove section parsing, not just text
   await page
     .locator("[data-import-file]")
     .setInputFiles("tests/fixtures/resumes/sample-chronological.docx");
   await expect(page.getByLabel("Full name")).toHaveValue("Dana Lopez", { timeout: 6000 });
+  await expect(page.getByLabel("Company").first()).toHaveValue(/Acme/, { timeout: 6000 });
 
-  // pdf (pdf.js local worker)
+  // Clear, then verify the PDF path INDEPENDENTLY populates — catches the line-collapse
+  // bug (a collapsed PDF yields an empty name, not "Dana Lopez").
+  await page.getByRole("button", { name: "Clear" }).click();
+  await expect(page.getByLabel("Full name")).toHaveValue("");
   await page
     .locator("[data-import-file]")
     .setInputFiles("tests/fixtures/resumes/sample-onepage.pdf");
-  await page.waitForTimeout(1500); // let pdf.js extract + re-render
+  await expect(page.getByLabel("Full name")).toHaveValue("Dana Lopez", { timeout: 6000 });
 
   expect(thirdParty, `third-party requests: ${thirdParty.join(", ")}`).toEqual([]);
 });

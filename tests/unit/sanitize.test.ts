@@ -47,11 +47,18 @@ describe("sanitizeResume", () => {
     const svg = "data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=";
     const huge = "data:image/png;base64," + "A".repeat(3_000_000);
     const ok = "data:image/png;base64,iVBORw0KGgo=";
-    expect(sanitizeResume({ ...base, basics: { ...base.basics, photo: svg } }).basics.photo).toBe("");
-    expect(sanitizeResume({ ...base, basics: { ...base.basics, photo: huge } }).basics.photo).toBe("");
-    expect(sanitizeResume({ ...base, basics: { ...base.basics, photo: ok } }).basics.photo).toBe(ok);
+    expect(sanitizeResume({ ...base, basics: { ...base.basics, photo: svg } }).basics.photo).toBe(
+      "",
+    );
+    expect(sanitizeResume({ ...base, basics: { ...base.basics, photo: huge } }).basics.photo).toBe(
+      "",
+    );
+    expect(sanitizeResume({ ...base, basics: { ...base.basics, photo: ok } }).basics.photo).toBe(
+      ok,
+    );
     expect(
-      sanitizeResume({ ...base, basics: { ...base.basics, photo: "https://x/p.png" } }).basics.photo,
+      sanitizeResume({ ...base, basics: { ...base.basics, photo: "https://x/p.png" } }).basics
+        .photo,
     ).toBe("https://x/p.png");
   });
 
@@ -60,5 +67,30 @@ describe("sanitizeResume", () => {
     const out = sanitizeResume({ ...base, summary: `hi${nul}bye\nline2` });
     expect(() => resumeSchema.parse(out)).not.toThrow();
     expect(out.summary).toBe("hibye\nline2");
+  });
+
+  it("rejects a URL with embedded CR/LF (credential-confusion)", () => {
+    expect(isSafeUrl("https://example.com\n@evil.com")).toBe(false);
+    expect(normalizeUrl("https://example.com\t@evil.com")).toBe("");
+  });
+
+  it("strips bidi-override marks (visual spoofing)", () => {
+    const rlo = String.fromCharCode(0x202e);
+    expect(sanitizeResume({ ...base, summary: `safe${rlo}txet` }).summary).toBe("safetxet");
+  });
+
+  it("cleans nested fields and preserves tab/CR", () => {
+    const bel = String.fromCharCode(7);
+    const out = sanitizeResume({
+      ...base,
+      experience: [
+        { title: `a${bel}b`, company: "", location: "", start: "", end: "", bullets: [`x${bel}y`] },
+      ],
+      skills: [{ category: `c${bel}`, items: "Go\tRust\r" }],
+    });
+    expect(out.experience[0]!.title).toBe("ab");
+    expect(out.experience[0]!.bullets[0]).toBe("xy");
+    expect(out.skills[0]!.category).toBe("c");
+    expect(out.skills[0]!.items).toBe("Go\tRust\r"); // tab + CR kept
   });
 });

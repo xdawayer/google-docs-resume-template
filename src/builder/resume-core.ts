@@ -22,7 +22,9 @@ function toCandidate(raw: string): string {
 
 export function isSafeUrl(raw: string): boolean {
   const c = toCandidate(raw);
-  if (!c) return false;
+  // Embedded whitespace/CR/LF is a host/credential-confusion vector
+  // (e.g. "https://example.com\n@evil.com" parses to host evil.com).
+  if (!c || /\s/.test(c)) return false;
   try {
     return SAFE_SCHEMES.includes(new URL(c).protocol);
   } catch {
@@ -43,15 +45,24 @@ function safePhoto(raw: string): string {
   return ""; // svg, oversized, javascript:, http:, etc.
 }
 
-// Strip C0/C1 control chars + DEL, but KEEP tab (9), newline (10), CR (13) so multi-line
-// fields survive a save. A char-code loop avoids fragile control-char regex literals.
+// Strip C0 + C1 control chars, DEL, line/paragraph separators, and bidi
+// embedding/override/isolate marks (U+202E etc. enable visual URL/label spoofing in
+// the rendered resume), but KEEP tab (9), newline (10), CR (13) so multi-line fields
+// survive a save. A char-code loop avoids fragile control-char regex literals.
 const KEEP = new Set([9, 10, 13]);
+function isStripped(c: number): boolean {
+  if (c === 0x7f) return true; // DEL
+  if (c <= 0x1f) return !KEEP.has(c); // C0 (keep tab/LF/CR)
+  if (c >= 0x80 && c <= 0x9f) return true; // C1
+  if (c === 0x2028 || c === 0x2029) return true; // line / paragraph separator
+  if (c >= 0x202a && c <= 0x202e) return true; // bidi embeddings + overrides
+  if (c >= 0x2066 && c <= 0x2069) return true; // bidi isolates
+  return false;
+}
 function clean(s: string): string {
   let out = "";
   for (const ch of s ?? "") {
-    const c = ch.codePointAt(0) ?? 0;
-    if (c === 0x7f || (c <= 0x1f && !KEEP.has(c))) continue;
-    out += ch;
+    if (!isStripped(ch.codePointAt(0) ?? 0)) out += ch;
   }
   return out;
 }

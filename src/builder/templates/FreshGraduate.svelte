@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
+  import { normalizeUrl } from "../resume-core";
   let { resume }: { resume: Resume } = $props();
 
   const fullName = $derived(resume.basics.fullName || "Your Name");
@@ -108,7 +109,7 @@
                     <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" />
                   </svg>
                 </span>
-                <a class="c-text" href={link.url}>{link.label || link.url}</a>
+                <a class="c-text" href={normalizeUrl(link.url)}>{link.label || link.url}</a>
               </li>
             {/each}
           </ul>

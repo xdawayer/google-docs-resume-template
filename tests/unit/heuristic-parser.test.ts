@@ -59,4 +59,31 @@ describe("HeuristicParser", () => {
       expect(typeof confidence).toBe("object");
     }
   });
+
+  it("does not turn the email into junk Website links", async () => {
+    const { resume } = await parse(CHRONO);
+    expect(resume.basics.links.map((l) => l.url)).not.toContain("https://example.com");
+    expect(resume.basics.links.every((l) => !/dana\.lopez$/.test(l.url))).toBe(true);
+    expect(resume.basics.links.some((l) => l.url.includes("linkedin.com"))).toBe(true);
+  });
+
+  it("splits an ASCII-hyphen title/company header", async () => {
+    const { resume } = await parse(
+      "Experience\nOperations Manager - Acme Co, Remote\nJan 2021 – Present\n- did x",
+    );
+    expect(resume.experience[0]!.title).toBe("Operations Manager");
+    expect(resume.experience[0]!.company).toBe("Acme Co");
+  });
+
+  it("handles a date range on the header line without leaking into company", async () => {
+    const { resume } = await parse("Experience\nPM — Acme Jan 2021 – Present\n- shipped");
+    expect(resume.experience[0]!.company).toMatch(/Acme/);
+    expect(resume.experience[0]!.company).not.toMatch(/2021|Present/);
+    expect(resume.experience[0]!.end).toMatch(/Present/i);
+  });
+
+  it("warns when no section headings are detected", async () => {
+    const { warnings } = await parse("Jane Roe\njane@x.com\nDid some things here.");
+    expect(warnings.join(" ")).toMatch(/no section headings/i);
+  });
 });

@@ -18,7 +18,9 @@
   import ImportPanel from "./import/ImportPanel.svelte";
   import { sanitizeResume } from "./resume-core";
 
-  let resume = $state<Resume>(loadResume() ?? sampleFor("ats-minimal"));
+  // Sanitize on load too: localStorage may hold values written by a prior build, a
+  // browser extension, or devtools — the render path must not trust stored content.
+  let resume = $state<Resume>(sanitizeResume(loadResume() ?? sampleFor("ats-minimal")));
   let template = $state<TemplateId>("ats-minimal");
 
   // Switching template while the content is still an untouched sample swaps in the

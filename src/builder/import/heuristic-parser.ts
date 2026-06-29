@@ -10,7 +10,8 @@ const PHONE_RE = /(\+?\d[\d\s().-]{7,}\d)/;
 const URL_RE =
   /((https?:\/\/)?(www\.)?(linkedin\.com|github\.com|[\w-]+\.[a-z]{2,})(\/[\w./#?=-]*)?)/gi;
 const DATE_RANGE_RE =
-  /([A-Z][a-z]{2,9}\.?\s*\d{4}|\d{4})\s*[–\-—to]+\s*(present|current|[A-Z][a-z]{2,9}\.?\s*\d{4}|\d{4})/i;
+  /([A-Z][a-z]{2,9}\.?\s*\d{4}|\d{4})\s*(?:[–—-]|to)\s*(present|current|[A-Z][a-z]{2,9}\.?\s*\d{4}|\d{4})/i;
+const EMAIL_GLOBAL_RE = /[\w.+-]+@[\w-]+\.[\w.-]+/g;
 const BULLET_RE = /^\s*[•\-*▪◦·]\s+/;
 const DEGREE_RE =
   /\b(b\.?s\.?|b\.?a\.?|m\.?s\.?|m\.?a\.?|mba|ph\.?d\.?|bachelor|master|associate)\b/i;
@@ -30,7 +31,7 @@ function classifyHeading(line: string): Section | null {
 
 function splitTitleCompany(line: string): { title: string; company: string; location: string } {
   const parts = line
-    .split(/\s+[—–|]\s+|\s+at\s+/i)
+    .split(/\s+[—–|-]\s+|\s+at\s+/i)
     .map((s) => s.trim())
     .filter(Boolean);
   const title = parts[0] ?? "";
@@ -68,12 +69,13 @@ export class HeuristicParser implements ResumeParser {
       resume.basics.phone = phone;
       confidence["/basics/phone"] = 0.8;
     }
-    const urls = Array.from(head.matchAll(URL_RE))
-      .map((m) => m[0])
-      .filter((u) => !u.includes("@"));
+    // Strip emails first so an email's domain/local-part doesn't surface as a junk link.
+    const headNoEmail = head.replace(EMAIL_GLOBAL_RE, " ");
+    const urls = Array.from(headNoEmail.matchAll(URL_RE)).map((m) => m[0]);
     resume.basics.links = [...new Set(urls)]
       .slice(0, 4)
       .map((u) => ({ label: labelFor(u), url: u }));
+    if (resume.basics.links.length) confidence["/basics/links"] = 0.5;
     const nameLine = nonEmpty.find(
       (l) => !EMAIL_RE.test(l) && !PHONE_RE.test(l) && !classifyHeading(l),
     );
@@ -156,10 +158,18 @@ function parseExperience(
       i++;
       continue;
     }
-    const { title, company, location } = splitTitleCompany(line);
+    const onLine = line.match(DATE_RANGE_RE);
+    // When the date range is on the header line, strip it before splitting so it
+    // doesn't leak into company/location.
+    const headerText = onLine
+      ? line
+          .replace(DATE_RANGE_RE, "")
+          .replace(/[—–|]\s*$/, "")
+          .trim()
+      : line;
+    const { title, company, location } = splitTitleCompany(headerText);
     let start = "";
     let end = "";
-    const onLine = line.match(DATE_RANGE_RE);
     const next = block[i + 1];
     if (onLine) {
       start = onLine[1] ?? "";
@@ -185,5 +195,6 @@ function parseExperience(
     i = bullets.length ? j : i + 1;
   }
   if (!out.length) warnings.push("No work experience detected.");
-  return out;
+  if (out.length > 40) warnings.push("Many roles detected — trimmed to 40; review the import.");
+  return out.slice(0, 40); // cap to bound render cost on hostile input
 }
