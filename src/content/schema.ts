@@ -58,6 +58,21 @@ const linkStatus = z.enum(["unverified", "available", "unavailable", "checking"]
 
 const status = z.enum(["draft", "published"]);
 
+// A template is sourced either from a real Google Doc (copy into Drive) or from
+// the in-app builder (open in the editor). Builder templates are equally real —
+// the editor renders them live and exports a selectable-text PDF — but they have
+// no Doc to copy, so docId/copyUrl/link-health don't apply to them.
+const kind = z.enum(["google-doc", "builder"]);
+// The six built-in editor designs (mirrors TEMPLATE_IDS in builder/resume-schema).
+const builderTemplate = z.enum([
+  "ats-minimal",
+  "executive",
+  "modern-sidebar",
+  "creative",
+  "fresh-graduate",
+  "bold",
+]);
+
 const atsChecklistItem = z
   .object({
     id: z.string().min(1),
@@ -102,6 +117,7 @@ export const templateSchema = z
     slug: z.string().regex(SLUG_RE, "slug must be kebab-case"),
     name: z.string().min(1),
     status: status.default("draft"),
+    kind: kind.default("google-doc"),
 
     // Taxonomy (drives category/role pages + filters)
     category: z.array(category).min(1),
@@ -109,14 +125,17 @@ export const templateSchema = z
     experienceLevel: z.array(experienceLevel).min(1),
     pageCount: z.number().int().min(1).max(3),
 
-    // Google Docs source of truth
-    docId: z.string().regex(DOC_ID_RE),
+    // Google Docs source of truth (required for kind: "google-doc", enforced below)
+    docId: z.string().regex(DOC_ID_RE).optional(),
     copyUrl: z
       .string()
       .regex(COPY_URL_RE, "must be a real .../d/{id}/copy URL")
-      .refine((u) => !u.includes("REPLACE_WITH_"), "placeholder copyUrl"),
+      .refine((u) => !u.includes("REPLACE_WITH_"), "placeholder copyUrl")
+      .optional(),
     wordUrl: z.string().url().optional(), // DOCX fallback
     sourceUrl: z.string().url().optional(),
+    // Builder source of truth (required for kind: "builder")
+    builderTemplate: builderTemplate.optional(),
 
     // Verification / health (written by the link-health monitor, M2)
     linkStatus: linkStatus.default("unverified"),
@@ -146,20 +165,47 @@ export const templateSchema = z
   })
   .strict()
   .superRefine((t, ctx) => {
+    // Per-kind source-of-truth requirements.
+    if (t.kind === "google-doc") {
+      if (!t.docId)
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "google-doc needs docId",
+          path: ["docId"],
+        });
+      if (!t.copyUrl)
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "google-doc needs copyUrl",
+          path: ["copyUrl"],
+        });
+    } else if (t.kind === "builder") {
+      if (!t.builderTemplate)
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "builder template needs builderTemplate id",
+          path: ["builderTemplate"],
+        });
+    }
+
     if (t.status === "published") {
-      if (t.linkStatus !== "available") {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "published template must have linkStatus 'available'",
-          path: ["linkStatus"],
-        });
-      }
-      if (t.atsProfile !== "visual-pdf" && t.parseEvidence.length < 1) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "non visual-pdf published template needs >=1 parseEvidence",
-          path: ["parseEvidence"],
-        });
+      // Link-health + parse-evidence apply only to Google-Doc copies. A builder
+      // template is verified by the live editor, not a copy URL.
+      if (t.kind === "google-doc") {
+        if (t.linkStatus !== "available") {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "published template must have linkStatus 'available'",
+            path: ["linkStatus"],
+          });
+        }
+        if (t.atsProfile !== "visual-pdf" && t.parseEvidence.length < 1) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "non visual-pdf published template needs >=1 parseEvidence",
+            path: ["parseEvidence"],
+          });
+        }
       }
       if (t.related.length < 2) {
         ctx.addIssue({

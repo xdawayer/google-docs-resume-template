@@ -17,7 +17,8 @@ export type GoMap = Record<string, GoEntry>;
 
 export interface TemplateLite {
   slug: string;
-  copyUrl: string;
+  /** undefined for builder templates (no Doc copy) — they get no /go entry */
+  copyUrl?: string;
   status: "draft" | "published";
 }
 

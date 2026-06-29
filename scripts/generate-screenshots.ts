@@ -54,6 +54,7 @@ async function main(): Promise<void> {
     if (!res.success) continue;
     const t = res.data;
     if (only && t.slug !== only) continue;
+    if (!t.docId) continue; // builder: no Doc to screenshot
 
     const pdf = await exportPdf(drive, t.docId);
     const meta = await getMeta(drive, t.docId);

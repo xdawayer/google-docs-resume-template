@@ -33,6 +33,7 @@ async function main(): Promise<void> {
     // status is not gated so a draft can be verified before it is published.
     if (!res.success) continue;
     const t = res.data;
+    if (!t.docId) continue; // builder: no Doc to health-check
 
     let status: LinkHealth = "available";
     let reason: string | undefined;

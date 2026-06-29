@@ -51,7 +51,7 @@ const creative = creativeWorkSchema({
   />
 
   <article class="detail">
-    <h1>{t.name} Resume Template for Google Docs</h1>
+    <h1>{t.name} Resume Template{t.kind === "google-doc" ? " for Google Docs" : ""}</h1>
 
     <div class="detail-grid">
       <div class="detail-preview">
@@ -80,7 +80,11 @@ const creative = creativeWorkSchema({
         </ul>
 
         {
-          cta === "copy" ? (
+          t.kind === "builder" ? (
+            <a class="btn primary block" href={`/resume-builder/?t=${t.builderTemplate}`}>
+              Open in the resume builder
+            </a>
+          ) : cta === "copy" ? (
             <a
               class="btn primary block"
               href={`/go/${t.slug}/`}

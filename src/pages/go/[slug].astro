@@ -12,10 +12,10 @@ export async function getStaticPaths() {
   const all = await getCollection("templates", ({ data }: Entry) => data.status === "published");
   const health = loadHealthMap();
   return all
-    .filter((e: Entry) => !e.data.copyUrl.includes("REPLACE_WITH_"))
+    .filter((e: Entry) => e.data.copyUrl && !e.data.copyUrl.includes("REPLACE_WITH_"))
     .map((e: Entry) => ({
       params: { slug: e.data.slug },
-      props: { copyUrl: e.data.copyUrl, status: getHealth(health, e.data.slug), slug: e.data.slug },
+      props: { copyUrl: e.data.copyUrl!, status: getHealth(health, e.data.slug), slug: e.data.slug },
     }));
 }
 

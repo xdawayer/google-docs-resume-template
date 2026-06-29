@@ -22,10 +22,20 @@
   import ImportPanel from "./import/ImportPanel.svelte";
   import { sanitizeResume } from "./resume-core";
 
+  // Preselect a template from ?t= (e.g. an "Open in builder" link from the directory).
+  function startTemplate(): TemplateId {
+    if (typeof location !== "undefined") {
+      const t = new URLSearchParams(location.search).get("t");
+      if (t && (TEMPLATE_IDS as readonly string[]).includes(t)) return t as TemplateId;
+    }
+    return "ats-minimal";
+  }
+  const initialTemplate = startTemplate();
+
   // Sanitize on load too: localStorage may hold values written by a prior build, a
   // browser extension, or devtools — the render path must not trust stored content.
-  let resume = $state<Resume>(sanitizeResume(loadResume() ?? sampleFor("ats-minimal")));
-  let template = $state<TemplateId>("ats-minimal");
+  let resume = $state<Resume>(sanitizeResume(loadResume() ?? sampleFor(initialTemplate)));
+  let template = $state<TemplateId>(initialTemplate);
   // Typography/color knobs (separate from content); sanitized on load.
   let style = $state<ResumeStyle>(loadStyle() ?? defaultStyle());
   // Section order: drives the form panels and the rendered resume's section order.

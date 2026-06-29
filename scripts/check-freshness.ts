@@ -33,6 +33,7 @@ async function main(): Promise<void> {
     const res = templateSchema.safeParse(r.data);
     if (!res.success || res.data.status !== "published") continue;
     const t = res.data;
+    if (!t.docId) continue; // builder: no Doc
     const entry = lock[t.slug];
     if (!entry) {
       drift.push(`${t.slug}: no screenshot lock entry (run shots:gen)`);

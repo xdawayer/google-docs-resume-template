@@ -136,6 +136,7 @@ async function main(): Promise<void> {
     if (!res.success) continue;
     const t = res.data;
     if (only && t.slug !== only) continue;
+    if (!t.copyUrl || !t.docId) continue; // builder: no Doc
     if (t.copyUrl.includes("REPLACE_WITH_")) {
       console.warn(`⚠ ${t.slug}: docId is a placeholder — author + fill the real Doc first.`);
       continue;

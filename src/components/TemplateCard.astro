@@ -41,15 +41,17 @@ const search = [t.name, ...t.category, ...t.roles].join(" ").toLowerCase();
     <h2 class="card-title"><a href={detail}>{t.name}</a></h2>
     <div class="card-actions">
       <button class="btn" type="button" data-preview={t.slug}>Preview</button>
-      <a
-        class="btn primary"
-        href={`/go/${t.slug}/`}
-        target="_blank"
-        rel="noopener"
-        data-copy={t.slug}
-      >
-        Copy in Google Docs
-      </a>
+      {
+        t.kind === "builder" ? (
+          <a class="btn primary" href={`/resume-builder/?t=${t.builderTemplate}`} data-open-builder={t.slug}>
+            Open in builder
+          </a>
+        ) : (
+          <a class="btn primary" href={`/go/${t.slug}/`} target="_blank" rel="noopener" data-copy={t.slug}>
+            Copy in Google Docs
+          </a>
+        )
+      }
     </div>
   </div>
 </article>
