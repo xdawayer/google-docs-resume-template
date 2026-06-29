@@ -5,7 +5,8 @@
     TEMPLATE_IDS,
     TEMPLATE_META,
     resumeSchema,
-    sampleResume,
+    sampleFor,
+    isPristineSample,
     loadResume,
     saveResume,
     emptyExperience,
@@ -15,8 +16,15 @@
   import Form from "./Form.svelte";
   import Preview from "./Preview.svelte";
 
-  let resume = $state<Resume>(loadResume() ?? sampleResume());
+  let resume = $state<Resume>(loadResume() ?? sampleFor("ats-minimal"));
   let template = $state<TemplateId>("ats-minimal");
+
+  // Switching template while the content is still an untouched sample swaps in the
+  // persona that suits that template. Once the user edits, their content is kept.
+  function pickTemplate(id: TemplateId) {
+    if (isPristineSample(resume)) resume = sampleFor(id);
+    template = id;
+  }
 
   // Auto-save every change to localStorage (no accounts, no backend).
   $effect(() => {
@@ -37,13 +45,13 @@
     <div class="toolbar">
       <div class="templates" role="group" aria-label="Template">
         {#each TEMPLATE_IDS as id}
-          <button class:active={template === id} onclick={() => (template = id)}>
+          <button class:active={template === id} onclick={() => pickTemplate(id)}>
             {TEMPLATE_META[id].label}
           </button>
         {/each}
       </div>
       <div class="actions">
-        <button class="ghost" onclick={() => (resume = sampleResume())}>Sample</button>
+        <button class="ghost" onclick={() => (resume = sampleFor(template))}>Sample</button>
         <button class="ghost" onclick={clearAll}>Clear</button>
         <button class="primary" onclick={() => window.print()}>Download PDF</button>
       </div>
