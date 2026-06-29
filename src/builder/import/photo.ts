@@ -10,6 +10,7 @@
 
 export const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"] as const;
 export const MAX_FILE_BYTES = 12 * 1024 * 1024; // reject absurd inputs before decoding
+export const MAX_PIXELS = 30_000_000; // ~30 MP — a small file can still decode huge (bomb)
 export const MAX_DIM = 512; // longest side after downscale — plenty for an avatar
 const OUTPUT_TYPE = "image/jpeg";
 const QUALITY = 0.85;
@@ -27,6 +28,11 @@ export async function readImageAsDataUrl(file: File): Promise<string> {
   }
   const raw = await readAsDataUrl(file);
   const img = await loadImage(raw);
+  // A small (highly compressible) file can still decode to a huge bitmap; cap the
+  // pixel count so the canvas step can't blow up memory.
+  if (img.width * img.height > MAX_PIXELS) {
+    throw new Error("That image's resolution is too high — try a smaller photo.");
+  }
   return downscale(img);
 }
 
