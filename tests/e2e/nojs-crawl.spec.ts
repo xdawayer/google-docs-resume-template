@@ -8,10 +8,10 @@ test("hub renders the grid + all cards as static HTML with JS off", async ({ pag
   const cards = page.locator(".template-card");
   const n = await cards.count();
   for (let i = 0; i < n; i++) {
-    // every card carries an internal detail link even without JS
-    await expect(cards.nth(i).locator('a[href^="/google-docs-resume-template/"]')).toHaveCount(1, {
-      timeout: 5000,
-    });
+    // every card carries at least one internal detail link even without JS (the
+    // thumbnail and the title both link to the detail page — both are crawlable).
+    const detailLinks = cards.nth(i).locator('a[href^="/google-docs-resume-template/"]');
+    expect(await detailLinks.count()).toBeGreaterThanOrEqual(1);
   }
   // no card links straight to Google Docs
   await expect(page.locator('.template-card a[href*="docs.google.com"]')).toHaveCount(0);

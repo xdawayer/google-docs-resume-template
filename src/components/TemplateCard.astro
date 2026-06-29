@@ -38,7 +38,7 @@ const search = [t.name, ...t.category, ...t.roles].join(" ").toLowerCase();
       {t.category.slice(0, 3).map((c) => <span class={`tag tag-${c}`}>{c}</span>)}
       <span class="tag tag-ats-profile">{t.atsProfile}</span>
     </div>
-    <h3 class="card-title"><a href={detail}>{t.name}</a></h3>
+    <h2 class="card-title"><a href={detail}>{t.name}</a></h2>
     <div class="card-actions">
       <button class="btn" type="button" data-preview={t.slug}>Preview</button>
       <a
