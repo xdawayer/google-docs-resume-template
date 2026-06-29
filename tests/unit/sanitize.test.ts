@@ -32,7 +32,7 @@ describe("sanitizeResume", () => {
       ...base,
       basics: { ...base.basics, links: [{ label: "Portfolio", url: "javascript:alert(1)" }] },
     });
-    expect(out.basics.links[0]).toEqual({ label: "Portfolio", url: "" });
+    expect(out.basics.links[0]!).toEqual({ label: "Portfolio", url: "" });
   });
 
   it("normalizes a bare-domain link to https", () => {
@@ -40,7 +40,7 @@ describe("sanitizeResume", () => {
       ...base,
       basics: { ...base.basics, links: [{ label: "GH", url: "github.com/x" }] },
     });
-    expect(out.basics.links[0].url).toBe("https://github.com/x");
+    expect(out.basics.links[0]!.url).toBe("https://github.com/x");
   });
 
   it("rejects svg + oversized data photo, keeps small raster + https", () => {

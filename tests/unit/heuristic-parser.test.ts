@@ -39,17 +39,17 @@ describe("HeuristicParser", () => {
   it("splits experience entries with bullets", async () => {
     const { resume } = await parse(CHRONO);
     expect(resume.experience.length).toBe(2);
-    expect(resume.experience[0].title).toMatch(/Operations Manager/);
-    expect(resume.experience[0].company).toMatch(/Acme/);
-    expect(resume.experience[0].bullets.length).toBe(2);
-    expect(resume.experience[0].end).toMatch(/Present/i);
+    expect(resume.experience[0]!.title).toMatch(/Operations Manager/);
+    expect(resume.experience[0]!.company).toMatch(/Acme/);
+    expect(resume.experience[0]!.bullets.length).toBe(2);
+    expect(resume.experience[0]!.end).toMatch(/Present/i);
   });
 
   it("extracts education + skills + summary", async () => {
     const { resume } = await parse(CHRONO);
     expect(resume.summary).toMatch(/Operations lead/);
-    expect(resume.education[0].school).toMatch(/Berkeley/);
-    expect(resume.skills[0].items).toMatch(/SQL/);
+    expect(resume.education[0]!.school).toMatch(/Berkeley/);
+    expect(resume.skills[0]!.items).toMatch(/SQL/);
   });
 
   it("always returns schema-valid output, even on garbage", async () => {
