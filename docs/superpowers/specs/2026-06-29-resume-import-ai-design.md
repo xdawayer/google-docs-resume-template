@@ -77,9 +77,12 @@ sinks. Imported-file and LLM content is untrusted, so add `sanitizeResume(r): Re
 - `links[].url`: allow only `https:`, `mailto:`, `tel:`; auto-`https://` a bare domain;
   **reject** `javascript:`/`data:`/`blob:`/`file:` and whitespace/control-obfuscated
   schemes (drop the url, keep the label).
-- `basics.photo`: v1 **never import or accept an AI-supplied photo**. Only a
-  user-typed `https:` URL or a bounded `data:image/(png|jpeg|webp)` under a strict byte
-  cap; never `image/svg+xml`.
+- `basics.photo`: the only photo source is the user typing it in the builder — **text
+  extraction carries no image, and the AI functions blank `photo` before returning** (the
+  model never supplies one). So `sanitizeResume(r)` just validates the user value (allow a
+  `https:` URL or a bounded `data:image/(png|jpeg|webp)` under a strict byte cap; never
+  `image/svg+xml`) and needs no provenance flag — resolving the "keep user photo vs strip
+  AI photo" conflict.
 - Strip control chars; cap field lengths.
 
 `sanitizeResume` runs (a) after any parser/AI output, before it touches builder state,
@@ -116,7 +119,9 @@ Resume (`/basics/email`, `/experience/0/company`, `/experience/0/bullets/2`), va
 0..1. v1 may score at **section/entry granularity** (`/experience/0`) rather than every
 leaf. `ImportPanel` flags any key < 0.6. The heuristic parser emits real per-derivation
 scores; the AI parser returns a flat default (e.g. 0.85) — confidence is a *review hint*,
-not calibrated truth.
+not calibrated truth. Because that flat score sits above the threshold, AI-parsed results
+show a single "AI-filled — please review" banner instead of per-field flags (the editor +
+sanitize + Zod remain the safety net either way).
 
 **ImportPanel ↔ Builder integration:** `Builder.svelte` owns `resume = $state(...)`
 (`Builder.svelte:19`). Add an `onImport(resume)` callback prop (or expose a `loadResume`
@@ -247,6 +252,11 @@ they're neutralized.
   Rate Limiting API is permissive, not accounting).
 - **Vertex on Workers** (WebCrypto SA→OAuth JWT) deferred; revisit only with a
   Workers-native impl + tests.
+- **Durable Object on Pages Functions** (`_budget.ts`) needs the DO class exported plus a
+  `[[durable_objects]]` + migration entry in `wrangler.toml` for a Pages project — validate
+  this wiring early in P2 (a `wrangler pages dev` smoke test) so it doesn't become a
+  second Vertex-style overpromise. Fallback if blocked: CF native Rate Limiting binding
+  as the global cap + mandatory Turnstile, accepting weaker accounting.
 - **Future:** Google Drive/account login; payment/quotas to make the AI path a paid tier;
   richer optimize (ATS keywords, multiple variants).
 ```
