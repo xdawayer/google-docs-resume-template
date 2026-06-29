@@ -170,7 +170,7 @@
   }
   .primary {
     border: none;
-    background: #6366f1;
+    background: #4f46e5;
     color: #fff;
     border-radius: 6px;
     padding: 5px 14px;

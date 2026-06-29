@@ -18,6 +18,16 @@
     lowCount = 0;
     try {
       const extracted = await extractText(input);
+      // Guard empty/near-empty extraction (e.g. a scanned, image-only PDF with no
+      // text layer) — otherwise we'd wipe the builder with a blank parse and look
+      // like a silent failure.
+      if (extracted.text.replace(/\s+/g, " ").trim().length < 20) {
+        throw new Error(
+          extracted.source === "pdf"
+            ? "No readable text found. If this is a scanned or image-only PDF it has no text layer — export a text PDF (or .docx), or paste the text below."
+            : "No readable text found in that file. Try pasting the text instead.",
+        );
+      }
       const { resume, confidence, warnings: w } = await parser.parse(extracted);
       warnings = w;
       lowCount = Object.values(confidence).filter((c) => c < 0.6).length;
@@ -110,7 +120,7 @@
   button {
     margin-top: 8px;
     border: none;
-    background: #6366f1;
+    background: #4f46e5;
     color: #fff;
     border-radius: 6px;
     padding: 6px 12px;

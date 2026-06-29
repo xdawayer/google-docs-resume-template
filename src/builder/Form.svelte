@@ -15,11 +15,16 @@
     defaultOrder,
   } from "./section-order";
   import { readImageAsDataUrl } from "./import/photo";
+  import { safePhoto } from "./resume-core";
 
   let {
     resume = $bindable(),
     sectionOrder = $bindable(),
   }: { resume: Resume; sectionOrder: SectionKey[] } = $props();
+
+  // The thumbnail uses the same safePhoto gate the templates do, so the preview
+  // never disagrees with the rendered resume (unsafe/insecure URL → placeholder).
+  const photoPreview = $derived(safePhoto(resume.basics.photo));
 
   // Collapse is editor-only UI state (preview always shows non-empty sections).
   let collapsed = $state<Record<string, boolean>>({});
@@ -163,8 +168,8 @@
   <div class="photo">
     <span class="photo-lbl">Photo (optional)</span>
     <div class="photo-row">
-      {#if resume.basics.photo}
-        <img class="photo-prev" src={resume.basics.photo} alt="Photo preview" />
+      {#if photoPreview}
+        <img class="photo-prev" src={photoPreview} alt="Photo preview" />
       {:else}
         <span class="photo-ph" aria-hidden="true">👤</span>
       {/if}
@@ -508,8 +513,8 @@
   }
   .upload {
     display: inline-block;
-    border: 1px solid #6366f1;
-    color: #6366f1;
+    border: 1px solid #4f46e5;
+    color: #4f46e5;
     background: #fff;
     border-radius: 6px;
     padding: 5px 12px;

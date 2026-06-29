@@ -155,7 +155,7 @@
     outline-offset: 1px;
   }
   .swatch:focus-visible {
-    outline: 2px solid #6366f1;
+    outline: 2px solid #4f46e5;
     outline-offset: 1px;
   }
 </style>

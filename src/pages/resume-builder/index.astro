@@ -71,23 +71,34 @@ const description =
         margin-left: auto;
       }
 
-      /* Print only the resume sheet — real selectable text, ATS-friendly. */
+      /* Print only the resume sheet — real selectable text, ATS-friendly.
+         Hide the chrome and flatten the app/preview containers so the sheet sits
+         in normal flow and establishes the printed page height. (A previous
+         position:absolute approach left the sheet out of flow, so the short app
+         height produced a blank page.) */
       @media print {
         @page {
           size: A4;
           margin: 0;
         }
-        body * {
-          visibility: hidden !important;
+        .app-header,
+        [data-chrome] {
+          display: none !important;
         }
-        [data-sheet],
-        [data-sheet] * {
-          visibility: visible !important;
+        .app,
+        .builder,
+        .preview,
+        .stage {
+          display: block !important;
+          height: auto !important;
+          min-height: 0 !important;
+          overflow: visible !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          background: none !important;
+          box-shadow: none !important;
         }
         [data-sheet] {
-          position: absolute;
-          left: 0;
-          top: 0;
           margin: 0 !important;
           box-shadow: none !important;
         }

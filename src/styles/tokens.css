@@ -12,8 +12,12 @@
   --line: #e8e8ee;
   --line-strong: #d7d7e0;
 
-  --accent: #6366f1; /* AI purple */
-  --accent-deep: #4f46e5; /* hover / pressed */
+  /* Interactive purple is indigo-600 so white-on-accent and accent-on-white both
+     pass WCAG AA (4.5:1). The brighter indigo-500 is kept only for decorative
+     gradients/glows (not contrast-gated). */
+  --accent: #4f46e5; /* AI purple (AA-safe for text) */
+  --accent-deep: #4338ca; /* hover / pressed */
+  --accent-bright: #6366f1; /* decorative only (gradient/glow), never text bg */
   --accent-soft: #eef2ff; /* tint surface */
   --accent-ink: #ffffff;
   --accent-glow: rgba(99, 102, 241, 0.35);

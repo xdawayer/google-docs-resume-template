@@ -142,7 +142,7 @@ main {
   width: 22px;
   height: 22px;
   border-radius: 7px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  background: linear-gradient(135deg, var(--accent-bright), var(--accent-deep));
   box-shadow: var(--shadow-purple);
 }
 .nav-links {
@@ -467,7 +467,7 @@ main {
   color: var(--ink);
 }
 .landing-hero .grad {
-  background: linear-gradient(120deg, var(--accent), #8b5cf6 60%, var(--accent-deep));
+  background: linear-gradient(120deg, var(--accent-bright), #8b5cf6 60%, var(--accent-deep));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -715,13 +715,9 @@ main {
   font-weight: 600;
   font-size: 15px;
   text-decoration: none;
-  opacity: 0.72;
-  transition:
-    opacity 0.18s ease,
-    color 0.18s ease;
+  transition: color 0.18s ease;
 }
 .logo-row a:hover {
-  opacity: 1;
   color: var(--ink);
 }
 .logo-row svg {
