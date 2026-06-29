@@ -34,6 +34,12 @@
       <label>Phone<input bind:value={resume.basics.phone} /></label>
     </div>
     <label>Location<input bind:value={resume.basics.location} placeholder="City, State" /></label>
+    <label
+      >Photo URL (optional)<input
+        bind:value={resume.basics.photo}
+        placeholder="https://…  — used by the Creative template"
+      /></label
+    >
     <div class="rows">
       {#each resume.basics.links as link, i}
         <div class="row">

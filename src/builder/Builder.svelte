@@ -3,7 +3,7 @@
     type Resume,
     type TemplateId,
     TEMPLATE_IDS,
-    TEMPLATE_LABELS,
+    TEMPLATE_META,
     resumeSchema,
     sampleResume,
     loadResume,
@@ -13,10 +13,10 @@
     emptySkillGroup,
   } from "./resume-schema";
   import Form from "./Form.svelte";
-  import Sheet from "./Sheet.svelte";
+  import Preview from "./Preview.svelte";
 
   let resume = $state<Resume>(loadResume() ?? sampleResume());
-  let template = $state<TemplateId>("classic");
+  let template = $state<TemplateId>("ats-minimal");
 
   // Auto-save every change to localStorage (no accounts, no backend).
   $effect(() => {
@@ -38,7 +38,7 @@
       <div class="templates" role="group" aria-label="Template">
         {#each TEMPLATE_IDS as id}
           <button class:active={template === id} onclick={() => (template = id)}>
-            {TEMPLATE_LABELS[id]}
+            {TEMPLATE_META[id].label}
           </button>
         {/each}
       </div>
@@ -48,12 +48,19 @@
         <button class="primary" onclick={() => window.print()}>Download PDF</button>
       </div>
     </div>
+    {#if !TEMPLATE_META[template].atsSafe}
+      <p class="ats-note">
+        Designed two-column template — looks great, but some applicant tracking systems read
+        two columns out of order. For ATS-heavy applications, pick <strong>ATS Minimal</strong> or
+        <strong>Executive Elegant</strong>.
+      </p>
+    {/if}
     <Form bind:resume />
   </section>
 
   <section class="preview" aria-label="Preview">
     <div class="stage">
-      <Sheet {resume} variant={template} />
+      <Preview {resume} {template} />
     </div>
   </section>
 </div>
@@ -82,6 +89,11 @@
     padding: 8px 0;
     z-index: 1;
   }
+  .templates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
   .templates button {
     border: 1px solid #ccc;
     background: #fff;
@@ -94,6 +106,16 @@
     background: #111;
     color: #fff;
     border-color: #111;
+  }
+  .ats-note {
+    margin: 0 0 14px;
+    padding: 8px 10px;
+    background: #fff7e6;
+    border: 1px solid #ffe1a8;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    color: #7a5b00;
+    line-height: 1.4;
   }
   .actions {
     display: flex;

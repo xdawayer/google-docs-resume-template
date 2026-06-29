@@ -41,6 +41,7 @@ export const resumeSchema = z.object({
       email: z.string().default(""),
       phone: z.string().default(""),
       location: z.string().default(""),
+      photo: z.string().default(""), // optional URL/data-URL; templates fall back to initials
       links: z.array(linkSchema).default([]),
     })
     .default({}),
@@ -56,12 +57,28 @@ export type Education = z.infer<typeof educationSchema>;
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
 export type Resume = z.infer<typeof resumeSchema>;
 
-export const TEMPLATE_IDS = ["classic", "modern", "compact"] as const;
+export const TEMPLATE_IDS = [
+  "ats-minimal",
+  "executive",
+  "modern-sidebar",
+  "creative",
+  "fresh-graduate",
+  "bold",
+] as const;
 export type TemplateId = (typeof TEMPLATE_IDS)[number];
-export const TEMPLATE_LABELS: Record<TemplateId, string> = {
-  classic: "Classic",
-  modern: "Modern",
-  compact: "Compact",
+
+export interface TemplateMeta {
+  label: string;
+  /** Single-column, parser-safe. Two-column / designed templates set this false. */
+  atsSafe: boolean;
+}
+export const TEMPLATE_META: Record<TemplateId, TemplateMeta> = {
+  "ats-minimal": { label: "ATS Minimal", atsSafe: true },
+  executive: { label: "Executive Elegant", atsSafe: true },
+  "modern-sidebar": { label: "Modern Sidebar", atsSafe: false },
+  creative: { label: "Creative Portfolio", atsSafe: false },
+  "fresh-graduate": { label: "Fresh Graduate", atsSafe: false },
+  bold: { label: "Bold Two-Column", atsSafe: false },
 };
 
 export function emptyExperience(): Experience {
