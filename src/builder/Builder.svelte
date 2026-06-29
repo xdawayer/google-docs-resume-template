@@ -12,6 +12,7 @@
     emptyExperience,
     emptyEducation,
     emptySkillGroup,
+    emptyProject,
   } from "./resume-schema";
   import { type ResumeStyle, defaultStyle, loadStyle, saveStyle } from "./resume-style";
   import Form from "./Form.svelte";
@@ -51,7 +52,9 @@
 
   function clearAll() {
     const blank = resumeSchema.parse({});
+    blank.highlights.push("");
     blank.experience.push(emptyExperience());
+    blank.projects.push(emptyProject());
     blank.education.push(emptyEducation());
     blank.skills.push(emptySkillGroup());
     resume = blank;

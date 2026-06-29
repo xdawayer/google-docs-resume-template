@@ -20,6 +20,12 @@
   );
 
   const hasSkills = $derived(resume.skills.some((s) => s.category || s.items));
+
+  const jt = $derived(resume.jobTarget);
+  const jobTargetMeta = $derived(
+    [jt.employmentType, jt.locations, jt.salary, jt.availability].filter(Boolean),
+  );
+  const hasJobTarget = $derived(Boolean(jt.title) || jobTargetMeta.length > 0);
 </script>
 
 <article class="sheet" data-sheet>
@@ -125,6 +131,23 @@
       </section>
     {/if}
 
+    {#if resume.highlights.some(Boolean)}
+      <section class="sec clear">
+        <h2 class="sec-h"><span class="marker"></span>Highlights</h2>
+        <ul class="bullets">
+          {#each resume.highlights.filter(Boolean) as highlight}<li>{highlight}</li>{/each}
+        </ul>
+      </section>
+    {/if}
+
+    {#if hasJobTarget}
+      <section class="sec clear">
+        <h2 class="sec-h"><span class="marker"></span>Job Target</h2>
+        {#if jt.title}<span class="job">{jt.title}</span>{/if}
+        {#if jobTargetMeta.length}<div class="meta">{jobTargetMeta.join(" · ")}</div>{/if}
+      </section>
+    {/if}
+
     {#if resume.experience.some((e) => e.title || e.company)}
       <section class="sec clear">
         <h2 class="sec-h"><span class="marker"></span>Work Experience</h2>
@@ -145,6 +168,34 @@
               {#if (exp.bullets ?? []).some(Boolean)}
                 <ul class="bullets">
                   {#each (exp.bullets ?? []).filter(Boolean) as bullet}<li>{bullet}</li>{/each}
+                </ul>
+              {/if}
+            </div>
+          {/if}
+        {/each}
+      </section>
+    {/if}
+
+    {#if resume.projects.some((p) => p.name || p.role)}
+      <section class="sec clear">
+        <h2 class="sec-h"><span class="marker"></span>Projects</h2>
+        {#each resume.projects as proj}
+          {#if proj.name || proj.role}
+            <div class="entry">
+              <div class="row">
+                <div class="role-line">
+                  {#if proj.name}<span class="job">{proj.name}</span>{/if}{#if proj.role}<span
+                      class="company">{#if proj.name} · {/if}{proj.role}</span
+                    >{/if}
+                </div>
+                {#if proj.start || proj.end}
+                  <span class="dates">{proj.start}{#if proj.end} – {proj.end}{/if}</span>
+                {/if}
+              </div>
+              {#if proj.link}<div class="meta">{proj.link}</div>{/if}
+              {#if (proj.bullets ?? []).some(Boolean)}
+                <ul class="bullets">
+                  {#each (proj.bullets ?? []).filter(Boolean) as bullet}<li>{bullet}</li>{/each}
                 </ul>
               {/if}
             </div>

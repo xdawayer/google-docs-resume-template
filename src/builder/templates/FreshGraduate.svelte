@@ -24,6 +24,14 @@
         links.length,
     ),
   );
+
+  const jt = $derived(resume.jobTarget);
+  const jobTargetMeta = $derived(
+    [jt.employmentType, jt.locations, jt.salary, jt.availability].filter(
+      Boolean,
+    ),
+  );
+  const hasJobTarget = $derived(Boolean(jt.title) || jobTargetMeta.length > 0);
 </script>
 
 <article class="sheet" data-sheet>
@@ -160,6 +168,41 @@
         </section>
       {/if}
 
+      {#if resume.highlights.some(Boolean)}
+        <section class="block">
+          <h2 class="sec">
+            <span class="sec-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 13l4 4 10-10" />
+              </svg>
+            </span>
+            Highlights
+          </h2>
+          <ul class="bullets">
+            {#each resume.highlights.filter(Boolean) as h}<li>{h}</li>{/each}
+          </ul>
+        </section>
+      {/if}
+
+      {#if hasJobTarget}
+        <section class="block">
+          <h2 class="sec">
+            <span class="sec-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle cx="12" cy="12" r="0.6" />
+              </svg>
+            </span>
+            Job Target
+          </h2>
+          <div class="entry">
+            {#if jt.title}<div class="primary">{jt.title}</div>{/if}
+            {#if jobTargetMeta.length}<p class="detail">{jobTargetMeta.join(" · ")}</p>{/if}
+          </div>
+        </section>
+      {/if}
+
       {#if resume.education.some((e) => e.school)}
         <section class="block">
           <h2 class="sec">
@@ -222,6 +265,45 @@
                 {#if exp.bullets?.some(Boolean)}
                   <ul class="bullets">
                     {#each exp.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
+                  </ul>
+                {/if}
+              </div>
+            {/if}
+          {/each}
+        </section>
+      {/if}
+
+      {#if resume.projects.some((p) => p.name || p.role)}
+        <section class="block">
+          <h2 class="sec">
+            <span class="sec-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3z" />
+                <path d="M3 7V5a2 2 0 0 1 2-2h3l2 2" />
+              </svg>
+            </span>
+            Projects
+          </h2>
+          {#each resume.projects as proj}
+            {#if proj.name || proj.role}
+              <div class="entry">
+                <div class="entry-head">
+                  <span class="primary">{proj.name}</span>
+                  {#if proj.start || proj.end}
+                    <span class="period">
+                      {proj.start}{#if proj.start && proj.end} – {/if}{proj.end}
+                    </span>
+                  {/if}
+                </div>
+                {#if proj.role}<div class="org">{proj.role}</div>{/if}
+                {#if proj.link}
+                  <p class="detail">
+                    <a class="c-text" href={normalizeUrl(proj.link)}>{proj.link}</a>
+                  </p>
+                {/if}
+                {#if proj.bullets?.some(Boolean)}
+                  <ul class="bullets">
+                    {#each proj.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
                   </ul>
                 {/if}
               </div>

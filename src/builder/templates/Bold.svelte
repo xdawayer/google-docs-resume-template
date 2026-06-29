@@ -30,6 +30,12 @@
     resume.education.some((e) => e.school || e.degree || e.field),
   );
   const hasSkills = $derived(resume.skills.some((s) => s.category || s.items));
+
+  const jt = $derived(resume.jobTarget);
+  const jobTargetMeta = $derived(
+    [jt.employmentType, jt.locations, jt.salary, jt.availability].filter(Boolean),
+  );
+  const hasJobTarget = $derived(Boolean(jt.title) || jobTargetMeta.length > 0);
 </script>
 
 {#snippet iconPhone()}
@@ -62,6 +68,18 @@
 
 {#snippet iconExp()}
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
+{/snippet}
+
+{#snippet iconHighlights()}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+{/snippet}
+
+{#snippet iconTarget()}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg>
+{/snippet}
+
+{#snippet iconProjects()}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>
 {/snippet}
 
 <article class="sheet" data-sheet>
@@ -139,6 +157,25 @@
   </aside>
 
   <main class="main">
+    {#if resume.highlights.some(Boolean)}
+      <section>
+        <h2 class="main-h"><span class="main-badge">{@render iconHighlights()}</span>Highlights</h2>
+        <ul>
+          {#each resume.highlights.filter(Boolean) as h}<li>{h}</li>{/each}
+        </ul>
+      </section>
+    {/if}
+
+    {#if hasJobTarget}
+      <section>
+        <h2 class="main-h"><span class="main-badge">{@render iconTarget()}</span>Job Target</h2>
+        {#if jt.title}<div class="job-title">{jt.title}</div>{/if}
+        {#if jobTargetMeta.length}
+          <div class="job-sub job-loc">{jobTargetMeta.join(" · ")}</div>
+        {/if}
+      </section>
+    {/if}
+
     {#if hasExperience}
       <section>
         <h2 class="main-h"><span class="main-badge">{@render iconExp()}</span>Experience</h2>
@@ -159,6 +196,34 @@
               {#if exp.bullets.some(Boolean)}
                 <ul>
                   {#each exp.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
+                </ul>
+              {/if}
+            </div>
+          {/if}
+        {/each}
+      </section>
+    {/if}
+
+    {#if resume.projects.some((p) => p.name || p.role)}
+      <section>
+        <h2 class="main-h"><span class="main-badge">{@render iconProjects()}</span>Projects</h2>
+        {#each resume.projects as proj}
+          {#if proj.name || proj.role}
+            <div class="job">
+              <div class="job-top">
+                <span class="job-title">{proj.name || proj.role}</span>
+                {#if proj.start || proj.end}
+                  <span class="job-dates">{proj.start}{#if proj.start && proj.end} – {/if}{proj.end}</span>
+                {/if}
+              </div>
+              {#if (proj.name && proj.role) || proj.link}
+                <div class="job-sub">
+                  {#if proj.name && proj.role}{proj.role}{/if}{#if proj.link}<span class="job-loc">{#if proj.name && proj.role} · {/if}{proj.link}</span>{/if}
+                </div>
+              {/if}
+              {#if proj.bullets.some(Boolean)}
+                <ul>
+                  {#each proj.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
                 </ul>
               {/if}
             </div>
@@ -370,6 +435,9 @@
     box-sizing: border-box;
     background: #ffffff;
     padding: 13mm 12mm 12mm;
+  }
+  .main section + section {
+    margin-top: 18px;
   }
   .main-h {
     display: flex;

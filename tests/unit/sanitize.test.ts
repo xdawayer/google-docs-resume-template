@@ -93,4 +93,34 @@ describe("sanitizeResume", () => {
     expect(out.skills[0]!.category).toBe("c");
     expect(out.skills[0]!.items).toBe("Go\tRust\r"); // tab + CR kept
   });
+
+  it("routes a project link through normalizeUrl (drops javascript:, normalizes bare domain)", () => {
+    const out = sanitizeResume({
+      ...base,
+      projects: [
+        { name: "P", role: "Lead", link: "javascript:alert(1)", start: "", end: "", bullets: [] },
+        { name: "Q", role: "", link: "github.com/me/q", start: "", end: "", bullets: [] },
+      ],
+    });
+    expect(out.projects[0]!.link).toBe("");
+    expect(out.projects[1]!.link).toBe("https://github.com/me/q");
+  });
+
+  it("cleans highlights and jobTarget fields", () => {
+    const bel = String.fromCharCode(7);
+    const out = sanitizeResume({
+      ...base,
+      highlights: [`win${bel}ner`, "clean"],
+      jobTarget: {
+        title: `Lead${bel}`,
+        employmentType: "Full-time",
+        locations: `Austin${bel}`,
+        salary: "",
+        availability: "",
+      },
+    });
+    expect(out.highlights).toEqual(["winner", "clean"]);
+    expect(out.jobTarget.title).toBe("Lead");
+    expect(out.jobTarget.locations).toBe("Austin");
+  });
 });

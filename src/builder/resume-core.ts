@@ -82,6 +82,14 @@ export function sanitizeResume(input: Resume): Resume {
       links: r.basics.links.map((l) => ({ label: clean(l.label), url: normalizeUrl(l.url) })),
     },
     summary: clean(r.summary),
+    highlights: r.highlights.map(clean),
+    jobTarget: {
+      title: clean(r.jobTarget.title),
+      employmentType: clean(r.jobTarget.employmentType),
+      locations: clean(r.jobTarget.locations),
+      salary: clean(r.jobTarget.salary),
+      availability: clean(r.jobTarget.availability),
+    },
     experience: r.experience.map((e) => ({
       ...e,
       title: clean(e.title),
@@ -90,6 +98,15 @@ export function sanitizeResume(input: Resume): Resume {
       start: clean(e.start),
       end: clean(e.end),
       bullets: e.bullets.map(clean),
+    })),
+    projects: r.projects.map((p) => ({
+      ...p,
+      name: clean(p.name),
+      role: clean(p.role),
+      link: normalizeUrl(p.link),
+      start: clean(p.start),
+      end: clean(p.end),
+      bullets: p.bullets.map(clean),
     })),
     education: r.education.map((ed) => ({
       ...ed,

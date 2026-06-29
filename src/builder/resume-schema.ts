@@ -33,6 +33,27 @@ export const skillGroupSchema = z.object({
   items: z.string().default(""),
 });
 
+// Projects (项目经历): like an experience entry but for a named project, with an
+// optional link. `link` is a URL sink — sanitizeResume routes it through normalizeUrl.
+export const projectSchema = z.object({
+  name: z.string().default(""),
+  role: z.string().default(""),
+  link: z.string().default(""),
+  start: z.string().default(""),
+  end: z.string().default(""),
+  bullets: z.array(z.string()).default([]),
+});
+
+// Job target (期望职位): the single objective block — target role, type, where,
+// pay, and availability. All optional; an all-empty block renders nothing.
+export const jobTargetSchema = z.object({
+  title: z.string().default(""),
+  employmentType: z.string().default(""),
+  locations: z.string().default(""),
+  salary: z.string().default(""),
+  availability: z.string().default(""),
+});
+
 export const resumeSchema = z.object({
   basics: z
     .object({
@@ -46,7 +67,11 @@ export const resumeSchema = z.object({
     })
     .default({}),
   summary: z.string().default(""),
+  // Highlights (个人优势): a short bulleted list of strengths/selling points.
+  highlights: z.array(z.string()).default([]),
+  jobTarget: jobTargetSchema.default({}),
   experience: z.array(experienceSchema).default([]),
+  projects: z.array(projectSchema).default([]),
   education: z.array(educationSchema).default([]),
   skills: z.array(skillGroupSchema).default([]),
 });
@@ -55,6 +80,8 @@ export type Link = z.infer<typeof linkSchema>;
 export type Experience = z.infer<typeof experienceSchema>;
 export type Education = z.infer<typeof educationSchema>;
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
+export type Project = z.infer<typeof projectSchema>;
+export type JobTarget = z.infer<typeof jobTargetSchema>;
 export type Resume = z.infer<typeof resumeSchema>;
 
 export const TEMPLATE_IDS = [
@@ -90,6 +117,9 @@ export function emptyEducation(): Education {
 export function emptySkillGroup(): SkillGroup {
   return { category: "", items: "" };
 }
+export function emptyProject(): Project {
+  return { name: "", role: "", link: "", start: "", end: "", bullets: [""] };
+}
 
 /** A filled example so the preview is never blank on first load. */
 /**
@@ -110,6 +140,27 @@ const PERSONAS: Record<TemplateId, unknown> = {
     },
     summary:
       "Results-driven marketing specialist with 6 years of experience developing data-informed campaigns that increase brand awareness, engagement, and conversion.",
+    highlights: [
+      "6 years turning audience data into multi-channel campaigns that move pipeline.",
+      "Cut cost per acquisition 22% while growing qualified leads 35%.",
+    ],
+    jobTarget: {
+      title: "Senior Marketing Specialist",
+      employmentType: "Full-time",
+      locations: "Austin, TX · Remote",
+      salary: "$85k–$105k",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "Lifecycle Email Revamp",
+        role: "Campaign Lead",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: ["Rebuilt the onboarding series, lifting activation 18% in one quarter."],
+      },
+    ],
     experience: [
       {
         title: "Marketing Specialist",
@@ -159,6 +210,27 @@ const PERSONAS: Record<TemplateId, unknown> = {
     },
     summary:
       "Accomplished operations executive with 20+ years driving enterprise performance, organizational transformation, and sustainable growth across global markets.",
+    highlights: [
+      "20+ years scaling global operations and leading multi-region transformation.",
+      "Repeated margin expansion through restructuring and disciplined capital allocation.",
+    ],
+    jobTarget: {
+      title: "Chief Operating Officer",
+      employmentType: "Full-time",
+      locations: "New York, NY",
+      salary: "",
+      availability: "Open to board & operating roles",
+    },
+    projects: [
+      {
+        name: "Enterprise Restructuring Program",
+        role: "Executive Sponsor",
+        link: "",
+        start: "2020",
+        end: "2022",
+        bullets: ["Led a four-region restructuring that expanded operating margin 22%."],
+      },
+    ],
     experience: [
       {
         title: "Chief Operating Officer",
@@ -208,6 +280,27 @@ const PERSONAS: Record<TemplateId, unknown> = {
     },
     summary:
       "Backend-leaning full-stack engineer with 7 years building reliable, high-scale services. I care about latency, clean APIs, and shipping.",
+    highlights: [
+      "7 years building reliable, high-scale backend services.",
+      "Obsessed with latency, clean APIs, and shipping safely.",
+    ],
+    jobTarget: {
+      title: "Senior / Staff Software Engineer",
+      employmentType: "Full-time",
+      locations: "Austin, TX · Remote",
+      salary: "$170k–$210k",
+      availability: "Available in 30 days",
+    },
+    projects: [
+      {
+        name: "Read-through Cache Layer",
+        role: "Tech Lead",
+        link: "",
+        start: "2023",
+        end: "2023",
+        bullets: ["Cut p95 API latency from 850ms to 210ms across 14 services."],
+      },
+    ],
     experience: [
       {
         title: "Senior Software Engineer",
@@ -260,6 +353,29 @@ const PERSONAS: Record<TemplateId, unknown> = {
     },
     summary:
       "Multidisciplinary designer with 6 years shaping brand identities, campaigns, and digital products for lifestyle and tech clients.",
+    highlights: [
+      "6 years shaping brand identities and campaign systems end to end.",
+      "Lifted brand-recall scores 31% on a national retail rebrand.",
+    ],
+    jobTarget: {
+      title: "Senior Brand / Product Designer",
+      employmentType: "Full-time",
+      locations: "Los Angeles, CA · Remote",
+      salary: "",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "National Retail Rebrand",
+        role: "Design Lead",
+        link: "mayarivera.design",
+        start: "2022",
+        end: "2023",
+        bullets: [
+          "Delivered a cross-channel identity system shipped across web, social, and print.",
+        ],
+      },
+    ],
     experience: [
       {
         title: "Senior Graphic Designer",
@@ -309,6 +425,27 @@ const PERSONAS: Record<TemplateId, unknown> = {
     },
     summary:
       "Recent business administration graduate with a marketing focus, eager to apply coursework, internship, and project experience to a first full-time role.",
+    highlights: [
+      "Business administration graduate with a marketing focus.",
+      "Hands-on internship and campus-project experience in campaigns and analytics.",
+    ],
+    jobTarget: {
+      title: "Marketing Coordinator / Analyst",
+      employmentType: "Full-time",
+      locations: "Toronto, ON",
+      salary: "",
+      availability: "Available immediately",
+    },
+    projects: [
+      {
+        name: "Campus Launch Campaign",
+        role: "Project Lead",
+        link: "",
+        start: "2024",
+        end: "2024",
+        bullets: ["Reached 18k students through email and campus channels for a product launch."],
+      },
+    ],
     experience: [
       {
         title: "Marketing Intern",
@@ -350,6 +487,27 @@ const PERSONAS: Record<TemplateId, unknown> = {
     },
     summary:
       "Results-driven marketing manager with 7+ years leading brand, demand-gen, and content teams that grow pipeline and measurable impact.",
+    highlights: [
+      "7+ years leading brand, demand-gen, and content teams.",
+      "Drove 42% YoY pipeline growth on a $2M budget.",
+    ],
+    jobTarget: {
+      title: "Director of Marketing / Marketing Manager",
+      employmentType: "Full-time",
+      locations: "Austin, TX · Remote",
+      salary: "$130k–$160k",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "ABM Program Launch",
+        role: "Program Owner",
+        link: "",
+        start: "2021",
+        end: "2022",
+        bullets: ["Built an ABM program that influenced $6M in revenue in year one."],
+      },
+    ],
     experience: [
       {
         title: "Marketing Manager",
