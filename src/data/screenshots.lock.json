@@ -5,5 +5,19 @@
     "hash": "ebaf83e161c139cef044a69a124b2c5d32bc7d86b064524071a1922e1e95aff6",
     "modifiedTime": "2026-06-28T17:26:09.884Z",
     "generatedAt": "2026-06-28T17:28:25.064Z"
+  },
+  "student-internship": {
+    "width": 1275,
+    "height": 1650,
+    "hash": "1e107c71b9cd3affd2ad0e9a48c9b8d473e31e6ada15c0634b51145214d3dd94",
+    "modifiedTime": "2026-06-29T06:52:13.218Z",
+    "generatedAt": "2026-06-29T06:53:55.325Z"
+  },
+  "software-engineer": {
+    "width": 1275,
+    "height": 1650,
+    "hash": "a06e51f1b25b66d71e0c4126103d3110ad726e3538fd5f8b948437f08883260a",
+    "modifiedTime": "2026-06-29T06:52:24.464Z",
+    "generatedAt": "2026-06-29T06:53:58.619Z"
   }
 }

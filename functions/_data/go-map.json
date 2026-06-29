@@ -1,1 +1,14 @@
-{}
+{
+  "ats-classic-one-page": {
+    "copyUrl": "https://docs.google.com/document/d/1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0/copy",
+    "status": "available"
+  },
+  "software-engineer": {
+    "copyUrl": "https://docs.google.com/document/d/1-RBP6J5u3_jN6u4g-OmcBffEbo1RhL1QU5ysZkZBcGQ/copy",
+    "status": "available"
+  },
+  "student-internship": {
+    "copyUrl": "https://docs.google.com/document/d/1Yve0AhW1BwFiMXi1828VkWoYBISeAP2heE2eV5DGXtY/copy",
+    "status": "available"
+  }
+}

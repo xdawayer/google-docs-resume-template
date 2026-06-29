@@ -1,11 +1,7 @@
 ---
 slug: ats-classic-one-page
 name: ATS Classic One Page
-# DRAFT — evidence is REAL (docId, copyUrl, screenshot, link health, parseEvidence).
-# Held in draft only because publishing needs >=3 published templates (>=2 related
-# siblings each). Promote all three together once student-internship + software-engineer
-# have real shared Docs. Flip status -> published and rename *.draft.md -> *.md.
-status: draft
+status: published
 
 category: [ats, simple, professional]
 roles: [general]

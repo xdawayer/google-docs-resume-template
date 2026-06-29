@@ -1,13 +1,7 @@
 ---
-# DRAFT — content authored; excluded from gates until the external artifacts are real.
-# Pending (require the governed Workspace, not fakeable here):
-#   docId + copyUrl (real Google Doc), thumbnail screenshot (E6: pnpm shots:gen needs
-#   GOOGLE_SA_KEY), parseEvidence (real ATS parse test), linkStatus (E1 health check).
-# Promote: fill those, run `pnpm shots:gen` + `pnpm check:links`, set status: published,
-# then rename software-engineer.draft.md -> software-engineer.md and `pnpm validate`.
 slug: software-engineer
 name: Software Engineer
-status: draft
+status: published
 
 category: [tech, professional]
 roles: [software-engineer]
@@ -16,12 +10,14 @@ pageCount: 1
 
 docId: 1-RBP6J5u3_jN6u4g-OmcBffEbo1RhL1QU5ysZkZBcGQ
 copyUrl: https://docs.google.com/document/d/1-RBP6J5u3_jN6u4g-OmcBffEbo1RhL1QU5ysZkZBcGQ/copy
-linkStatus: unverified # -> available after `pnpm check:links` once the Doc is shared Anyone-with-link Viewer
+linkStatus: available
+lastVerifiedAt: 2026-06-29
+revisionId: "2026-06-29T06:52:24.464Z"
 
 thumbnail:
-  src: src/assets/templates/software-engineer.png # TODO: pnpm shots:gen (needs GOOGLE_SA_KEY)
-  width: 1600
-  height: 2071
+  src: src/assets/templates/software-engineer.png
+  width: 1275
+  height: 1650
   alt: First page of the Software Engineer resume template with a technical skills section above impact-focused experience
 
 atsProfile: balanced

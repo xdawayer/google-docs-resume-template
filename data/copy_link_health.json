@@ -1,7 +1,19 @@
 {
   "ats-classic-one-page": {
     "status": "available",
-    "lastCheckedAt": "2026-06-29T06:37:33.617Z",
+    "lastCheckedAt": "2026-06-29T06:53:34.374Z",
+    "consecutiveFailures": 0,
+    "reason": "reachable (sharing not introspectable by reader SA)"
+  },
+  "software-engineer": {
+    "status": "available",
+    "lastCheckedAt": "2026-06-29T06:53:34.963Z",
+    "consecutiveFailures": 0,
+    "reason": "reachable (sharing not introspectable by reader SA)"
+  },
+  "student-internship": {
+    "status": "available",
+    "lastCheckedAt": "2026-06-29T06:53:35.552Z",
     "consecutiveFailures": 0,
     "reason": "reachable (sharing not introspectable by reader SA)"
   }
