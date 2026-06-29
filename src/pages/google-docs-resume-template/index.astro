@@ -24,20 +24,184 @@ const itemList = itemListSchema(
 const title = `Free Google Docs Resume Templates to Copy & Edit | ${BRAND}`;
 const description =
   "Copy a free, ATS-friendly resume template into Google Docs and edit it in minutes. Templates for students, tech, professional, creative, and executive roles. No signup.";
+
+// Real brand logos (Simple Icons, 24x24 viewBox) for tools the product works with.
+const LOGOS: { name: string; d: string }[] = [
+  {
+    name: "Google Docs",
+    d: "M14.727 6.727H14V0H4.91c-.905 0-1.637.732-1.637 1.636v20.728c0 .904.732 1.636 1.636 1.636h14.182c.904 0 1.636-.732 1.636-1.636V6.727h-6zm-.545 10.455H7.09v-1.364h7.09v1.364zm2.727-3.273H7.091v-1.364h9.818v1.364zm0-3.273H7.091V9.273h9.818v1.363zM14.727 6h6l-6-6v6z",
+  },
+  {
+    name: "Microsoft Word",
+    d: "M23.004 1.5q.41 0 .703.293t.293.703v19.008q0 .41-.293.703t-.703.293H6.996q-.41 0-.703-.293T6 21.504V18H.996q-.41 0-.703-.293T0 17.004V6.996q0-.41.293-.703T.996 6H6V2.496q0-.41.293-.703t.703-.293zM6.035 11.203l1.442 4.735h1.64l1.57-7.876H9.036l-.937 4.653-1.325-4.5H5.38l-1.406 4.523-.938-4.675H1.312l1.57 7.874h1.641zM22.5 21v-3h-15v3zm0-4.5v-3.75H12v3.75zm0-5.25V7.5H12v3.75zm0-5.25V3h-15v3Z",
+  },
+  {
+    name: "PDF",
+    d: "M23.63 15.3c-.71-.745-2.166-1.17-4.224-1.17-1.1 0-2.377.106-3.761.354a19.443 19.443 0 0 1-2.307-2.661c-.532-.71-.994-1.49-1.42-2.236.817-2.484 1.207-4.507 1.207-5.962 0-1.632-.603-3.336-2.342-3.336-.532 0-1.065.32-1.349.781-.78 1.384-.425 4.4.923 7.381a60.277 60.277 0 0 1-1.703 4.507c-.568 1.349-1.207 2.733-1.917 4.01C2.834 18.53.314 20.34.03 21.758c-.106.533.071 1.03.462 1.42.142.107.639.533 1.49.533 2.59 0 5.323-4.188 6.707-6.707 1.065-.355 2.13-.71 3.194-.994a34.963 34.963 0 0 1 3.407-.745c2.732 2.448 5.145 2.839 6.352 2.839 1.49 0 2.023-.604 2.2-1.1.32-.64.106-1.349-.213-1.704zm-1.42 1.03c-.107.532-.64.887-1.384.887-.213 0-.39-.036-.604-.071-1.348-.32-2.626-.994-3.903-2.059a17.717 17.717 0 0 1 2.98-.248c.746 0 1.385.035 1.81.142.497.106 1.278.426 1.1 1.348zm-7.524-1.668a38.01 38.01 0 0 0-2.945.674 39.68 39.68 0 0 0-2.52.745 40.05 40.05 0 0 0 1.207-2.555c.426-.994.78-2.023 1.136-2.981.354.603.745 1.207 1.135 1.739a50.127 50.127 0 0 0 1.987 2.378zM10.038 1.46a.768.768 0 0 1 .674-.425c.745 0 .887.851.887 1.526 0 1.135-.355 2.874-.958 4.861-1.03-2.768-1.1-5.074-.603-5.962zM6.134 17.997c-1.81 2.981-3.549 4.826-4.613 4.826a.872.872 0 0 1-.532-.177c-.213-.213-.32-.461-.249-.745.213-1.065 2.271-2.555 5.394-3.904Z",
+  },
+];
+
+// Feature cards — REAL capabilities only (no AI claims). Simple authored stroke icons.
+const FEATURES = [
+  {
+    title: "ATS-friendly by default",
+    body: "Single-column, parser-safe templates so applicant tracking systems read every line in order.",
+    icon: '<path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  },
+  {
+    title: "Import your existing resume",
+    body: "Drop in a .docx or PDF — or paste text — and it parses into editable fields, entirely in your browser.",
+    icon: '<path d="M12 15V4"/><path d="M8 8l4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+  },
+  {
+    title: "Six designer templates",
+    body: "From strict ATS to a bold two-column layout. Switch templates anytime — your content stays put.",
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  },
+  {
+    title: "Make it yours",
+    body: "Tune the font, text size, line spacing, and accent color live — no design skills required.",
+    icon: '<path d="M4 7h11"/><circle cx="18" cy="7" r="2.4"/><path d="M9 12h11"/><circle cx="6" cy="12" r="2.4"/><path d="M4 17h11"/><circle cx="18" cy="17" r="2.4"/>',
+  },
+  {
+    title: "Reorder in a click",
+    body: "Drag-free up/down controls arrange sections the way recruiters actually scan a resume.",
+    icon: '<path d="M8 4v16"/><path d="M5 7l3-3 3 3"/><path d="M16 20V4"/><path d="M13 17l3 3 3-3"/>',
+  },
+  {
+    title: "Private by design",
+    body: "No signup, nothing uploaded to a server. Everything stays on your device; export a clean PDF.",
+    icon: '<rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>',
+  },
+];
 ---
 
 <BaseLayout title={title} description={description}>
-  <section class="hero">
-    <h1>Google Docs resume templates you can copy and edit.</h1>
-    <p class="lead">
-      Pick an ATS-friendly template, open your own copy in Google Docs, and download it as PDF or
-      Word when you are ready to apply.
-    </p>
+  <section class="landing-hero">
+    <div>
+      <span class="eyebrow">Resume builder &amp; template directory</span>
+      <h1>Free <span class="grad">Google Docs resume</span> templates that get interviews.</h1>
+      <p class="hero-sub">
+        Copy an ATS-friendly template into Google Docs, or build yours in the editor — pick a
+        layout, drop in your details, and download a clean PDF. No signup.
+      </p>
+      <div class="hero-cta">
+        <a class="btn primary" href="/resume-builder/">Build your resume — free</a>
+        <a class="btn ghost" href="#templates">Browse templates</a>
+      </div>
+      <div class="hero-trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>No signup</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>ATS-friendly PDF</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Saved in your browser</span>
+      </div>
+    </div>
+
+    <div class="preview-card" aria-hidden="true">
+      <div class="preview-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="pill">Live preview</span>
+      </div>
+      <div class="preview-body">
+        <div class="pv-name">ALEX MORGAN</div>
+        <div class="pv-role"><span id="streamRole">Software Engineer</span><span class="stream-caret"></span></div>
+        <div class="pv-rule"></div>
+        <div class="pv-h">Professional Summary</div>
+        <div class="pv-line w90"></div>
+        <div class="pv-line w70"></div>
+        <div class="pv-h" style="margin-top:16px">Experience</div>
+        <div class="pv-line w50"></div>
+        <div class="pv-line w90"></div>
+        <div class="pv-line w70"></div>
+      </div>
+    </div>
   </section>
 
-  <section id="templates" aria-label="Resume templates">
+  <section class="logo-strip">
+    <p class="cap">Works with the tools you already use</p>
+    <div class="logo-row">
+      {
+        LOGOS.map((l) => (
+          <span>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d={l.d} />
+            </svg>
+            {l.name}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="eyebrow">Why this builder</span>
+      <h2>Everything you need, nothing you don't.</h2>
+      <p>A focused toolkit for a resume that reads cleanly to both a recruiter and their software.</p>
+    </div>
+    <div class="feature-grid">
+      {
+        FEATURES.map((f) => (
+          <article class="feature-card">
+            <span class="feature-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={f.icon} />
+            </span>
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="templates" class="section" aria-label="Resume templates">
+    <div class="section-head">
+      <span class="eyebrow">Templates</span>
+      <h2>Google Docs resume templates</h2>
+      <p>Open your own copy in Google Docs, edit, and export to PDF or Word when you are ready.</p>
+    </div>
     <TemplateGrid entries={cards} filters={filters} />
   </section>
 
+  <section class="cta-band">
+    <h2>Ready to build your resume?</h2>
+    <p>Pick a template or start from scratch in the editor. Free, private, and ready in minutes.</p>
+    <a class="btn primary" href="/resume-builder/">Start building — free</a>
+  </section>
+
   <JsonLd schema={itemList} />
+
+  <script>
+    // Streaming "typewriter" for the preview role — progressive enhancement,
+    // disabled under reduced-motion. Decorative only (aria-hidden preview).
+    const el = document.getElementById("streamRole");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (el && !reduce) {
+      const roles = [
+        "Software Engineer",
+        "Marketing Manager",
+        "Product Designer",
+        "Data Analyst",
+        "Recent Graduate",
+      ];
+      let r = 0;
+      let i = "Software Engineer".length;
+      let deleting = false;
+      const tick = () => {
+        const word = roles[r]!;
+        i += deleting ? -1 : 1;
+        el.textContent = word.slice(0, i);
+        let delay = deleting ? 45 : 80;
+        if (!deleting && i === word.length) {
+          delay = 1400;
+          deleting = true;
+        } else if (deleting && i === 0) {
+          deleting = false;
+          r = (r + 1) % roles.length;
+          delay = 320;
+        }
+        window.setTimeout(tick, delay);
+      };
+      window.setTimeout(tick, 1600);
+    }
+  </script>
 </BaseLayout>

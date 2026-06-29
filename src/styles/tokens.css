@@ -1,20 +1,41 @@
-/* DT2 — document-forward visual identity. Paper + ink, a real sheet shadow,
-   a serif display for credibility. Deliberately NOT generic SaaS (no gradient
-   wash, no glass header, no floating fake-score badge). */
+@import "./fonts.css";
+
+/* AI-Native + Minimal identity: neutral base, a single AI-purple accent, Space
+   Grotesk display + DM Sans body. Token NAMES are kept stable so every page/
+   component re-skins from here; values define the new look. */
 :root {
   --paper: #ffffff;
-  --bg: #f4f1ea; /* warm paper, not blue-white */
-  --ink: #1a1a17;
-  --ink-soft: #55514a;
-  --line: #e2ddd2;
-  --accent: #1b4332; /* deep document green — trustworthy, not startup-blue */
+  --bg: #fafafb; /* near-white neutral */
+  --bg-subtle: #f3f3f6;
+  --ink: #0e0e14; /* near-black */
+  --ink-soft: #5a5a6b; /* readable muted (>=4.5:1 on --bg) */
+  --line: #e8e8ee;
+  --line-strong: #d7d7e0;
+
+  --accent: #6366f1; /* AI purple */
+  --accent-deep: #4f46e5; /* hover / pressed */
+  --accent-soft: #eef2ff; /* tint surface */
   --accent-ink: #ffffff;
-  --good: #1b6e4b;
-  --warn: #8a5a00;
-  --sheet-shadow: 0 1px 0 rgba(26, 26, 23, 0.04), 0 12px 28px rgba(26, 26, 23, 0.08);
-  --radius: 10px;
-  --radius-sm: 6px;
-  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --tap: 44px; /* minimum touch target */
+  --accent-glow: rgba(99, 102, 241, 0.35);
+
+  --dark: #0b0b12; /* dark sections */
+  --dark-2: #14141f;
+  --on-dark: #f4f4f8;
+  --on-dark-soft: #a6a6b8;
+
+  --good: #16a34a;
+  --warn: #b45309;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(13, 13, 25, 0.06), 0 1px 3px rgba(13, 13, 25, 0.05);
+  --shadow: 0 4px 16px rgba(13, 13, 25, 0.07), 0 14px 38px rgba(13, 13, 25, 0.07);
+  --shadow-purple: 0 12px 30px rgba(99, 102, 241, 0.28);
+  --sheet-shadow: var(--shadow); /* alias kept for existing references */
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --tap: 44px;
 }

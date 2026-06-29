@@ -110,7 +110,7 @@
   button {
     margin-top: 8px;
     border: none;
-    background: #1a4fa0;
+    background: #6366f1;
     color: #fff;
     border-radius: 6px;
     padding: 6px 12px;

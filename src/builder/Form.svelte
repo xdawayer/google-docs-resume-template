@@ -508,8 +508,8 @@
   }
   .upload {
     display: inline-block;
-    border: 1px solid #1a4fa0;
-    color: #1a4fa0;
+    border: 1px solid #6366f1;
+    color: #6366f1;
     background: #fff;
     border-radius: 6px;
     padding: 5px 12px;
