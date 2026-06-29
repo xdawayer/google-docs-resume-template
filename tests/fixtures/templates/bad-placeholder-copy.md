@@ -20,7 +20,7 @@ atsChecklist:
 seo:
   title: Placeholder Copy Link Resume Template for Google Docs
   metaDescription: This fixture intentionally ships a REPLACE_WITH placeholder copy link so the build-validation gate has something concrete to reject.
-  canonical: https://resumedocs.example/google-docs-resume-template/bad-placeholder-copy/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/bad-placeholder-copy/
 created: 2026-06-20
 updated: 2026-06-27
 ---

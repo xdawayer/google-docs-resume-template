@@ -51,7 +51,7 @@ caveats:
 seo:
   title: Software Engineer Resume Template (Google Docs)
   metaDescription: A free software engineer resume template for Google Docs. A plain-text skills section, impact-focused bullets, and a single-column, ATS-safe layout.
-  canonical: https://resumedocs.example/google-docs-resume-template/software-engineer/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/software-engineer/
 
 faq:
   - q: Should I list every programming language I know?

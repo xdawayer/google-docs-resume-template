@@ -21,7 +21,7 @@ parseEvidence: []
 seo:
   title: Published Without Evidence Resume Template Google Docs
   metaDescription: This fixture is published with a scanner-first profile but ships zero parse evidence, which the schema superRefine must reject before launch.
-  canonical: https://resumedocs.example/google-docs-resume-template/bad-published-no-evidence/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/bad-published-no-evidence/
 related: [valid-ats-classic-one-page, valid-student-internship]
 created: 2026-06-20
 updated: 2026-06-27

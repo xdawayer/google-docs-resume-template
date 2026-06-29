@@ -15,7 +15,7 @@ import { z } from "zod";
 
 export const CANONICAL_ORIGIN = (
   (typeof process !== "undefined" ? process.env.SITE_URL : undefined) ??
-  "https://resumedocs.example"
+  "https://googledocsresumetemplate.com"
 ).replace(/\/$/, "");
 
 export const TEMPLATE_PATH_PREFIX = "/google-docs-resume-template";

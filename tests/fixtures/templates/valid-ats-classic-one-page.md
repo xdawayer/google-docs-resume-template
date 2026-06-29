@@ -28,7 +28,7 @@ caveats: []
 seo:
   title: ATS Classic One Page Resume Template for Google Docs
   metaDescription: Copy a free ATS-friendly one-page resume template in Google Docs. Single column, standard headings, export to PDF or Word. No signup required.
-  canonical: https://resumedocs.example/google-docs-resume-template/valid-ats-classic-one-page/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/valid-ats-classic-one-page/
 faq:
   - q: "Is it free?"
     a: "Yes, copy it straight into your Google Drive."

@@ -132,7 +132,7 @@ describe("validateTemplates (cross-template rules)", () => {
             title: "a t",
             metaDescription:
               "a sufficiently long unique meta description that clears the seventy character minimum easily here",
-            canonical: "https://resumedocs.example/wrong/",
+            canonical: "https://googledocsresumetemplate.com/wrong/",
           },
         }),
       ),

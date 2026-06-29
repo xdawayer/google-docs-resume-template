@@ -1,12 +1,10 @@
 ---
-# DRAFT — content authored; excluded from gates until the external artifacts are real.
-# Pending (require the governed Workspace, not fakeable here):
-#   docId + copyUrl (real Google Doc), thumbnail screenshot (E6: pnpm shots:gen needs
-#   GOOGLE_SA_KEY), parseEvidence (real ATS parse test), linkStatus (E1 health check).
-# Promote: fill those, run `pnpm shots:gen` + `pnpm check:links`, set status: published,
-# then rename ats-classic-one-page.draft.md -> ats-classic-one-page.md and `pnpm validate`.
 slug: ats-classic-one-page
 name: ATS Classic One Page
+# DRAFT — evidence is REAL (docId, copyUrl, screenshot, link health, parseEvidence).
+# Held in draft only because publishing needs >=3 published templates (>=2 related
+# siblings each). Promote all three together once student-internship + software-engineer
+# have real shared Docs. Flip status -> published and rename *.draft.md -> *.md.
 status: draft
 
 category: [ats, simple, professional]
@@ -17,7 +15,7 @@ pageCount: 1
 docId: 1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0
 copyUrl: https://docs.google.com/document/d/1mJBNrc57diTnoh00XPNPQa6y6HnvlDT1dXjo2QBJTc0/copy
 linkStatus: available
-lastVerifiedAt: 2026-06-28
+lastVerifiedAt: 2026-06-29
 revisionId: "2026-06-28T17:26:09.884Z"
 
 thumbnail:
@@ -57,7 +55,7 @@ caveats:
 seo:
   title: ATS Classic One-Page Resume Template (Google Docs)
   metaDescription: A free single-column ATS resume template for Google Docs. Standard headings, no tables or text boxes, and one clean page parsers read in order.
-  canonical: https://resumedocs.example/google-docs-resume-template/ats-classic-one-page/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/ats-classic-one-page/
 
 faq:
   - q: Is this template really free?

@@ -21,7 +21,7 @@ atsChecklist:
 seo:
   title: Fake ATS Score Resume Template for Google Docs
   metaDescription: This fixture carries a forbidden numeric atsScore field so the strict schema rejects it; trust must be a checklist, never an invented number.
-  canonical: https://resumedocs.example/google-docs-resume-template/bad-numeric-score/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/bad-numeric-score/
 created: 2026-06-20
 updated: 2026-06-27
 ---

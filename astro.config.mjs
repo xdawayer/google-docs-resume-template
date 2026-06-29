@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 
 // Single source of truth for the production origin. No trailing slash, no www.
-const SITE_URL = process.env.SITE_URL ?? "https://resumedocs.example";
+const SITE_URL = process.env.SITE_URL ?? "https://googledocsresumetemplate.com";
 
 // Decision #9: "/" 301-redirects to the hub; the hub IS the collection page.
 // Decision: trailingSlash 'always' + directory build format are pinned and

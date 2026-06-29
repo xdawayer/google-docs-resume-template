@@ -32,7 +32,7 @@ import { join } from "node:path";
 
 const TEMPLATES_DIR = "src/content/templates";
 const PATH_PREFIX = "/google-docs-resume-template";
-const ORIGIN = (process.env.SITE_URL ?? "https://resumedocs.example").replace(/\/$/, "");
+const ORIGIN = (process.env.SITE_URL ?? "https://googledocsresumetemplate.com").replace(/\/$/, "");
 
 // Mirror of the enums in src/content/schema.ts.
 const CATEGORIES = [

@@ -51,7 +51,7 @@ caveats:
 seo:
   title: Student & Internship Resume Template (Google Docs)
   metaDescription: A free student and internship resume template for Google Docs. An education-first layout with room for projects, coursework, and activities.
-  canonical: https://resumedocs.example/google-docs-resume-template/student-internship/
+  canonical: https://googledocsresumetemplate.com/google-docs-resume-template/student-internship/
 
 faq:
   - q: I have no work experience — can I still use this?

@@ -1,7 +1,7 @@
 {
   "ats-classic-one-page": {
     "status": "available",
-    "lastCheckedAt": "2026-06-28T17:30:05.992Z",
+    "lastCheckedAt": "2026-06-29T06:37:33.617Z",
     "consecutiveFailures": 0,
     "reason": "reachable (sharing not introspectable by reader SA)"
   }
