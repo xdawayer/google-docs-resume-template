@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
   import { normalizeUrl } from "../resume-core";
-  let { resume }: { resume: Resume } = $props();
+  import { type SectionKey, defaultOrder } from "../section-order";
+  let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } = $props();
 
   const fullName = $derived(resume.basics.fullName || "Your Name");
   const initials = $derived(
@@ -153,167 +154,189 @@
     </aside>
 
     <main class="main">
-      {#if resume.summary}
-        <section class="block">
-          <h2 class="sec">
-            <span class="sec-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="8.5" />
-                <circle cx="12" cy="12" r="3.5" />
-              </svg>
-            </span>
-            Objective
-          </h2>
-          <p class="summary">{resume.summary}</p>
-        </section>
-      {/if}
-
-      {#if resume.highlights.some(Boolean)}
-        <section class="block">
-          <h2 class="sec">
-            <span class="sec-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 13l4 4 10-10" />
-              </svg>
-            </span>
-            Highlights
-          </h2>
-          <ul class="bullets">
-            {#each resume.highlights.filter(Boolean) as h}<li>{h}</li>{/each}
-          </ul>
-        </section>
-      {/if}
-
-      {#if hasJobTarget}
-        <section class="block">
-          <h2 class="sec">
-            <span class="sec-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9" />
-                <circle cx="12" cy="12" r="4.5" />
-                <circle cx="12" cy="12" r="0.6" />
-              </svg>
-            </span>
-            Job Target
-          </h2>
-          <div class="entry">
-            {#if jt.title}<div class="primary">{jt.title}</div>{/if}
-            {#if jobTargetMeta.length}<p class="detail">{jobTargetMeta.join(" · ")}</p>{/if}
-          </div>
-        </section>
-      {/if}
-
-      {#if resume.education.some((e) => e.school)}
-        <section class="block">
-          <h2 class="sec">
-            <span class="sec-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 9l10-4 10 4-10 4-10-4z" />
-                <path d="M6 11.2v4c0 1.6 2.7 3 6 3s6-1.4 6-3v-4" />
-                <path d="M22 9v5" />
-              </svg>
-            </span>
-            Education
-          </h2>
-          {#each resume.education as ed}
-            {#if ed.school}
-              <div class="entry">
-                <div class="entry-head">
-                  <span class="primary">
-                    {ed.degree}{#if ed.degree && ed.field}, {/if}{ed.field}
-                  </span>
-                  {#if ed.graduation}<span class="period">{ed.graduation}</span>{/if}
-                </div>
-                <div class="org">
-                  {ed.school}{#if ed.location} · {ed.location}{/if}
-                </div>
-                {#if ed.details}<p class="detail">{ed.details}</p>{/if}
-              </div>
-            {/if}
-          {/each}
-        </section>
-      {/if}
-
-      {#if resume.experience.some((e) => e.title || e.company)}
-        <section class="block">
-          <h2 class="sec">
-            <span class="sec-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="8" width="18" height="12" rx="2" />
-                <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                <path d="M3 13h18" />
-              </svg>
-            </span>
-            Experience
-          </h2>
-          {#each resume.experience as exp}
-            {#if exp.title || exp.company}
-              <div class="entry">
-                <div class="entry-head">
-                  <span class="primary">{exp.title}</span>
-                  {#if exp.start || exp.end}
-                    <span class="period">
-                      {exp.start}{#if exp.start && exp.end} – {/if}{exp.end}
-                    </span>
-                  {/if}
-                </div>
-                {#if exp.company || exp.location}
-                  <div class="org">
-                    {exp.company}{#if exp.company && exp.location} · {/if}{exp.location}
-                  </div>
-                {/if}
-                {#if exp.bullets?.some(Boolean)}
-                  <ul class="bullets">
-                    {#each exp.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
-                  </ul>
-                {/if}
-              </div>
-            {/if}
-          {/each}
-        </section>
-      {/if}
-
-      {#if resume.projects.some((p) => p.name || p.role)}
-        <section class="block">
-          <h2 class="sec">
-            <span class="sec-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3z" />
-                <path d="M3 7V5a2 2 0 0 1 2-2h3l2 2" />
-              </svg>
-            </span>
-            Projects
-          </h2>
-          {#each resume.projects as proj}
-            {#if proj.name || proj.role}
-              <div class="entry">
-                <div class="entry-head">
-                  <span class="primary">{proj.name}</span>
-                  {#if proj.start || proj.end}
-                    <span class="period">
-                      {proj.start}{#if proj.start && proj.end} – {/if}{proj.end}
-                    </span>
-                  {/if}
-                </div>
-                {#if proj.role}<div class="org">{proj.role}</div>{/if}
-                {#if proj.link}
-                  <p class="detail">
-                    <a class="c-text" href={normalizeUrl(proj.link)}>{proj.link}</a>
-                  </p>
-                {/if}
-                {#if proj.bullets?.some(Boolean)}
-                  <ul class="bullets">
-                    {#each proj.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
-                  </ul>
-                {/if}
-              </div>
-            {/if}
-          {/each}
-        </section>
-      {/if}
+      {#each sectionOrder as key (key)}
+        {#if key === "summary"}{@render summarySec()}
+        {:else if key === "highlights"}{@render highlightsSec()}
+        {:else if key === "jobTarget"}{@render jobTargetSec()}
+        {:else if key === "experience"}{@render experienceSec()}
+        {:else if key === "projects"}{@render projectsSec()}
+        {:else if key === "education"}{@render educationSec()}
+        {/if}
+      {/each}
     </main>
   </div>
 </article>
+
+{#snippet summarySec()}
+  {#if resume.summary}
+    <section class="block">
+      <h2 class="sec">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.5" />
+            <circle cx="12" cy="12" r="3.5" />
+          </svg>
+        </span>
+        Objective
+      </h2>
+      <p class="summary">{resume.summary}</p>
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet highlightsSec()}
+  {#if resume.highlights.some(Boolean)}
+    <section class="block">
+      <h2 class="sec">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 13l4 4 10-10" />
+          </svg>
+        </span>
+        Highlights
+      </h2>
+      <ul class="bullets">
+        {#each resume.highlights.filter(Boolean) as h}<li>{h}</li>{/each}
+      </ul>
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet jobTargetSec()}
+  {#if hasJobTarget}
+    <section class="block">
+      <h2 class="sec">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="4.5" />
+            <circle cx="12" cy="12" r="0.6" />
+          </svg>
+        </span>
+        Job Target
+      </h2>
+      <div class="entry">
+        {#if jt.title}<div class="primary">{jt.title}</div>{/if}
+        {#if jobTargetMeta.length}<p class="detail">{jobTargetMeta.join(" · ")}</p>{/if}
+      </div>
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet educationSec()}
+  {#if resume.education.some((e) => e.school)}
+    <section class="block">
+      <h2 class="sec">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 9l10-4 10 4-10 4-10-4z" />
+            <path d="M6 11.2v4c0 1.6 2.7 3 6 3s6-1.4 6-3v-4" />
+            <path d="M22 9v5" />
+          </svg>
+        </span>
+        Education
+      </h2>
+      {#each resume.education as ed}
+        {#if ed.school}
+          <div class="entry">
+            <div class="entry-head">
+              <span class="primary">
+                {ed.degree}{#if ed.degree && ed.field}, {/if}{ed.field}
+              </span>
+              {#if ed.graduation}<span class="period">{ed.graduation}</span>{/if}
+            </div>
+            <div class="org">
+              {ed.school}{#if ed.location} · {ed.location}{/if}
+            </div>
+            {#if ed.details}<p class="detail">{ed.details}</p>{/if}
+          </div>
+        {/if}
+      {/each}
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet experienceSec()}
+  {#if resume.experience.some((e) => e.title || e.company)}
+    <section class="block">
+      <h2 class="sec">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="12" rx="2" />
+            <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <path d="M3 13h18" />
+          </svg>
+        </span>
+        Experience
+      </h2>
+      {#each resume.experience as exp}
+        {#if exp.title || exp.company}
+          <div class="entry">
+            <div class="entry-head">
+              <span class="primary">{exp.title}</span>
+              {#if exp.start || exp.end}
+                <span class="period">
+                  {exp.start}{#if exp.start && exp.end} – {/if}{exp.end}
+                </span>
+              {/if}
+            </div>
+            {#if exp.company || exp.location}
+              <div class="org">
+                {exp.company}{#if exp.company && exp.location} · {/if}{exp.location}
+              </div>
+            {/if}
+            {#if exp.bullets?.some(Boolean)}
+              <ul class="bullets">
+                {#each exp.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
+              </ul>
+            {/if}
+          </div>
+        {/if}
+      {/each}
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet projectsSec()}
+  {#if resume.projects.some((p) => p.name || p.role)}
+    <section class="block">
+      <h2 class="sec">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3z" />
+            <path d="M3 7V5a2 2 0 0 1 2-2h3l2 2" />
+          </svg>
+        </span>
+        Projects
+      </h2>
+      {#each resume.projects as proj}
+        {#if proj.name || proj.role}
+          <div class="entry">
+            <div class="entry-head">
+              <span class="primary">{proj.name}</span>
+              {#if proj.start || proj.end}
+                <span class="period">
+                  {proj.start}{#if proj.start && proj.end} – {/if}{proj.end}
+                </span>
+              {/if}
+            </div>
+            {#if proj.role}<div class="org">{proj.role}</div>{/if}
+            {#if proj.link}
+              <p class="detail">
+                <a class="c-text" href={normalizeUrl(proj.link)}>{proj.link}</a>
+              </p>
+            {/if}
+            {#if proj.bullets?.some(Boolean)}
+              <ul class="bullets">
+                {#each proj.bullets.filter(Boolean) as b}<li>{b}</li>{/each}
+              </ul>
+            {/if}
+          </div>
+        {/if}
+      {/each}
+    </section>
+  {/if}
+{/snippet}
 
 <style>
   .sheet {

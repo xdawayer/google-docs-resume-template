@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
-  let { resume }: { resume: Resume } = $props();
+  import { type SectionKey, defaultOrder } from "../section-order";
+  let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } =
+    $props();
 
   const fullName = $derived(resume.basics.fullName || "Your Name");
 
@@ -124,121 +126,143 @@
       {/if}
     </div>
 
-    {#if resume.summary}
-      <section class="sec sec--summary">
-        <h2 class="sec-h"><span class="marker"></span>Professional Summary</h2>
-        <p class="summary">{resume.summary}</p>
-      </section>
-    {/if}
-
-    {#if resume.highlights.some(Boolean)}
-      <section class="sec clear">
-        <h2 class="sec-h"><span class="marker"></span>Highlights</h2>
-        <ul class="bullets">
-          {#each resume.highlights.filter(Boolean) as highlight}<li>{highlight}</li>{/each}
-        </ul>
-      </section>
-    {/if}
-
-    {#if hasJobTarget}
-      <section class="sec clear">
-        <h2 class="sec-h"><span class="marker"></span>Job Target</h2>
-        {#if jt.title}<span class="job">{jt.title}</span>{/if}
-        {#if jobTargetMeta.length}<div class="meta">{jobTargetMeta.join(" · ")}</div>{/if}
-      </section>
-    {/if}
-
-    {#if resume.experience.some((e) => e.title || e.company)}
-      <section class="sec clear">
-        <h2 class="sec-h"><span class="marker"></span>Work Experience</h2>
-        {#each resume.experience as exp}
-          {#if exp.title || exp.company}
-            <div class="entry">
-              <div class="row">
-                <div class="role-line">
-                  {#if exp.title}<span class="job">{exp.title}</span>{/if}{#if exp.company}<span
-                      class="company">{#if exp.title} · {/if}{exp.company}</span
-                    >{/if}
-                </div>
-                {#if exp.start || exp.end}
-                  <span class="dates">{exp.start}{#if exp.end} – {exp.end}{/if}</span>
-                {/if}
-              </div>
-              {#if exp.location}<div class="meta">{exp.location}</div>{/if}
-              {#if (exp.bullets ?? []).some(Boolean)}
-                <ul class="bullets">
-                  {#each (exp.bullets ?? []).filter(Boolean) as bullet}<li>{bullet}</li>{/each}
-                </ul>
-              {/if}
-            </div>
-          {/if}
-        {/each}
-      </section>
-    {/if}
-
-    {#if resume.projects.some((p) => p.name || p.role)}
-      <section class="sec clear">
-        <h2 class="sec-h"><span class="marker"></span>Projects</h2>
-        {#each resume.projects as proj}
-          {#if proj.name || proj.role}
-            <div class="entry">
-              <div class="row">
-                <div class="role-line">
-                  {#if proj.name}<span class="job">{proj.name}</span>{/if}{#if proj.role}<span
-                      class="company">{#if proj.name} · {/if}{proj.role}</span
-                    >{/if}
-                </div>
-                {#if proj.start || proj.end}
-                  <span class="dates">{proj.start}{#if proj.end} – {proj.end}{/if}</span>
-                {/if}
-              </div>
-              {#if proj.link}<div class="meta">{proj.link}</div>{/if}
-              {#if (proj.bullets ?? []).some(Boolean)}
-                <ul class="bullets">
-                  {#each (proj.bullets ?? []).filter(Boolean) as bullet}<li>{bullet}</li>{/each}
-                </ul>
-              {/if}
-            </div>
-          {/if}
-        {/each}
-      </section>
-    {/if}
-
-    {#if resume.education.some((e) => e.school || e.degree || e.field)}
-      <section class="sec clear">
-        <h2 class="sec-h"><span class="marker"></span>Education</h2>
-        {#each resume.education as edu}
-          {#if edu.school || edu.degree || edu.field}
-            <div class="entry">
-              <div class="row">
-                <div class="role-line">
-                  {#if edu.degree || edu.field}
-                    <span class="job"
-                      >{edu.degree}{#if edu.degree && edu.field}, {/if}{edu.field}</span
-                    >
-                  {:else}
-                    <span class="job">{edu.school}</span>
-                  {/if}
-                </div>
-                {#if edu.graduation}<span class="dates">{edu.graduation}</span>{/if}
-              </div>
-              {#if edu.degree || edu.field}
-                {#if edu.school}
-                  <div class="meta meta--school"
-                    >{edu.school}{#if edu.location} · {edu.location}{/if}</div
-                  >
-                {/if}
-              {:else if edu.location}
-                <div class="meta">{edu.location}</div>
-              {/if}
-              {#if edu.details}<p class="edu-details">{edu.details}</p>{/if}
-            </div>
-          {/if}
-        {/each}
-      </section>
-    {/if}
+    {#each sectionOrder as key (key)}
+      {#if key === "summary"}{@render summarySec()}
+      {:else if key === "highlights"}{@render highlightsSec()}
+      {:else if key === "jobTarget"}{@render jobTargetSec()}
+      {:else if key === "experience"}{@render experienceSec()}
+      {:else if key === "projects"}{@render projectsSec()}
+      {:else if key === "education"}{@render educationSec()}
+      {/if}
+    {/each}
   </div>
 </article>
+
+{#snippet summarySec()}
+  {#if resume.summary}
+    <section class="sec sec--summary">
+      <h2 class="sec-h"><span class="marker"></span>Professional Summary</h2>
+      <p class="summary">{resume.summary}</p>
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet highlightsSec()}
+  {#if resume.highlights.some(Boolean)}
+    <section class="sec clear">
+      <h2 class="sec-h"><span class="marker"></span>Highlights</h2>
+      <ul class="bullets">
+        {#each resume.highlights.filter(Boolean) as highlight}<li>{highlight}</li>{/each}
+      </ul>
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet jobTargetSec()}
+  {#if hasJobTarget}
+    <section class="sec clear">
+      <h2 class="sec-h"><span class="marker"></span>Job Target</h2>
+      {#if jt.title}<span class="job">{jt.title}</span>{/if}
+      {#if jobTargetMeta.length}<div class="meta">{jobTargetMeta.join(" · ")}</div>{/if}
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet experienceSec()}
+  {#if resume.experience.some((e) => e.title || e.company)}
+    <section class="sec clear">
+      <h2 class="sec-h"><span class="marker"></span>Work Experience</h2>
+      {#each resume.experience as exp}
+        {#if exp.title || exp.company}
+          <div class="entry">
+            <div class="row">
+              <div class="role-line">
+                {#if exp.title}<span class="job">{exp.title}</span>{/if}{#if exp.company}<span
+                    class="company">{#if exp.title} · {/if}{exp.company}</span
+                  >{/if}
+              </div>
+              {#if exp.start || exp.end}
+                <span class="dates">{exp.start}{#if exp.end} – {exp.end}{/if}</span>
+              {/if}
+            </div>
+            {#if exp.location}<div class="meta">{exp.location}</div>{/if}
+            {#if (exp.bullets ?? []).some(Boolean)}
+              <ul class="bullets">
+                {#each (exp.bullets ?? []).filter(Boolean) as bullet}<li>{bullet}</li>{/each}
+              </ul>
+            {/if}
+          </div>
+        {/if}
+      {/each}
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet projectsSec()}
+  {#if resume.projects.some((p) => p.name || p.role)}
+    <section class="sec clear">
+      <h2 class="sec-h"><span class="marker"></span>Projects</h2>
+      {#each resume.projects as proj}
+        {#if proj.name || proj.role}
+          <div class="entry">
+            <div class="row">
+              <div class="role-line">
+                {#if proj.name}<span class="job">{proj.name}</span>{/if}{#if proj.role}<span
+                    class="company">{#if proj.name} · {/if}{proj.role}</span
+                  >{/if}
+              </div>
+              {#if proj.start || proj.end}
+                <span class="dates">{proj.start}{#if proj.end} – {proj.end}{/if}</span>
+              {/if}
+            </div>
+            {#if proj.link}<div class="meta">{proj.link}</div>{/if}
+            {#if (proj.bullets ?? []).some(Boolean)}
+              <ul class="bullets">
+                {#each (proj.bullets ?? []).filter(Boolean) as bullet}<li>{bullet}</li>{/each}
+              </ul>
+            {/if}
+          </div>
+        {/if}
+      {/each}
+    </section>
+  {/if}
+{/snippet}
+
+{#snippet educationSec()}
+  {#if resume.education.some((e) => e.school || e.degree || e.field)}
+    <section class="sec clear">
+      <h2 class="sec-h"><span class="marker"></span>Education</h2>
+      {#each resume.education as edu}
+        {#if edu.school || edu.degree || edu.field}
+          <div class="entry">
+            <div class="row">
+              <div class="role-line">
+                {#if edu.degree || edu.field}
+                  <span class="job"
+                    >{edu.degree}{#if edu.degree && edu.field}, {/if}{edu.field}</span
+                  >
+                {:else}
+                  <span class="job">{edu.school}</span>
+                {/if}
+              </div>
+              {#if edu.graduation}<span class="dates">{edu.graduation}</span>{/if}
+            </div>
+            {#if edu.degree || edu.field}
+              {#if edu.school}
+                <div class="meta meta--school"
+                  >{edu.school}{#if edu.location} · {edu.location}{/if}</div
+                >
+              {/if}
+            {:else if edu.location}
+              <div class="meta">{edu.location}</div>
+            {/if}
+            {#if edu.details}<p class="edu-details">{edu.details}</p>{/if}
+          </div>
+        {/if}
+      {/each}
+    </section>
+  {/if}
+{/snippet}
 
 <style>
   .sheet {

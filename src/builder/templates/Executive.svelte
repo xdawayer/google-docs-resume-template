@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Resume } from "../resume-schema";
-  let { resume }: { resume: Resume } = $props();
+  import { type SectionKey, defaultOrder } from "../section-order";
+  let { resume, sectionOrder = defaultOrder() }: { resume: Resume; sectionOrder?: SectionKey[] } = $props();
 
   type ContactItem = {
     kind: "location" | "phone" | "email" | "link";
@@ -91,13 +92,49 @@
     {/if}
   </header>
 
+  {#each sectionOrder as key (key)}
+    {#if key === "summary"}{@render summarySec()}
+    {:else if key === "highlights"}{@render highlightsSec()}
+    {:else if key === "jobTarget"}{@render jobTargetSec()}
+    {:else if key === "experience"}{@render experienceSec()}
+    {:else if key === "projects"}{@render projectsSec()}
+    {:else if key === "education"}{@render educationSec()}
+    {/if}
+  {/each}
+
+  {#if resume.skills.some((s) => s.category || s.items)}
+    <section>
+      <h2>Core Competencies</h2>
+      <div class="comp">
+        {#each resume.skills as g}
+          {#if g.category || g.items}
+            <div class="comp-group">
+              {#if g.category}<div class="comp-cat">{g.category}</div>{/if}
+              {#if g.items}
+                <ul class="comp-list">
+                  {#each g.items.split(",").map((s) => s.trim()).filter(Boolean) as item}
+                    <li>{item}</li>
+                  {/each}
+                </ul>
+              {/if}
+            </div>
+          {/if}
+        {/each}
+      </div>
+    </section>
+  {/if}
+</article>
+
+{#snippet summarySec()}
   {#if resume.summary}
     <section>
       <h2>Executive Profile</h2>
       <p class="summary">{resume.summary}</p>
     </section>
   {/if}
+{/snippet}
 
+{#snippet highlightsSec()}
   {#if resume.highlights.some(Boolean)}
     <section>
       <h2>Highlights</h2>
@@ -106,7 +143,9 @@
       </ul>
     </section>
   {/if}
+{/snippet}
 
+{#snippet jobTargetSec()}
   {#if hasJobTarget}
     <section>
       <h2>Job Target</h2>
@@ -116,7 +155,9 @@
       {/if}
     </section>
   {/if}
+{/snippet}
 
+{#snippet experienceSec()}
   {#if resume.experience.some((e) => e.title || e.company)}
     <section>
       <h2>Leadership Experience</h2>
@@ -151,7 +192,9 @@
       {/each}
     </section>
   {/if}
+{/snippet}
 
+{#snippet projectsSec()}
   {#if resume.projects.some((p) => p.name || p.role)}
     <section>
       <h2>Projects</h2>
@@ -182,29 +225,9 @@
       {/each}
     </section>
   {/if}
+{/snippet}
 
-  {#if resume.skills.some((s) => s.category || s.items)}
-    <section>
-      <h2>Core Competencies</h2>
-      <div class="comp">
-        {#each resume.skills as g}
-          {#if g.category || g.items}
-            <div class="comp-group">
-              {#if g.category}<div class="comp-cat">{g.category}</div>{/if}
-              {#if g.items}
-                <ul class="comp-list">
-                  {#each g.items.split(",").map((s) => s.trim()).filter(Boolean) as item}
-                    <li>{item}</li>
-                  {/each}
-                </ul>
-              {/if}
-            </div>
-          {/if}
-        {/each}
-      </div>
-    </section>
-  {/if}
-
+{#snippet educationSec()}
   {#if resume.education.some((e) => e.school || e.degree)}
     <section>
       <h2>Education</h2>
@@ -233,7 +256,7 @@
       {/each}
     </section>
   {/if}
-</article>
+{/snippet}
 
 <style>
   .sheet {

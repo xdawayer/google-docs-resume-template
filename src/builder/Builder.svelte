@@ -15,6 +15,7 @@
     emptyProject,
   } from "./resume-schema";
   import { type ResumeStyle, defaultStyle, loadStyle, saveStyle } from "./resume-style";
+  import { type SectionKey, defaultOrder, loadOrder, saveOrder } from "./section-order";
   import Form from "./Form.svelte";
   import Preview from "./Preview.svelte";
   import StyleBar from "./StyleBar.svelte";
@@ -27,6 +28,8 @@
   let template = $state<TemplateId>("ats-minimal");
   // Typography/color knobs (separate from content); sanitized on load.
   let style = $state<ResumeStyle>(loadStyle() ?? defaultStyle());
+  // Section order: drives the form panels and the rendered resume's section order.
+  let sectionOrder = $state<SectionKey[]>(loadOrder() ?? defaultOrder());
 
   // Switching template while the content is still an untouched sample swaps in the
   // persona that suits that template. Once the user edits, their content is kept.
@@ -48,6 +51,9 @@
   });
   $effect(() => {
     saveStyle(style);
+  });
+  $effect(() => {
+    saveOrder(sectionOrder);
   });
 
   function clearAll() {
@@ -97,12 +103,12 @@
           <strong>Executive Elegant</strong>.
         </p>
       {/if}
-      <Form bind:resume />
+      <Form bind:resume bind:sectionOrder />
     </section>
 
     <section class="preview" aria-label="Preview">
       <div class="stage">
-        <Preview {resume} {template} {style} />
+        <Preview {resume} {template} {style} {sectionOrder} />
       </div>
     </section>
   </div>

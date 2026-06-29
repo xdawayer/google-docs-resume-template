@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Resume, TemplateId } from "./resume-schema";
   import { styleVarString, defaultStyle, type ResumeStyle } from "./resume-style";
+  import { type SectionKey, defaultOrder } from "./section-order";
   import AtsMinimal from "./templates/AtsMinimal.svelte";
   import Executive from "./templates/Executive.svelte";
   import ModernSidebar from "./templates/ModernSidebar.svelte";
@@ -12,7 +13,13 @@
     resume,
     template,
     style = defaultStyle(),
-  }: { resume: Resume; template: TemplateId; style?: ResumeStyle } = $props();
+    sectionOrder = defaultOrder(),
+  }: {
+    resume: Resume;
+    template: TemplateId;
+    style?: ResumeStyle;
+    sectionOrder?: SectionKey[];
+  } = $props();
 
   const components: Record<TemplateId, typeof AtsMinimal> = {
     "ats-minimal": AtsMinimal,
@@ -32,7 +39,7 @@
 </script>
 
 <div class="rb-style" style={vars}>
-  <Comp {resume} />
+  <Comp {resume} {sectionOrder} />
 </div>
 
 <style>
