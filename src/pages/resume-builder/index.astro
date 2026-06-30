@@ -52,6 +52,7 @@ const appSchema = softwareAppSchema({
   </head>
   <body>
     <header class="app-header" data-chrome>
+      <img class="app-logo" src="/favicon.svg" alt="" width="24" height="24" aria-hidden="true" />
       <a class="back" href="/google-docs-resume-template/">← Templates</a>
       <h1>Resume Builder</h1>
       <span class="muted">Free · No signup · ATS-friendly PDF · saved in your browser</span>
@@ -82,6 +83,11 @@ const appSchema = softwareAppSchema({
         padding: 0 16px;
         border-bottom: 1px solid var(--line);
         background: var(--bg);
+      }
+      .app-logo {
+        display: block;
+        flex: none;
+        border-radius: 6px;
       }
       .app-header .back {
         color: #6366f1;

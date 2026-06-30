@@ -4,7 +4,10 @@ import { BRAND, BASE } from "@lib/site";
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href={`${BASE}/`}>{BRAND}</a>
+    <a class="brand" href={`${BASE}/`}>
+      <img class="brand-mark" src="/favicon.svg" alt="" width="28" height="28" loading="eager" />
+      <span>{BRAND}</span>
+    </a>
     <button
       class="btn nav-toggle"
       aria-expanded="false"
