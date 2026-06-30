@@ -77,6 +77,10 @@ const builderTemplate = z.enum([
   "academic",
   "corporate",
   "timeline",
+  "portrait",
+  "minimalist",
+  "functional",
+  "compact",
 ]);
 
 const atsChecklistItem = z

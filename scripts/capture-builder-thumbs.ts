@@ -28,6 +28,10 @@ const TEMPLATES: { id: string; slug: string }[] = [
   { id: "academic", slug: "academic-classic" },
   { id: "corporate", slug: "corporate-formal" },
   { id: "timeline", slug: "timeline-modern" },
+  { id: "portrait", slug: "portrait-photo" },
+  { id: "minimalist", slug: "minimalist-clean" },
+  { id: "functional", slug: "functional-skills" },
+  { id: "compact", slug: "compact-professional" },
 ];
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4321";

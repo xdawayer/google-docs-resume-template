@@ -14,6 +14,10 @@
   import Academic from "./templates/AcademicClassic.svelte";
   import Corporate from "./templates/CorporateFormal.svelte";
   import Timeline from "./templates/Timeline.svelte";
+  import Portrait from "./templates/Portrait.svelte";
+  import Minimalist from "./templates/Minimalist.svelte";
+  import Functional from "./templates/Functional.svelte";
+  import Compact from "./templates/Compact.svelte";
 
   let {
     resume,
@@ -40,6 +44,10 @@
     academic: Academic,
     corporate: Corporate,
     timeline: Timeline,
+    portrait: Portrait,
+    minimalist: Minimalist,
+    functional: Functional,
+    compact: Compact,
   };
   const Comp = $derived(components[template]);
 

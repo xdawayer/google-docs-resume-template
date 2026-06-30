@@ -97,6 +97,10 @@ export const TEMPLATE_IDS = [
   "academic",
   "corporate",
   "timeline",
+  "portrait",
+  "minimalist",
+  "functional",
+  "compact",
 ] as const;
 export type TemplateId = (typeof TEMPLATE_IDS)[number];
 
@@ -118,6 +122,10 @@ export const TEMPLATE_META: Record<TemplateId, TemplateMeta> = {
   academic: { label: "Academic", atsSafe: true },
   corporate: { label: "Corporate", atsSafe: true },
   timeline: { label: "Timeline", atsSafe: false },
+  portrait: { label: "Portrait", atsSafe: false },
+  minimalist: { label: "Minimalist", atsSafe: true },
+  functional: { label: "Functional", atsSafe: true },
+  compact: { label: "Compact", atsSafe: true },
 };
 
 export function emptyExperience(): Experience {
@@ -990,6 +998,302 @@ const PERSONAS: Record<TemplateId, unknown> = {
       { category: "Certifications", items: "PMP, Certified ScrumMaster (CSM)" },
       { category: "Skills", items: "Agile, Stakeholder Management, Risk Management, Roadmapping" },
       { category: "Tools", items: "Jira, Asana, MS Project, Confluence" },
+    ],
+  },
+
+  portrait: {
+    basics: {
+      fullName: "Olivia Hayes",
+      headline: "Real Estate Agent",
+      email: "olivia.hayes@email.com",
+      phone: "(555) 614-2208",
+      location: "Scottsdale, AZ",
+      photo:
+        "data:image/png;base64,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",
+      links: [{ label: "Website", url: "oliviahayes.realty" }],
+    },
+    summary:
+      "Licensed real estate agent with 7 years guiding buyers and sellers through residential transactions. Relationship-driven, with a record of fast closings and high client referral rates.",
+    highlights: [
+      "Closed $42M in residential volume over three years.",
+      "Maintained a 4.9-star client rating across 120+ reviews.",
+    ],
+    jobTarget: {
+      title: "Senior Real Estate Agent",
+      employmentType: "Full-time",
+      locations: "Scottsdale, AZ",
+      salary: "",
+      availability: "Open to new brokerage",
+    },
+    projects: [
+      {
+        name: "Luxury Listings Program",
+        role: "Lead Agent",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: [
+          "Grew the luxury segment 60% by building a referral and staging partner network.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "Real Estate Agent",
+        company: "Desert Sky Realty",
+        location: "Scottsdale, AZ",
+        start: "2019",
+        end: "Present",
+        bullets: [
+          "Closed $42M in residential volume, averaging 28 transactions a year at 98% of list price.",
+          "Built a referral pipeline that drove 65% of new business through past-client relationships.",
+        ],
+      },
+      {
+        title: "Real Estate Associate",
+        company: "Canyon Realty Group",
+        location: "Phoenix, AZ",
+        start: "2017",
+        end: "2019",
+        bullets: ["Supported a top-producing team and managed 40+ active listings end to end."],
+      },
+    ],
+    education: [
+      {
+        school: "Arizona State University",
+        degree: "B.S.",
+        field: "Business Administration",
+        location: "Tempe, AZ",
+        graduation: "2016",
+      },
+    ],
+    skills: [
+      { category: "Licenses", items: "AZ Real Estate License, Notary Public" },
+      { category: "Strengths", items: "Negotiation, Staging, CRM, Market Analysis" },
+    ],
+  },
+
+  minimalist: {
+    basics: {
+      fullName: "Ethan Brooks",
+      headline: "Product Manager",
+      email: "ethan.brooks@email.com",
+      phone: "(555) 207-4419",
+      location: "San Francisco, CA",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/ethanbrooks" }],
+    },
+    summary:
+      "Product manager with 7 years shipping B2B SaaS products from discovery to launch. I keep teams focused on the few things that move retention and revenue.",
+    highlights: [
+      "Shipped products that grew net revenue retention from 104% to 121%.",
+      "Run lean discovery — fewer, better bets, validated before build.",
+    ],
+    jobTarget: {
+      title: "Senior Product Manager",
+      employmentType: "Full-time",
+      locations: "San Francisco, CA · Remote",
+      salary: "$160k–$190k",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "Self-Serve Onboarding",
+        role: "Product Lead",
+        link: "",
+        start: "2023",
+        end: "2024",
+        bullets: [
+          "Launched a self-serve flow that lifted activation 27% and cut time-to-value in half.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "Product Manager",
+        company: "Northstar Software",
+        location: "San Francisco, CA",
+        start: "2021",
+        end: "Present",
+        bullets: [
+          "Owned the activation and retention roadmap, growing net revenue retention from 104% to 121%.",
+          "Led a four-team launch that added $3.4M in new ARR in its first two quarters.",
+        ],
+      },
+      {
+        title: "Associate Product Manager",
+        company: "Lumen Apps",
+        location: "Remote",
+        start: "2018",
+        end: "2021",
+        bullets: [
+          "Shipped a billing redesign that cut involuntary churn 19% through smarter dunning.",
+        ],
+      },
+    ],
+    education: [
+      {
+        school: "University of California, Berkeley",
+        degree: "B.A.",
+        field: "Cognitive Science",
+        location: "Berkeley, CA",
+        graduation: "2018",
+      },
+    ],
+    skills: [
+      { category: "Product", items: "Discovery, Roadmapping, A/B Testing, Analytics" },
+      { category: "Tools", items: "Amplitude, Figma, Jira, SQL" },
+    ],
+  },
+
+  functional: {
+    basics: {
+      fullName: "Maria Santos",
+      headline: "Operations Coordinator",
+      email: "maria.santos@email.com",
+      phone: "(555) 330-8852",
+      location: "Tampa, FL",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/mariasantos" }],
+    },
+    summary:
+      "Detail-driven coordinator transitioning into operations, with transferable strengths in scheduling, vendor communication, and process improvement built across customer-facing roles.",
+    highlights: [
+      "Transferable strengths in process, scheduling, and stakeholder communication.",
+      "Cut a recurring scheduling error rate to near zero with a simple checklist system.",
+    ],
+    jobTarget: {
+      title: "Operations Coordinator",
+      employmentType: "Full-time",
+      locations: "Tampa, FL · Hybrid",
+      salary: "",
+      availability: "Available immediately",
+    },
+    projects: [
+      {
+        name: "Scheduling Overhaul",
+        role: "Initiative Owner",
+        link: "",
+        start: "2024",
+        end: "2024",
+        bullets: [
+          "Designed a shift-handoff checklist that cut scheduling errors 90% across two teams.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "Customer Service Lead",
+        company: "Bayshore Retail",
+        location: "Tampa, FL",
+        start: "2021",
+        end: "Present",
+        bullets: [
+          "Coordinated schedules and vendor deliveries for a 25-person store, improving on-time stocking 30%.",
+        ],
+      },
+      {
+        title: "Front Office Administrator",
+        company: "Gulf Coast Clinic",
+        location: "Tampa, FL",
+        start: "2018",
+        end: "2021",
+        bullets: [
+          "Managed booking, billing, and supplier communication for a busy three-provider clinic.",
+        ],
+      },
+    ],
+    education: [
+      {
+        school: "Hillsborough Community College",
+        degree: "A.A.",
+        field: "Business Administration",
+        location: "Tampa, FL",
+        graduation: "2018",
+      },
+    ],
+    skills: [
+      {
+        category: "Operations",
+        items: "Scheduling, Process Improvement, Inventory, Vendor Management",
+      },
+      { category: "Communication", items: "Customer Service, Conflict Resolution, Documentation" },
+      { category: "Tools", items: "Excel, Google Workspace, Slack, QuickBooks" },
+    ],
+  },
+
+  compact: {
+    basics: {
+      fullName: "Daniel Reed",
+      headline: "Senior Operations Manager",
+      email: "daniel.reed@email.com",
+      phone: "(555) 901-7763",
+      location: "Columbus, OH",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/danielreed" }],
+    },
+    summary:
+      "Operations manager with 12 years scaling distribution and service teams. I turn messy processes into measured systems that cut cost and lift throughput.",
+    highlights: [
+      "12 years leading operations across distribution and customer service.",
+      "Drove a 24% productivity gain while reducing headcount cost 11%.",
+    ],
+    jobTarget: {
+      title: "Director of Operations",
+      employmentType: "Full-time",
+      locations: "Columbus, OH",
+      salary: "$120k–$150k",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "Warehouse Automation Rollout",
+        role: "Program Owner",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: ["Deployed pick-path automation that lifted throughput 24% and cut errors 38%."],
+      },
+    ],
+    experience: [
+      {
+        title: "Senior Operations Manager",
+        company: "Midwest Distribution Co.",
+        location: "Columbus, OH",
+        start: "2018",
+        end: "Present",
+        bullets: [
+          "Ran a 180-person, three-shift operation, lifting on-time fulfillment from 91% to 99%.",
+          "Cut annual operating cost $1.8M through routing, staffing, and vendor renegotiation.",
+        ],
+      },
+      {
+        title: "Operations Manager",
+        company: "Lakeside Logistics",
+        location: "Cleveland, OH",
+        start: "2014",
+        end: "2018",
+        bullets: ["Standardized warehouse SOPs across four sites, reducing safety incidents 45%."],
+      },
+      {
+        title: "Operations Supervisor",
+        company: "Cardinal Freight",
+        location: "Columbus, OH",
+        start: "2011",
+        end: "2014",
+        bullets: ["Supervised a 40-person shift and led the move to a new 120k-sq-ft facility."],
+      },
+    ],
+    education: [
+      {
+        school: "Ohio State University",
+        degree: "B.S.",
+        field: "Supply Chain Management",
+        location: "Columbus, OH",
+        graduation: "2011",
+      },
+    ],
+    skills: [
+      { category: "Operations", items: "Lean, Six Sigma, S&OP, Forecasting, KPI Design" },
+      { category: "Leadership", items: "Team Building, Hiring, Coaching, Change Management" },
+      { category: "Systems", items: "SAP, NetSuite, WMS, Tableau, Excel" },
     ],
   },
 };
