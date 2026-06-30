@@ -1,6 +1,14 @@
 # Cloudflare Pages config. The static build is in dist/; functions/ deploys as
-# Pages Functions (/go/[slug], /api/collect). nodejs_compat enables fetch/URL etc.
+# Pages Functions (/go/[slug], /api/collect, /api/link-attribution/redirects, /[code]).
+# nodejs_compat enables fetch/URL etc.
 name = "google-docs-resume-template"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat"]
+
+# Link-attribution short links (functions/api/link-attribution/redirects.ts writes,
+# functions/[code].ts reads) read/write this KV namespace, bound as LINK_REDIRECTS.
+# This project's bindings are managed here in wrangler.toml (not the dashboard UI).
+[[kv_namespaces]]
+binding = "LINK_REDIRECTS"
+id = "6399e178ac534f53b55fc85229a6a848"
