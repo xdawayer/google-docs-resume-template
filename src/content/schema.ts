@@ -63,7 +63,7 @@ const status = z.enum(["draft", "published"]);
 // the editor renders them live and exports a selectable-text PDF — but they have
 // no Doc to copy, so docId/copyUrl/link-health don't apply to them.
 const kind = z.enum(["google-doc", "builder"]);
-// The six built-in editor designs (mirrors TEMPLATE_IDS in builder/resume-schema).
+// The built-in editor designs (mirrors TEMPLATE_IDS in builder/resume-schema).
 const builderTemplate = z.enum([
   "ats-minimal",
   "executive",
@@ -71,6 +71,12 @@ const builderTemplate = z.enum([
   "creative",
   "fresh-graduate",
   "bold",
+  "technical",
+  "header-band",
+  "clinical",
+  "academic",
+  "corporate",
+  "timeline",
 ]);
 
 const atsChecklistItem = z

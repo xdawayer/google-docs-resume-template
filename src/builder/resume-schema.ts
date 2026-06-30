@@ -91,6 +91,12 @@ export const TEMPLATE_IDS = [
   "creative",
   "fresh-graduate",
   "bold",
+  "technical",
+  "header-band",
+  "clinical",
+  "academic",
+  "corporate",
+  "timeline",
 ] as const;
 export type TemplateId = (typeof TEMPLATE_IDS)[number];
 
@@ -106,6 +112,12 @@ export const TEMPLATE_META: Record<TemplateId, TemplateMeta> = {
   creative: { label: "Creative Portfolio", atsSafe: false },
   "fresh-graduate": { label: "Fresh Graduate", atsSafe: false },
   bold: { label: "Bold Two-Column", atsSafe: false },
+  technical: { label: "Technical", atsSafe: true },
+  "header-band": { label: "Header Band", atsSafe: true },
+  clinical: { label: "Clinical", atsSafe: true },
+  academic: { label: "Academic", atsSafe: true },
+  corporate: { label: "Corporate", atsSafe: true },
+  timeline: { label: "Timeline", atsSafe: false },
 };
 
 export function emptyExperience(): Experience {
@@ -541,6 +553,443 @@ const PERSONAS: Record<TemplateId, unknown> = {
     skills: [
       { category: "Marketing", items: "Demand Gen, Brand, ABM, Content Strategy" },
       { category: "Tools", items: "HubSpot, Salesforce, GA4, Asana" },
+    ],
+  },
+
+  technical: {
+    basics: {
+      fullName: "Daniel Park",
+      headline: "Software Engineer",
+      email: "daniel.park@email.com",
+      phone: "(555) 318-2204",
+      location: "Seattle, WA",
+      links: [
+        { label: "GitHub", url: "github.com/danielpark" },
+        { label: "LinkedIn", url: "linkedin.com/in/danielpark" },
+      ],
+    },
+    summary:
+      "Full-stack software engineer with 6 years building cloud services and developer tooling. I care about reliability, clean interfaces, and shipping measurable wins.",
+    highlights: [
+      "6 years shipping cloud services across the stack, from API to infrastructure.",
+      "Cut build times 60% and reduced production incidents by half.",
+    ],
+    jobTarget: {
+      title: "Senior Software Engineer",
+      employmentType: "Full-time",
+      locations: "Seattle, WA · Remote",
+      salary: "$160k–$200k",
+      availability: "Available in 30 days",
+    },
+    projects: [
+      {
+        name: "Internal Deploy Platform",
+        role: "Tech Lead",
+        link: "",
+        start: "2023",
+        end: "2024",
+        bullets: [
+          "Built a self-serve deploy platform adopted by 20+ teams, cutting release lead time 70%.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "Software Engineer",
+        company: "Cloudgrid",
+        location: "Seattle, WA",
+        start: "2021",
+        end: "Present",
+        bullets: [
+          "Designed a service-mesh migration that cut p95 latency 45% across 30 services.",
+          "Reduced CI build times from 22 to 9 minutes, saving ~80 engineer-hours weekly.",
+        ],
+      },
+      {
+        title: "Software Engineer",
+        company: "Datawave",
+        location: "Remote",
+        start: "2018",
+        end: "2021",
+        bullets: [
+          "Built an event-driven ingestion pipeline processing 4B events/day at 99.99% uptime.",
+        ],
+      },
+    ],
+    education: [
+      {
+        school: "University of Washington",
+        degree: "B.S.",
+        field: "Computer Science",
+        location: "Seattle, WA",
+        graduation: "2018",
+      },
+    ],
+    skills: [
+      { category: "Languages", items: "TypeScript, Go, Python, Rust, SQL" },
+      { category: "Infrastructure", items: "AWS, Kubernetes, Terraform, Postgres, Kafka" },
+    ],
+  },
+
+  "header-band": {
+    basics: {
+      fullName: "Sophia Bennett",
+      headline: "Account Executive",
+      email: "sophia.bennett@email.com",
+      phone: "(555) 902-7741",
+      location: "Chicago, IL",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/sophiabennett" }],
+    },
+    summary:
+      "Enterprise account executive with 8 years closing complex B2B deals and growing strategic accounts. Consistent quota-beating performer focused on durable customer value.",
+    highlights: [
+      "8 years exceeding quota in enterprise B2B sales.",
+      "Closed $14M in new ARR over three years at 128% average quota attainment.",
+    ],
+    jobTarget: {
+      title: "Senior Account Executive",
+      employmentType: "Full-time",
+      locations: "Chicago, IL · Remote",
+      salary: "$120k base · $240k OTE",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "Land-and-Expand Play",
+        role: "Deal Lead",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: ["Designed an expansion motion that grew three accounts from $90k to $1.2M ARR."],
+      },
+    ],
+    experience: [
+      {
+        title: "Account Executive",
+        company: "Apex Software",
+        location: "Chicago, IL",
+        start: "2020",
+        end: "Present",
+        bullets: [
+          "Closed $14M in new ARR across enterprise accounts at 128% average quota attainment.",
+          "Built a referral pipeline that sourced 30% of net-new bookings in 2023.",
+        ],
+      },
+      {
+        title: "Sales Development Representative",
+        company: "Brightline",
+        location: "Chicago, IL",
+        start: "2017",
+        end: "2020",
+        bullets: ["Booked 400+ qualified meetings and was promoted to AE within 18 months."],
+      },
+    ],
+    education: [
+      {
+        school: "University of Illinois",
+        degree: "B.A.",
+        field: "Communications",
+        location: "Urbana, IL",
+        graduation: "2016",
+      },
+    ],
+    skills: [
+      { category: "Sales", items: "Enterprise B2B, MEDDIC, Forecasting, Negotiation" },
+      { category: "Tools", items: "Salesforce, Outreach, Gong, Sales Navigator" },
+    ],
+  },
+
+  clinical: {
+    basics: {
+      fullName: "Emily Carter",
+      headline: "Registered Nurse, BSN",
+      email: "emily.carter@email.com",
+      phone: "(555) 640-1187",
+      location: "Denver, CO",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/emilycarterrn" }],
+    },
+    summary:
+      "Compassionate registered nurse with 7 years of acute-care experience across medical-surgical and ICU settings. Committed to safe, patient-centered care and strong interdisciplinary teamwork.",
+    highlights: [
+      "7 years of acute-care nursing across med-surg and ICU.",
+      "Maintained a 98% patient-satisfaction score across 2023.",
+    ],
+    jobTarget: {
+      title: "ICU Registered Nurse",
+      employmentType: "Full-time",
+      locations: "Denver, CO",
+      salary: "",
+      availability: "Available immediately",
+    },
+    projects: [
+      {
+        name: "Falls-Reduction Initiative",
+        role: "Unit Champion",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: ["Led a falls-prevention protocol that cut unit fall rates 35% in six months."],
+      },
+    ],
+    experience: [
+      {
+        title: "Registered Nurse, ICU",
+        company: "Denver General Hospital",
+        location: "Denver, CO",
+        start: "2020",
+        end: "Present",
+        bullets: [
+          "Provided critical care for up to 3 high-acuity patients per shift in a 24-bed ICU.",
+          "Precepted 8 new-graduate nurses, improving unit onboarding time and retention.",
+        ],
+      },
+      {
+        title: "Registered Nurse, Med-Surg",
+        company: "Front Range Medical Center",
+        location: "Boulder, CO",
+        start: "2017",
+        end: "2020",
+        bullets: [
+          "Managed care for 5–6 patients per shift with a focus on safe medication administration.",
+        ],
+      },
+    ],
+    education: [
+      {
+        school: "University of Colorado",
+        degree: "B.S.N.",
+        field: "Nursing",
+        location: "Aurora, CO",
+        graduation: "2017",
+      },
+    ],
+    skills: [
+      { category: "Licenses & Certifications", items: "RN License (CO), BLS, ACLS, PALS" },
+      {
+        category: "Clinical Skills",
+        items: "Critical Care, IV Therapy, EHR (Epic), Patient Education",
+      },
+    ],
+  },
+
+  academic: {
+    basics: {
+      fullName: "Sarah Thompson",
+      headline: "High School Science Teacher",
+      email: "sarah.thompson@email.com",
+      phone: "(555) 271-9930",
+      location: "Portland, OR",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/sarahthompson" }],
+    },
+    summary:
+      "Dedicated high school science teacher with 9 years designing inquiry-based curricula that raise engagement and outcomes. Experienced in differentiated instruction and AP Biology.",
+    highlights: [
+      "9 years teaching high school biology and chemistry.",
+      "Raised AP Biology pass rates from 68% to 89% over three years.",
+    ],
+    jobTarget: {
+      title: "Science Department Lead",
+      employmentType: "Full-time",
+      locations: "Portland, OR",
+      salary: "",
+      availability: "Available for the 2026–27 school year",
+    },
+    projects: [
+      {
+        name: "STEM Curriculum Redesign",
+        role: "Lead Author",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: [
+          "Redesigned the 10th-grade science curriculum around inquiry labs, lifting engagement 22%.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "High School Science Teacher",
+        company: "Lincoln High School",
+        location: "Portland, OR",
+        start: "2019",
+        end: "Present",
+        bullets: [
+          "Taught AP Biology and Chemistry to 140+ students, raising AP pass rates from 68% to 89%.",
+          "Mentored three first-year teachers and chaired the science assessment committee.",
+        ],
+      },
+      {
+        title: "Science Teacher",
+        company: "Maple Grove High School",
+        location: "Salem, OR",
+        start: "2016",
+        end: "2019",
+        bullets: ["Built hands-on lab units that increased state science proficiency 15%."],
+      },
+    ],
+    education: [
+      {
+        school: "University of Oregon",
+        degree: "M.Ed.",
+        field: "Science Education",
+        location: "Eugene, OR",
+        graduation: "2016",
+        details: "B.S. in Biology, 2014. Relevant: Curriculum Design, Educational Assessment.",
+      },
+    ],
+    skills: [
+      {
+        category: "Certifications",
+        items: "Oregon Teaching License, AP Biology Certified, CPR/First Aid",
+      },
+      {
+        category: "Skills",
+        items: "Curriculum Design, Differentiated Instruction, Google Classroom, Assessment",
+      },
+    ],
+  },
+
+  corporate: {
+    basics: {
+      fullName: "Michael Chen",
+      headline: "Senior Financial Analyst",
+      email: "michael.chen@email.com",
+      phone: "(555) 488-3360",
+      location: "New York, NY",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/michaelchen" }],
+    },
+    summary:
+      "CPA and senior financial analyst with 8 years in FP&A and corporate finance. I translate complex data into decisions that protect margin and fund growth.",
+    highlights: [
+      "8 years in FP&A, forecasting, and management reporting.",
+      "Built models that informed $200M+ in capital-allocation decisions.",
+    ],
+    jobTarget: {
+      title: "Finance Manager / FP&A Lead",
+      employmentType: "Full-time",
+      locations: "New York, NY · Hybrid",
+      salary: "$130k–$160k",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "Annual Budgeting Overhaul",
+        role: "Project Lead",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: [
+          "Rebuilt the budgeting process, cutting cycle time 40% and tightening forecast accuracy to within 3%.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "Senior Financial Analyst",
+        company: "Meridian Capital",
+        location: "New York, NY",
+        start: "2020",
+        end: "Present",
+        bullets: [
+          "Owned FP&A for a $500M business unit, delivering monthly forecasts within 3% of actuals.",
+          "Identified $4.2M in annual cost savings through margin and vendor analysis.",
+        ],
+      },
+      {
+        title: "Financial Analyst",
+        company: "Harbor Industries",
+        location: "Jersey City, NJ",
+        start: "2016",
+        end: "2020",
+        bullets: ["Built the three-statement model used in a $120M acquisition and integration."],
+      },
+    ],
+    education: [
+      {
+        school: "New York University",
+        degree: "B.S.",
+        field: "Finance & Accounting",
+        location: "New York, NY",
+        graduation: "2016",
+      },
+    ],
+    skills: [
+      { category: "Certifications", items: "CPA, CFA Level II" },
+      { category: "Finance", items: "FP&A, Financial Modeling, Forecasting, Valuation, GAAP" },
+      { category: "Tools", items: "Excel, SAP, NetSuite, Tableau, SQL" },
+    ],
+  },
+
+  timeline: {
+    basics: {
+      fullName: "David Wilson",
+      headline: "Project Manager, PMP",
+      email: "david.wilson@email.com",
+      phone: "(555) 753-2218",
+      location: "Atlanta, GA",
+      links: [{ label: "LinkedIn", url: "linkedin.com/in/davidwilson" }],
+    },
+    summary:
+      "PMP-certified project manager with 9 years delivering cross-functional programs on time and under budget. Skilled at aligning stakeholders and de-risking complex delivery.",
+    highlights: [
+      "9 years delivering cross-functional programs end to end.",
+      "Delivered a $5M program three weeks early and 8% under budget.",
+    ],
+    jobTarget: {
+      title: "Senior Project / Program Manager",
+      employmentType: "Full-time",
+      locations: "Atlanta, GA · Remote",
+      salary: "$115k–$140k",
+      availability: "Open to offers",
+    },
+    projects: [
+      {
+        name: "ERP Rollout",
+        role: "Program Manager",
+        link: "",
+        start: "2022",
+        end: "2023",
+        bullets: [
+          "Led a 14-month ERP rollout across five departments, delivered on time with 92% adoption.",
+        ],
+      },
+    ],
+    experience: [
+      {
+        title: "Project Manager",
+        company: "Summit Logistics",
+        location: "Atlanta, GA",
+        start: "2019",
+        end: "Present",
+        bullets: [
+          "Managed a $12M portfolio of programs, delivering 95% of milestones on schedule.",
+          "Cut average project delivery time 18% by standardizing intake and stage-gate reviews.",
+        ],
+      },
+      {
+        title: "Associate Project Manager",
+        company: "Brightpath Consulting",
+        location: "Atlanta, GA",
+        start: "2015",
+        end: "2019",
+        bullets: [
+          "Coordinated cross-functional teams of 20+ across concurrent client engagements.",
+        ],
+      },
+    ],
+    education: [
+      {
+        school: "Georgia Institute of Technology",
+        degree: "B.S.",
+        field: "Industrial Engineering",
+        location: "Atlanta, GA",
+        graduation: "2014",
+      },
+    ],
+    skills: [
+      { category: "Certifications", items: "PMP, Certified ScrumMaster (CSM)" },
+      { category: "Skills", items: "Agile, Stakeholder Management, Risk Management, Roadmapping" },
+      { category: "Tools", items: "Jira, Asana, MS Project, Confluence" },
     ],
   },
 };

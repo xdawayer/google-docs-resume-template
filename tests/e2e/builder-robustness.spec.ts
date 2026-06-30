@@ -6,6 +6,9 @@ import { test, expect } from "@playwright/test";
 test("print view puts the resume sheet in flow (non-blank PDF)", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === "chromium-no-js", "builder requires JS");
   await page.goto("/resume-builder/");
+  // The builder is a client:only island — the sheet renders after hydration, so
+  // wait for it before measuring (it is not in the server HTML).
+  await page.locator("[data-sheet]").first().waitFor({ state: "attached" });
   await page.emulateMedia({ media: "print" });
   const r = await page.evaluate(() => {
     const el = document.querySelector("[data-sheet]") as HTMLElement;

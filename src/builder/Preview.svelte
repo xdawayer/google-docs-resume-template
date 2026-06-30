@@ -8,6 +8,12 @@
   import Creative from "./templates/Creative.svelte";
   import FreshGraduate from "./templates/FreshGraduate.svelte";
   import Bold from "./templates/Bold.svelte";
+  import Technical from "./templates/Technical.svelte";
+  import HeaderBand from "./templates/HeaderBand.svelte";
+  import Clinical from "./templates/ClinicalClean.svelte";
+  import Academic from "./templates/AcademicClassic.svelte";
+  import Corporate from "./templates/CorporateFormal.svelte";
+  import Timeline from "./templates/Timeline.svelte";
 
   let {
     resume,
@@ -28,6 +34,12 @@
     creative: Creative,
     "fresh-graduate": FreshGraduate,
     bold: Bold,
+    technical: Technical,
+    "header-band": HeaderBand,
+    clinical: Clinical,
+    academic: Academic,
+    corporate: Corporate,
+    timeline: Timeline,
   };
   const Comp = $derived(components[template]);
 

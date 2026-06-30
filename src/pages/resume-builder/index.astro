@@ -30,7 +30,11 @@ const description =
       <h1>Resume Builder</h1>
       <span class="muted">Free · No signup · ATS-friendly PDF · saved in your browser</span>
     </header>
-    <Builder client:load />
+    <!-- client:only — the builder is a pure client tool (localStorage, window.print);
+         SSR'd the wrong template by default (no ?t= server-side), and client:load
+         hydration then REUSED that DOM for structurally-similar templates, leaving
+         them rendering ATS Minimal. client:only renders each template fresh, correctly. -->
+    <Builder client:only="svelte" />
 
     <style is:global>
       :root {
