@@ -96,7 +96,13 @@ function setupModal(): void {
 
   const open = (card: HTMLElement): void => {
     lastFocus = document.activeElement as HTMLElement | null;
-    const slug = card.querySelector<HTMLElement>("[data-copy]")?.dataset.copy ?? "";
+    // Mirror the card's OWN primary action so the modal CTA stays correct per
+    // template kind: google-doc cards copy to /go/<slug>/ (new tab), builder
+    // cards open /resume-builder/. Hardcoding "Copy in Google Docs" 404s on
+    // builder templates, which have no /go/ entry.
+    const primary = card.querySelector<HTMLAnchorElement>(".card-actions a.primary");
+    const copySlug = primary?.dataset.copy ?? ""; // only google-doc cards carry data-copy
+    const slug = copySlug || primary?.dataset.openBuilder || ""; // builder cards carry data-open-builder
     if (title)
       title.textContent = card.querySelector(".card-title")?.textContent?.trim() ?? "Template";
     if (thumb) {
@@ -104,9 +110,14 @@ function setupModal(): void {
       const t = card.querySelector(".thumb");
       if (t) thumb.appendChild(t.cloneNode(true));
     }
-    if (copy) {
-      copy.href = `/go/${slug}/`;
-      copy.dataset.copy = slug; // so the modal CTA also fires the copy beacon
+    if (copy && primary) {
+      copy.href = primary.getAttribute("href") ?? "#";
+      copy.textContent = primary.textContent?.trim() || "Open";
+      if (primary.target) copy.target = primary.target;
+      else copy.removeAttribute("target");
+      // Fire the copy beacon only on the actual Google Docs path.
+      if (copySlug) copy.dataset.copy = copySlug;
+      else delete copy.dataset.copy;
     }
     sendEvent("template_preview_open", { slug });
     modal.hidden = false;

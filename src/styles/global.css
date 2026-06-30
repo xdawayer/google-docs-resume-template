@@ -383,6 +383,32 @@ main {
   overflow: auto;
   padding: 20px;
 }
+/* The preview clones a card's `.thumb` into the modal. The card's thumb rules are
+   scoped to `.template-card`, so they DON'T follow the clone here — without these
+   the image renders at its intrinsic srcset size and overflows (horizontal scroll).
+   Show the WHOLE page, fit to height, so it reads without scrolling. */
+.modal-thumb {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 16px;
+}
+.modal-thumb .thumb {
+  display: block;
+  aspect-ratio: auto;
+  line-height: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--sheet-shadow);
+}
+.modal-thumb img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
 
 @media (max-width: 860px) {
   .grid {

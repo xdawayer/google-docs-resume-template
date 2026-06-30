@@ -13,7 +13,7 @@ pageCount: 1
 thumbnail:
   src: src/assets/templates/executive-elegant.png
   width: 1590
-  height: 2502
+  height: 2542
   alt: Single-column Executive Elegant resume template with a centered serif name and hairline section rules
 
 atsProfile: scanner-first
