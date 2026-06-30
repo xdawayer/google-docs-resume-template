@@ -22,8 +22,15 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // /go/* is a redirect surface (noindex) and 404 must never be in the map.
-      filter: (page) => !page.includes("/go/") && !page.includes("/404"),
+      // Keep the sitemap to indexable URLs only. /go/* is a redirect surface and
+      // 404 must never be listed; /category/* and /role/* render noindex,follow
+      // (E5 thin-facet guardrail), so listing them would trip Search Console's
+      // "Submitted URL marked noindex".
+      filter: (page) =>
+        !page.includes("/go/") &&
+        !page.includes("/404") &&
+        !page.includes("/category/") &&
+        !page.includes("/role/"),
     }),
     svelte(),
   ],

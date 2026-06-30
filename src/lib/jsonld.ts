@@ -77,3 +77,117 @@ export function faqSchema(faq: FaqEntry[]) {
     })),
   };
 }
+
+/**
+ * Brand entity (GEO). An Organization with a stable @id is the anchor AI engines
+ * use to attribute and cite the brand. `sameAs` is omitted unless we have REAL
+ * profiles — never fabricate social links.
+ */
+export interface OrganizationInput {
+  id: string;
+  name: string;
+  url: string;
+  logo: string;
+  description: string;
+  sameAs?: string[];
+}
+
+export function organizationSchema(o: OrganizationInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": o.id,
+    name: o.name,
+    url: o.url,
+    logo: o.logo,
+    description: o.description,
+    ...(o.sameAs && o.sameAs.length ? { sameAs: o.sameAs } : {}),
+  };
+}
+
+/**
+ * Site-level entity anchor (GEO). No SearchAction: the site has no on-site
+ * search endpoint, and inventing one would be a false signal.
+ */
+export interface WebSiteInput {
+  id: string;
+  name: string;
+  url: string;
+  description: string;
+  publisherId: string;
+}
+
+export function websiteSchema(w: WebSiteInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": w.id,
+    name: w.name,
+    url: w.url,
+    description: w.description,
+    inLanguage: "en",
+    publisher: { "@id": w.publisherId },
+  };
+}
+
+/**
+ * Step-by-step schema for the "how it works" flow. Targets the high-intent
+ * "how to make a resume on google docs" query as an extractable, citable answer.
+ */
+export interface HowToStep {
+  name: string;
+  text: string;
+  url?: string;
+}
+
+export interface HowToInput {
+  name: string;
+  description: string;
+  steps: HowToStep[];
+  totalTime?: string;
+}
+
+export function howToSchema(h: HowToInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: h.name,
+    description: h.description,
+    ...(h.totalTime ? { totalTime: h.totalTime } : {}),
+    step: h.steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      ...(s.url ? { url: s.url } : {}),
+    })),
+  };
+}
+
+/**
+ * The resume builder is a free web app. No aggregateRating (T2: trust is never a
+ * fabricated number); price is the real, verifiable fact — it is free.
+ */
+export interface SoftwareAppInput {
+  name: string;
+  url: string;
+  description: string;
+  applicationCategory: string;
+  image?: string;
+}
+
+export function softwareAppSchema(s: SoftwareAppInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: s.name,
+    url: s.url,
+    description: s.description,
+    applicationCategory: s.applicationCategory,
+    operatingSystem: "Web browser",
+    browserRequirements: "Requires JavaScript",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    isAccessibleForFree: true,
+    ...(s.image ? { image: s.image } : {}),
+  };
+}

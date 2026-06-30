@@ -788,6 +788,129 @@ main {
   position: relative;
 }
 
+/* How it works — numbered 4-step flow. */
+.how-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.how-step {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.how-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+.how-step h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+.how-step p {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+}
+.how-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+/* FAQ — accessible <details> accordion. The first item is open by default so
+   the content is visible to users and crawlers without interaction. */
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq-item {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  padding: 15px 18px;
+  min-height: var(--tap);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary:hover {
+  color: var(--accent);
+}
+.faq-item[open] summary {
+  color: var(--accent);
+}
+.faq-chevron {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  color: var(--ink-soft);
+  transition: transform 0.2s ease;
+}
+.faq-item[open] summary .faq-chevron {
+  transform: rotate(180deg);
+}
+.faq-item > p {
+  margin: 0;
+  padding: 0 18px 18px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.detail-faq {
+  margin-top: 44px;
+}
+.detail-faq > h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+.detail-faq .faq-list {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-chevron {
+    transition: none;
+  }
+}
+
 @media (max-width: 860px) {
   .landing-hero {
     grid-template-columns: 1fr;
@@ -795,6 +918,14 @@ main {
     padding: 36px 0 16px;
   }
   .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .how-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .how-steps {
     grid-template-columns: 1fr;
   }
 }

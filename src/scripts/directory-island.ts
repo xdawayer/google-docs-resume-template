@@ -166,7 +166,26 @@ function setupModal(): void {
   });
 }
 
+function setupFaqAnalytics(): void {
+  // Fire faq_expand when a question is opened (not on collapse). Delegated +
+  // capture so it covers the hub and template-page accordions with one listener.
+  document.addEventListener(
+    "toggle",
+    (e) => {
+      const el = e.target as HTMLElement | null;
+      if (!el || !el.matches("details.faq-item") || !(el as HTMLDetailsElement).open) return;
+      const q = el.querySelector("summary span")?.textContent?.trim() ?? "";
+      sendEvent("faq_expand", {
+        question: q.slice(0, 120),
+        location: el.closest(".detail") ? "detail" : "hub",
+      });
+    },
+    { capture: true },
+  );
+}
+
 setupFilter();
 setupMobileNav();
 setupCopyBeacon();
 setupModal();
+setupFaqAnalytics();

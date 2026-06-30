@@ -1,5 +1,5 @@
 ---
-import { absoluteUrl } from "@lib/site";
+import { absoluteUrl, BRAND, DEFAULT_OG_IMAGE, OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT } from "@lib/site";
 
 interface Props {
   title: string;
@@ -7,21 +7,40 @@ interface Props {
   canonical?: string;
   robots?: string;
   ogImage?: string;
+  ogType?: string;
 }
 
-const { title, description, robots = "index,follow", ogImage } = Astro.props;
+const { title, description, robots = "index,follow", ogImage, ogType = "website" } = Astro.props;
 // Self-canonical from the current path unless an explicit canonical is passed.
 const canonical = Astro.props.canonical ?? absoluteUrl(Astro.url.pathname);
-const og = ogImage ? absoluteUrl(ogImage) : undefined;
+// Always ship a social image: per-page override, else the branded default card.
+const usingDefaultOg = !ogImage;
+const og = absoluteUrl(ogImage ?? DEFAULT_OG_IMAGE);
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
 <meta name="robots" content={robots} />
+
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:type" content="website" />
+<meta property="og:type" content={ogType} />
 <meta property="og:url" content={canonical} />
-{og && <meta property="og:image" content={og} />}
+<meta property="og:site_name" content={BRAND} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content={og} />
+{
+  usingDefaultOg && (
+    <>
+      <meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+      <meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
+    </>
+  )
+}
+<meta property="og:image:alt" content={`${BRAND} — ${title}`} />
+
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={og} />

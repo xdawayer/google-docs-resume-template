@@ -3,7 +3,9 @@ import "../styles/global.css";
 import Seo from "@components/Seo.astro";
 import SiteHeader from "@components/SiteHeader.astro";
 import PreviewModal from "@components/PreviewModal.astro";
-import { BRAND } from "@lib/site";
+import JsonLd from "@components/JsonLd.astro";
+import { organizationSchema, websiteSchema } from "@lib/jsonld";
+import { BRAND, BRAND_DESCRIPTION, SITE_URL, ORG_ID, WEBSITE_ID, LOGO_URL } from "@lib/site";
 
 interface Props {
   title: string;
@@ -11,8 +13,26 @@ interface Props {
   canonical?: string;
   robots?: string;
   ogImage?: string;
+  ogType?: string;
 }
-const { title, description, canonical, robots, ogImage } = Astro.props;
+const { title, description, canonical, robots, ogImage, ogType } = Astro.props;
+
+// Sitewide brand entity (GEO). One Organization + WebSite, with stable @ids the
+// rest of the graph can reference, so AI engines resolve a single brand entity.
+const org = organizationSchema({
+  id: ORG_ID,
+  name: BRAND,
+  url: `${SITE_URL}/`,
+  logo: LOGO_URL,
+  description: BRAND_DESCRIPTION,
+});
+const site = websiteSchema({
+  id: WEBSITE_ID,
+  name: BRAND,
+  url: `${SITE_URL}/`,
+  description: BRAND_DESCRIPTION,
+  publisherId: ORG_ID,
+});
 ---
 
 <!doctype html>
@@ -26,7 +46,21 @@ const { title, description, canonical, robots, ogImage } = Astro.props;
       canonical={canonical}
       robots={robots}
       ogImage={ogImage}
+      ogType={ogType}
     />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="preload" href="/fonts/dm-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <JsonLd schema={org} />
+    <JsonLd schema={site} />
     <slot name="head" />
   </head>
   <body>

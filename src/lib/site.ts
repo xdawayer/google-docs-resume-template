@@ -14,6 +14,20 @@ export const SITE_URL = (
 
 export const BRAND = "ResumeDocs";
 
+/** One-line brand entity description (GEO: used in Organization/WebSite JSON-LD). */
+export const BRAND_DESCRIPTION =
+  "Free, ATS-friendly Google Docs resume templates plus a private, client-side resume builder that exports a clean, selectable-text PDF — no signup.";
+
+/** Stable JSON-LD @ids so the brand resolves to one entity sitewide. */
+export const ORG_ID = `${SITE_URL}/#organization`;
+export const WEBSITE_ID = `${SITE_URL}/#website`;
+
+/** Brand logo + default social card (real assets in public/). */
+export const LOGO_URL = `${SITE_URL}/icon-512.png`;
+export const DEFAULT_OG_IMAGE = "/og/default.png";
+export const OG_IMAGE_WIDTH = 1200;
+export const OG_IMAGE_HEIGHT = 630;
+
 /** Path prefix the whole directory lives under. The hub owns the head term. */
 export const BASE = "/google-docs-resume-template";
 

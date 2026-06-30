@@ -26,6 +26,19 @@ const t = entry.data as Template;
 const { Content } = await render(entry);
 const img = resolveThumb(t.thumbnail.src);
 
+// Related links: prefer the real template name over the raw slug (stronger,
+// human-readable anchor text). Fall back to a humanized slug for role/category
+// targets that aren't template entries.
+const humanize = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const allPublished = await getCollection(
+  "templates",
+  ({ data }: Entry) => data.status === "published",
+);
+const nameBySlug = new Map<string, string>(
+  allPublished.map((e: Entry) => [(e.data as Template).slug, (e.data as Template).name]),
+);
+const relatedLinks = t.related.map((r) => ({ slug: r, label: nameBySlug.get(r) ?? humanize(r) }));
+
 const health = getHealth(loadHealthMap(), t.slug);
 const cta = ctaState(health, Boolean(t.wordUrl));
 
@@ -42,6 +55,7 @@ const creative = creativeWorkSchema({
   title={t.seo.title}
   description={t.seo.metaDescription}
   ogImage={t.seo.ogImage}
+  robots={t.seo.noindex ? "noindex,follow" : undefined}
 >
   <Breadcrumbs
     crumbs={[
@@ -122,13 +136,43 @@ const creative = creativeWorkSchema({
     </div>
 
     {
-      t.related.length > 0 && (
+      t.faq.length > 0 && (
+        <section class="faq detail-faq" aria-labelledby="tpl-faq-h">
+          <h2 id="tpl-faq-h">Frequently asked questions</h2>
+          <div class="faq-list">
+            {t.faq.map((f, i) => (
+              <details class="faq-item" name="tpl-faq" open={i === 0}>
+                <summary>
+                  <span>{f.q}</span>
+                  <svg
+                    class="faq-chevron"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      relatedLinks.length > 0 && (
         <nav class="related" aria-label="Related templates">
           <h2>Related templates</h2>
           <ul>
-            {t.related.map((r) => (
+            {relatedLinks.map((r) => (
               <li>
-                <a href={templatePath(r)}>{r}</a>
+                <a href={templatePath(r.slug)}>{r.label}</a>
               </li>
             ))}
           </ul>
