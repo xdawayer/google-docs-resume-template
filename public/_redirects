@@ -1,3 +1,11 @@
-# Cloudflare Pages redirects. /go/* is served by the edge function (functions/go/[slug].ts);
-# these are page-level 301s only. Generated /go map lines are appended at build (M6).
+# Cloudflare Pages redirects. Path-based only — these rules cannot switch the
+# hostname, so the www -> apex 301 lives in functions/_middleware.ts instead.
+# /go/* is served by the edge function (functions/go/[slug].ts); the lines below
+# are page-level 301s only. Generated /go map lines are appended at build (M6).
+
+# @astrojs/sitemap emits the index as sitemap-index.xml; alias the conventional
+# /sitemap.xml to it with a 200 rewrite (not a 301 — GSC dislikes redirected
+# sitemaps) so either URL can be submitted to Search Console.
+/sitemap.xml  /sitemap-index.xml  200
+
 /  /google-docs-resume-template/  301
