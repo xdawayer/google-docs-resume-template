@@ -61,6 +61,19 @@ const site = websiteSchema({
     />
     <JsonLd schema={org} />
     <JsonLd schema={site} />
+    <!-- Google tag (gtag.js) -->
+    <script
+      is:inline
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-FHVX18B0MC"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-FHVX18B0MC');
+    </script>
     <slot name="head" />
   </head>
   <body>

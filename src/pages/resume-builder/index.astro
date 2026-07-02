@@ -49,6 +49,19 @@ const appSchema = softwareAppSchema({
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" is:inline set:html={serializeJsonLd(appSchema)} />
+    <!-- Google tag (gtag.js) -->
+    <script
+      is:inline
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-FHVX18B0MC"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-FHVX18B0MC');
+    </script>
   </head>
   <body>
     <header class="app-header" data-chrome>
